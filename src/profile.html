@@ -19,7 +19,7 @@
 				</div>
 				<br>
 				<div class="form__element form__element_centered">
-					<button class="form__button">Поменять</button>
+					<button class="form__button form__button_standard">Поменять</button>
 					<br><br>
 					<span class="form__input__error">Нужно выбрать файл</span>
 				</div>
@@ -28,14 +28,14 @@
 		</div>
 	</div>
 	<div class="root">
-		<aside class="sidebar">
-			<a href="chats.html" class="sidebar__control form__button form__button_round">⬅</a>
+		<aside class="sidebar sidebar_nav">
+			<a href="chats.html" class="sidebar__control form__button form__button_standard form__button_round">⬅</a>
 		</aside>
 		<main class="container container_wide">
 			<form name="profile">
 				
 				<div class="form__avatar">
-					<div class="form__avatar__control" onclick="avatarPopup(event)">
+					<div class="form__avatar__control" onclick="showPopup(event)">
 						<span>Поменять аватар</span>
 					</div>
 				</div>
@@ -82,20 +82,20 @@
 					<a href="profile_newpass.html" class="form__row__label form__link">Изменить пароль</a>
 				</div>
 				<div class="form__row">
-					<a class="form__row__label form__link form__link_red">Выйти</a>
+					<a href="auth.html" class="form__row__label form__link form__link_red">Выйти</a>
 				</div>
 				
 				<br><br><br>
 				
 				<div class="form__element form__element_centered">
-					<input name="submit" type="submit" class="form__button" value="Сохранить">
+					<input name="submit" type="submit" class="form__button form__button_standard" value="Сохранить">
 				</div>
 			</form>
 		</main>
 	</div>
 	<script type="text/javascript">
 		const popup = document.querySelector('.popup');
-		const avatarPopup = (event) => {
+		const showPopup = (event) => {
 			popup.style.display = 'flex';
 		};
 		popup.addEventListener('click', (event) => {

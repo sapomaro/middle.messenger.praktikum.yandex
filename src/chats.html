@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Чаты</title>
+	<link href="main.css" rel="stylesheet">
+</head>
+<body>
+	<div class="popup">
+		<div class="container container_narrow">
+			<form name="avatar">
+				<h1 class="container__header">Добавить пользователя</h1>
+				<br>
+				<div class="form__element">
+					<input name="user" type="text" class="form__input__field form__input__field_standard" 
+						value="" oninput="this.setAttribute('value', this.value);">
+					<label class="form__input__label">Логин</label>
+					<span class="form__input__error"></span>
+				</div>
+				<br>
+				<div class="form__element form__element_centered">
+					<button class="form__button">Добавить</button>
+					<br><br>
+				</div>
+			</form>
+			
+		</div>
+	</div>
+	<div class="root">
+		<aside class="sidebar sidebar_chatlist">
+			<div class="form__element form__text_right">
+				<a href="profile.html" class="form__link form__link_grey">Профиль ❯</a>
+			</div>
+			<div class="form__element">
+				<input name="search" type="text" class="form__input__field form__element_rounded form__element_grey form__element_centered" 
+					value="Поиск">
+			</div>
+		</aside>
+		<main class="container container_chatbox">
+			
+				<div class="chatbox__header">
+					<div class="chatbox__header__avatar"></div>
+					<h2 class="chatbox__header__text">${chat.name}</h2>
+					<button class="chatbox__header__control form__button form__button_round">⋮</button>
+				</div>
+				<div class="chatbox__body">
+					2
+				</div>
+				<form name="send" class="chatbox__footer">
+					<button class="form__button form__button_fileclip"></button>
+					<textarea name="message" class="form__textarea form__element_grey" rows="1" data-placeholder="Сообщение..."></textarea>
+					<button class="form__button form__button_standard form__button_round form__button_send">➜</button>
+				</form>
+		</main>
+	</div>
+	<script type="text/javascript">
+	(function() {
+		const sendForm = document.forms.send;
+		const messageField = document.forms.send.message;
+		
+		messageField.togglePlaceholder = (event = {}) => {
+			if (messageField.dataset && event.type) {
+				const placeholder = messageField.dataset.placeholder;
+				if (placeholder) {
+					if (event.type === 'blur' && messageField.value === '') {
+						messageField.value = placeholder;
+					}
+					else if (event.type === 'focus' && messageField.value === placeholder) {
+						messageField.value = '';
+					}
+				}
+			}
+
+		};
+		messageField.autoResize = () => {
+			const style = messageField.currentStyle || window.getComputedStyle(messageField);
+			const boxSizing = (style.boxSizing === 'border-box')
+				? parseInt(style.borderBottomWidth, 10) + parseInt(style.borderTopWidth, 10) : 0;
+			
+			messageField.style.overflowY = 'hidden';
+			messageField.style.height = 'auto';
+			messageField.style.height = (messageField.scrollHeight + boxSizing) + 'px'; 
+		};
+		
+		messageField.addEventListener('input', (event) => {
+			messageField.autoResize();
+		});
+		messageField.addEventListener('focus', (event) => {
+			messageField.togglePlaceholder(event);
+		});
+		messageField.addEventListener('blur', (event) => {
+			messageField.togglePlaceholder(event);
+		});
+		
+		messageField.togglePlaceholder({ type: 'blur' });
+		messageField.autoResize();
+			
+		const popup = document.querySelector('.popup');
+		const showPopup = (event) => {
+			popup.style.display = 'flex';
+		};
+		popup.addEventListener('click', (event) => {
+			if (event.target === popup) {
+				popup.style.display = 'none';
+			}
+		});
+	})();
+	</script>
+</body>
+</html> 
