@@ -27,24 +27,116 @@
 		</div>
 	</div>
 	<div class="root">
-		<aside class="sidebar sidebar_chatlist">
-			<div class="form__element form__text_right">
-				<a href="profile.html" class="form__link form__link_grey">Профиль ❯</a>
+		<aside class="sidebar sidebar_chatlist scrollable">
+			<div class="chatlist__controls">
+				<div class="form__element form__text_right">
+					<a href="profile.html" class="form__link form__link_grey">Профиль&ensp;<small>❯</small></a>
+				</div>
+				<div class="form__element">
+					<input name="search" type="text" class="form__input__field form__element_rounded form__element_grey form__element_centered" value="Поиск">
+				</div>
 			</div>
-			<div class="form__element">
-				<input name="search" type="text" class="form__input__field form__element_rounded form__element_grey form__element_centered" 
-					value="Поиск">
+			<div class="chatlist__item">
+				<div class="chatlist__item__wrapper">
+					<div class="chatlist__item__avatar"></div>
+					<div class="chatlist__item__text">
+						<div class="chatlist__item__name">Андрей</div>
+						<div class="chatlist__item__message">
+							<span class="chatlist__item__message__quote">Изображение</span>
+						</div>
+					</div>
+					<div class="chatlist__item__info">
+						<div class="chatlist__item__time">10:49</div>
+						<div class="chatlist__item__unreads">
+							<span class="chatlist__item__unreads__count">2</span>
+						</div>
+					</div>
+				</div>
 			</div>
+			
+			<div class="chatlist__item chatlist__item_active">
+				<div class="chatlist__item__wrapper">
+					<div class="chatlist__item__avatar"></div>
+					<div class="chatlist__item__text">
+						<div class="chatlist__item__name">Илья</div>
+						<div class="chatlist__item__message">
+							<span class="chatlist__item__message__quote">Друзья, у меня для вас особенный выпуск новостей!...</span>
+						</div>
+					</div>
+					<div class="chatlist__item__info">
+						<div class="chatlist__item__time">15:12</div>
+						<div class="chatlist__item__unreads">
+							<span class="chatlist__item__unreads__count">4222</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="chatlist__item">
+				<div class="chatlist__item__wrapper">
+					<div class="chatlist__item__avatar"></div>
+					<div class="chatlist__item__text">
+						<div class="chatlist__item__name">Design Destroyer</div>
+						<div class="chatlist__item__message">
+							<span class="chatlist__item__message__quote">В 2008 году художник Jon Rafman  начал собирать...</span>
+						</div>
+					</div>
+					<div class="chatlist__item__info">
+						<div class="chatlist__item__time">Пн</div>
+						<div class="chatlist__item__unreads">
+							<span class="chatlist__item__unreads__count"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
 		</aside>
-		<main class="container container_chatbox">
+		
+		
+		
+		
+		
+		<main class="container container_chatbox scrollable">
 			
 				<div class="chatbox__header">
 					<div class="chatbox__header__avatar"></div>
 					<h2 class="chatbox__header__text">${chat.name}</h2>
-					<button class="chatbox__header__control form__button form__button_round">⋮</button>
+					
+					<label class="chatbox__header__control">
+						<input type="checkbox" class="form__toggle form__element_hidden">
+						<span class="form__button form__button_round form__button_blank form__button_bigfont">⋮</span>
+						<span class="chatbox__dropdown">
+							<span class="chatbox__dropdown__menu">
+								<span class="form__element">
+									<span class="form__element_circled">+</span> Добавить пользователя
+								</span>
+								<span class="form__element">
+									<span class="form__element_circled">×</span> Удалить пользователя
+								</span>
+							</span>
+						</span>
+					</label>
+					
+					
 				</div>
 				<div class="chatbox__body">
-					2
+					<div class="chatbox__date">19 июня (вс)</div>
+					<div class="chatbox__message chatbox__message_inc">
+<span class="chatbox__message__text">Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой.
+
+Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.</span>
+						<span class="chatbox__message__info">
+							<span class="chatbox__message__time">11:56</span>
+						</span>
+					</div>
+					<div class="chatbox__message chatbox__message_out">
+						<span class="chatbox__message__text">Круто!</span>
+						<span class="chatbox__message__info">
+							<span class="chatbox__message__status">✓✓&nbsp;</span>
+							<span class="chatbox__message__time">12:00</span>
+						</span>
+					</div>
+					
 				</div>
 				<form name="send" class="chatbox__footer">
 					<button class="form__button form__button_fileclip"></button>
