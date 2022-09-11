@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Вход</title>
+	<link href="main.css" rel="stylesheet">
+</head>
+<body>
+	<div class="root">
+		
+		<main class="container container_narrow">
+			<form name="auth">
+				<h1 class="container__header">Вход</h1>
+				
+				<div class="form__element">
+					<input name="login" type="text" class="form__input__field form__input__field_standard" 
+						value="" oninput="this.setAttribute('value', this.value);">
+					<label class="form__input__label">Логин</label>
+					<span class="form__input__error"></span>
+				</div>
+				<div class="form__element">
+					<input name="password" type="password" class="form__input__field form__input__field_standard" 
+						value="" oninput="this.setAttribute('value', this.value);">
+					<label class="form__input__label">Пароль</label>
+					<span class="form__input__error"></span>
+				</div>
+				<div class="form__space"></div>
+				<div class="form__element">
+					<input name="submit" type="submit" class="form__button" value="Авторизоваться">
+				</div>
+				<div class="form__element form__link_wrapper">
+					<a href="register.html" class="form__link">Нет аккаунта?</a>
+				</div>
+			</form>
+		</main>
+	</div>
+</body>
+</html> 

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Профиль</title>
+	<link href="main.css" rel="stylesheet">
+</head>
+<body>
+	<div class="popup">
+		<div class="container container_narrow">
+			<form name="avatar">
+				<h1 class="container__header">Загрузите файл</h1>
+				<br>
+				<div class="form__element form__element_centered">
+					<label>
+						<a class="form__link form__link_underlined">Выбрать файл <br>на компьютере</a>
+						<input name="avatar" type="file" accept="image/png, image/jpeg" class="form__input__file">
+					</label>
+				</div>
+				<br>
+				<div class="form__element form__element_centered">
+					<button class="form__button">Поменять</button>
+					<br><br>
+					<span class="form__input__error">Нужно выбрать файл</span>
+				</div>
+			</form>
+			
+		</div>
+	</div>
+	<div class="root">
+		<aside class="sidebar">
+			<a href="chats.html" class="sidebar__control form__button form__button_round">⬅</a>
+		</aside>
+		<main class="container container_wide">
+			<form name="profile">
+				
+				<div class="form__avatar">
+					<div class="form__avatar__control" onclick="avatarPopup(event)">
+						<span>Поменять аватар</span>
+					</div>
+				</div>
+			
+				<h1 class="container__header">${first_name}</h1>
+				
+				<label class="form__row">
+					<span class="form__row__label">Почта</span>
+					<input name="email" type="email" class="form__input__field form__input__field_right"
+						value="${email}" readonly="readonly">
+				</label>
+				<label class="form__row">
+					<span class="form__row__label">Логин</span>
+					<input name="login" type="text" class="form__input__field form__input__field_right"
+						value="${login}" readonly="readonly">
+				</label>
+				<label class="form__row">
+					<span class="form__row__label">Имя</span>
+					<input name="first_name" type="text" class="form__input__field form__input__field_right"
+						value="${first_name}" readonly="readonly">
+				</label>
+				<label class="form__row">
+					<span class="form__row__label">Фамилия</span>
+					<input name="first_name" type="text" class="form__input__field form__input__field_right"
+						value="${last_name}" readonly="readonly">
+				</label>
+				<label class="form__row">
+					<span class="form__row__label">Имя в чате</span>
+					<input name="display_name" type="text" class="form__input__field form__input__field_right"
+						value="${display_name}" readonly="readonly">
+				</label>
+				<label class="form__row">
+					<span class="form__row__label">Телефон</span>
+					<input name="phone" type="tel" class="form__input__field form__input__field_right"
+						value="${phone}" readonly="readonly">
+				</label>
+				
+				<br><br><br>
+				
+				<div class="form__row">
+					<a class="form__row__label form__link">Изменить данные</a>
+				</div>
+				<div class="form__row">
+					<a href="profile_newpass.html" class="form__row__label form__link">Изменить пароль</a>
+				</div>
+				<div class="form__row">
+					<a class="form__row__label form__link form__link_red">Выйти</a>
+				</div>
+				
+				<br><br><br>
+				
+				<div class="form__element form__element_centered">
+					<input name="submit" type="submit" class="form__button" value="Сохранить">
+				</div>
+			</form>
+		</main>
+	</div>
+	<script type="text/javascript">
+		const popup = document.querySelector('.popup');
+		const avatarPopup = (event) => {
+			popup.style.display = 'flex';
+		};
+		popup.addEventListener('click', (event) => {
+			if (event.target === popup) {
+				popup.style.display = 'none';
+			}
+		});
+	</script>
+</body>
+</html> 

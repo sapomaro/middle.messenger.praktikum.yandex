@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Изменить пароль</title>
+	<link href="main.css" rel="stylesheet">
+</head>
+<body>
+	<div class="root">
+		<aside class="sidebar">
+			<a href="chats.html" class="sidebar__control form__button form__button_round">⬅</a>
+		</aside>
+		<main class="container container_wide">
+			<form name="profile" action="profile.html">
+				
+				<div class="form__avatar">
+
+				</div>
+			
+				<h1 class="container__header"></h1>
+				
+				<label class="form__row">
+					<span class="form__row__label">Старый пароль</span>
+					<span class=" form__text_right">
+						<input name="oldPassword" type="password" class="form__input__field form__input__field_right"
+						value="">
+					</span>
+				</label>
+				<label class="form__row">
+					<span class="form__row__label">Новый пароль</span>
+					<span class=" form__text_right">
+						<input name="newPassword" type="password" class="form__input__field form__input__field_right"
+						value="">
+						
+					</span>
+				</label>
+				<label class="form__row">
+					<span class="form__row__label">Повторите новый пароль</span>
+					<span class=" form__text_right">
+						<input name="newPassword2" type="password" class="form__input__field form__input__field_right" value="">
+						<span class="form__input__error">Пароли не совпадают</span>
+					</span>
+				</label>
+				
+				<br><br><br>
+				
+				<div class="form__element form__element_centered">
+					<input name="submit" type="submit" class="form__button" value="Сохранить">
+				</div>
+			</form>
+		</main>
+	</div>
+</body>
+</html> 
