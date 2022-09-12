@@ -19,7 +19,7 @@
 				</div>
 				<br>
 				<div class="form__element form__element_centered">
-					<button class="form__button">Добавить</button>
+					<button class="form__button form__button_standard">Добавить</button>
 					<br><br>
 				</div>
 			</form>
@@ -98,6 +98,8 @@
 		
 		<main class="container container_chatbox scrollable">
 			
+			
+			
 				<div class="chatbox__header">
 					<div class="chatbox__header__avatar"></div>
 					<h2 class="chatbox__header__text">${chat.name}</h2>
@@ -107,18 +109,21 @@
 						<span class="form__button form__button_round form__button_blank form__button_bigfont">⋮</span>
 						<span class="chatbox__dropdown">
 							<span class="chatbox__dropdown__menu">
-								<span class="form__element">
+								<span class="form__element form__button" onclick="showPopup(event)">
 									<span class="form__element_circled">+</span> Добавить пользователя
 								</span>
-								<span class="form__element">
+								<span class="form__element form__button">
 									<span class="form__element_circled">×</span> Удалить пользователя
 								</span>
 							</span>
 						</span>
 					</label>
-					
-					
+
 				</div>
+				
+				
+				
+				
 				<div class="chatbox__body">
 					<div class="chatbox__date">19 июня (вс)</div>
 					<div class="chatbox__message chatbox__message_inc">
@@ -138,15 +143,32 @@
 					</div>
 					
 				</div>
+				
+				
+				
+				
+				
+				
 				<form name="send" class="chatbox__footer">
-					<button class="form__button form__button_fileclip"></button>
+					<label class="chatbox__footer__control">
+						<span class="chatbox__dropdown">
+							
+						</span>
+						<button class="form__button form__button_fileclip" onclick="preventDefault(event)"></button>
+					</label>
 					<textarea name="message" class="form__textarea form__element_grey" rows="1" data-placeholder="Сообщение..."></textarea>
 					<button class="form__button form__button_standard form__button_round form__button_send">➜</button>
 				</form>
 		</main>
 	</div>
 	<script type="text/javascript">
-	(function() {
+	
+		const preventDefault = (event) => {
+			if (event.preventDefault) {
+				event.preventDefault();
+			}
+		};
+
 		const sendForm = document.forms.send;
 		const messageField = document.forms.send.message;
 		
@@ -196,7 +218,7 @@
 				popup.style.display = 'none';
 			}
 		});
-	})();
+
 	</script>
 </body>
 </html> 
