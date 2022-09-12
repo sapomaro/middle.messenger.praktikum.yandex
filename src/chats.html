@@ -33,7 +33,14 @@
 					<a href="profile.html" class="form__link form__link_grey">Профиль&ensp;<small>❯</small></a>
 				</div>
 				<div class="form__element">
-					<input name="search" type="text" class="form__input__field form__element_rounded form__element_grey form__element_centered" value="Поиск">
+					<div class="form__element_grey form__element_rounded">
+						<input name="search" type="text" class="form__input__field chatlist__search__field" 
+							value="" oninput="this.setAttribute('value', this.value);">
+						<label class="chatlist__search__label">
+							<img src="../public/search_icon.svg" width="22" height="22"> <span class="chatlist__search__label__text">Поиск</span>
+						</label>
+					</div>
+					
 				</div>
 			</div>
 			<div class="chatlist__item">
@@ -106,13 +113,13 @@
 					
 					<label class="chatbox__header__control">
 						<input type="checkbox" class="form__toggle form__element_hidden">
-						<span class="form__button form__button_round form__button_blank form__button_bigfont">⋮</span>
-						<span class="chatbox__dropdown">
+						<a class="form__button form__button_round form__button_blank form__button_bigfont">⋮</a>
+						<span class="chatbox__dropdown chatbox__dropdown_top">
 							<span class="chatbox__dropdown__menu">
-								<span class="form__element form__button" onclick="showPopup(event)">
+								<span class="form__element form__control" onclick="showPopup(event)">
 									<span class="form__element_circled">+</span> Добавить пользователя
 								</span>
-								<span class="form__element form__button">
+								<span class="form__element form__control">
 									<span class="form__element_circled">×</span> Удалить пользователя
 								</span>
 							</span>
@@ -131,14 +138,14 @@
 
 Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.</span>
 						<span class="chatbox__message__info">
-							<span class="chatbox__message__time">11:56</span>
+							<time class="chatbox__message__time">11:56</time>
 						</span>
 					</div>
 					<div class="chatbox__message chatbox__message_out">
 						<span class="chatbox__message__text">Круто!</span>
 						<span class="chatbox__message__info">
 							<span class="chatbox__message__status">✓✓&nbsp;</span>
-							<span class="chatbox__message__time">12:00</span>
+							<time class="chatbox__message__time">12:00</time>
 						</span>
 					</div>
 					
@@ -150,25 +157,33 @@
 				
 				
 				<form name="send" class="chatbox__footer">
-					<label class="chatbox__footer__control">
-						<span class="chatbox__dropdown">
-							
+					<label for="chatbox__dropdown_bottom1" class="chatbox__footer__control">
+						<input id="chatbox__dropdown_bottom1" type="checkbox" class="form__toggle form__element_hidden">
+						<a class="form__button form__button_fileclip"></a>
+						<span class="chatbox__dropdown chatbox__dropdown_bottom">
+							<span class="chatbox__dropdown__menu">
+								<span class="form__element form__control">
+									<img src="../public/photo_icon.svg" width="22" height="22"
+										class="form__icon"> Фото или видео
+								</span>
+								<span class="form__element form__control">
+									<img src="../public/file_icon.svg" width="22" height="22"
+										class="form__icon"> Файл
+								</span>
+								<span class="form__element form__control">
+									<img src="../public/location_icon.svg" width="22" height="22"
+										class="form__icon"> Локация
+								</span>
+							</span>
 						</span>
-						<button class="form__button form__button_fileclip" onclick="preventDefault(event)"></button>
 					</label>
 					<textarea name="message" class="form__textarea form__element_grey" rows="1" data-placeholder="Сообщение..."></textarea>
-					<button class="form__button form__button_standard form__button_round form__button_send">➜</button>
+					<button type="button" class="form__button form__button_standard form__button_round form__button_send">➜</button>
 				</form>
 		</main>
 	</div>
 	<script type="text/javascript">
 	
-		const preventDefault = (event) => {
-			if (event.preventDefault) {
-				event.preventDefault();
-			}
-		};
-
 		const sendForm = document.forms.send;
 		const messageField = document.forms.send.message;
 		

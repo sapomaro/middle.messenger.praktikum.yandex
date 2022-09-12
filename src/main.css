@@ -98,6 +98,7 @@ body {
 
 .sidebar_chatlist {
 	flex: 1 1 25%;
+	min-width: 11rem;
 }
 
 
@@ -191,8 +192,17 @@ body {
 .chatbox__dropdown {
 	display: none;
 	position: absolute;
-	width: 25rem;
-	margin-left: -20rem;
+	
+}
+.chatbox__dropdown_top {
+	margin-top: -0.5rem;
+	margin-left: -21rem;
+	width: 27rem;
+}
+.chatbox__dropdown_bottom {
+	margin-top: -19rem;
+	margin-left: -3rem;
+	width: 22rem;
 }
 .form__toggle:checked+.form__button+.chatbox__dropdown {
 	display: block;
@@ -320,9 +330,14 @@ body {
 
 
 
+
+
+
+
 .form__element {
+	position: relative;
 	display: block;
-	padding: 1rem;
+	margin: 1.5rem;
 	box-sizing: border-box;
 	/*margin: 1.5rem 0 0 0;*/
 }
@@ -386,7 +401,13 @@ body {
 	background: transparent;
 	text-decoration: none;
 }
-
+.form__control {
+	cursor: pointer;
+}
+.form__icon {
+	margin-right: 1rem;
+	vertical-align: bottom;
+}
 .form__button_standard {
 	display: inline-block;
 	width: 100%;
@@ -417,7 +438,7 @@ body {
 	width: 3rem;
 	height: 3rem;
 	border: none;
-	background: url("../public/fileclip.svg");
+	background: url("../public/fileclip_icon.svg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
@@ -463,21 +484,6 @@ body {
 	text-decoration: underline;
 }
 		
-.form__input__label {
-	position: absolute;
-	z-index: 1;
-	padding: 0.5rem 0;
-	color: #999;
-}
-
-.form__input__field[value=""]+.form__input__label {
-	margin-top: -2.5rem;
-	font-size: 1rem;
-}
-.form__input__label, .form__input__field:focus+.form__input__label {
-	margin-top: -3.9rem;
-	font-size: 0.75rem;
-}
 
 
 
@@ -486,11 +492,15 @@ body {
 	padding: 1rem 0 0 0;
 }
 
+
+
+
+
 .form__input__field {
 	position: relative;
 	z-index: 2;
 	display: block;
-	padding: 1rem 0 0.7rem 0;
+	padding: 1rem 0;
 	font-size: 1.2rem;
 	width: 100%;
 	box-sizing: border-box;
@@ -498,6 +508,59 @@ body {
 	background: transparent;
 	border: none;
 	outline: none;
+}
+
+.form__input__field_standard {
+	padding: 1rem 0 0.7rem 0;
+	margin-bottom: 0.25rem;
+	border-bottom: 1px solid #3369F3;
+}
+.form__input__field_right {
+	text-align: right;
+	color: #999;
+	padding-bottom: 0;
+}
+
+.form__input__label {
+	position: absolute;
+	z-index: 1;
+	padding: 0.5rem 0;
+	color: #999;
+}
+
+.form__input__field_standard[value=""]+.form__input__label {
+	margin-top: -2.75rem;
+	font-size: 1rem;
+}
+.form__input__label, .form__input__field_standard:focus+.form__input__label {
+	margin-top: -4.15rem;
+	font-size: 0.75rem;
+}
+
+.chatlist__search__field {
+	display: block;
+	font-size: 1rem;
+	padding: 1rem 1rem 1rem 3rem;
+}
+.chatlist__search__label {
+	position: absolute;
+	z-index: 1;
+	padding: 1rem 1rem;
+	margin-top: -3.25rem;
+}
+.chatlist__search__label__text {
+	display: none;
+}
+.chatlist__search__field[value=""]+.chatlist__search__label .chatlist__search__label__text {
+	display: inline;
+}
+.chatlist__search__field:focus+.chatlist__search__label .chatlist__search__label__text {
+	display: none;
+}
+
+
+.chatlist__search__label>* {
+	vertical-align: middle;
 }
 
 .form__textarea {
@@ -514,19 +577,10 @@ body {
 	font: inherit;
 	
 }
-.form__input__field_right {
-	text-align: right;
-	color: #999;
-	padding-bottom: 0;
-}
 
 
 
 
-
-.form__input__field_standard {
-	border-bottom: 1px solid #3369F3;
-}
 
 .form__element_circled {
 	display: inline-block;
@@ -554,8 +608,7 @@ body {
 
 .form__element_centered {
 	text-align: center;
-	padding-left: 1rem;
-	padding-right: 1rem;
+
 }
 
 
@@ -565,7 +618,6 @@ body {
 
 .form__input__error {
 	font-size: 0.75rem;
-	margin: 0.25rem 0;
 	color: #FF2F2F;
 }
 
