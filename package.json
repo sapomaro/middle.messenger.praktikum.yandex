@@ -3,15 +3,14 @@
   "version": "1.0.0",
   "description": "sprint_1",
   "scripts": {
-    "dev": "parcel ./src/*.cdjs --no-cache",
-    "build": "parcel build ./src/*.cdjs --dist-dir dist && node ./server.js"
+    "dev": "parcel ./src/pages/*.html --no-cache",
+    "build": "parcel build ./src/pages/*.html --dist-dir dist && node ./server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "parcel": "^2.7.0",
-    "parcel-transformer-curlydollar": "file:local_modules/parcel-transformer-curlydollar",
     "sass": "^1.54.9"
   },
   "engines": {

@@ -6,6 +6,7 @@
 	<link href="main.css" rel="stylesheet">
 </head>
 <body>
+
 	<div class="root">
 		
 		<main class="container container_narrow">
@@ -24,6 +25,29 @@
 					<label class="form__input__label">Пароль</label>
 					<span class="form__input__error"></span>
 				</div>
+				
+				
+				
+				
+				<script type="text/javascript">
+					var test = 'РЕЗУЛЬТАТ';
+//console.log(window.test);
+					var authInputs = [
+						{ name: '', type: '', label: '' },
+						{ name: '', type: '', label: '' }
+					]; 
+				</script>
+				
+				<span>%{test}%</span>
+				
+				<div class="form__element" key="%{}%">
+					<input name="%{authInputs[-].name}%" type="%{authInputs[-].type}%" class="form__input__field form__input__field_standard" 
+						value="" oninput="this.setAttribute('value', this.value);">
+					<label class="form__input__label">%{authInputs[-].label}%</label>
+					<span class="form__input__error"></span>
+				</div>	
+				
+				
 				<div class="form__space"></div>
 				<div class="form__element">
 					<input name="submit" type="submit" class="form__button form__button_standard" value="Авторизоваться">
@@ -34,5 +58,7 @@
 			</form>
 		</main>
 	</div>
+	<script src="../templator/ProtoPages.js"></script>
+
 </body>
 </html> 

@@ -361,7 +361,7 @@ body {
 	height: 10rem;
 	display: flex;
 	margin: 2rem auto;
-	background: #efefef url("../public/noavatar.png");
+	background: #efefef url("../../public/noavatar.png");
 	background-repeat: no-repeat;
 	background-position: center;
 	border-radius: 50%;
@@ -438,7 +438,7 @@ body {
 	width: 3rem;
 	height: 3rem;
 	border: none;
-	background: url("../public/fileclip_icon.svg");
+	background: url("../../public/fileclip_icon.svg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
@@ -602,6 +602,10 @@ body {
 	background: #efefef;
 	color: #999;
 }
+.form__element_grey:focus {
+	color: #000;
+}
+
 .form__element_rounded {
 	border-radius: 0.5rem;
 }
