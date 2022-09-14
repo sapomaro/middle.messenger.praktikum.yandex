@@ -6,17 +6,25 @@ window.ProtoPages = (() => {
 	let templateContext;
 	
 	const templatePattern = /%\{\s?(.*?)\s?\}%/gi;
-	
+	const templateSubpatterns = {
+		arrayKey: /([^\[]+)\[([^\]]+)\]/
+	};
 	const templatePartialKey = 'key';
-
+	const templatePartialIndex = 0;
 
 	const resolvePattern = (pattern) => {
 		let context = templateContext,
-			props = pattern.split('.');
+			props = pattern.trim().split('.');
 		
 		for (let i = 0; i < props.length; ++i) {
 			if (typeof context[props[i]] !== 'undefined') {
 				context = context[props[i]];
+			}
+			else {
+				templateSubpatterns.arrayKey.lastIndex = 0;
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 			}
 		}
 		if (typeof context === 'string' || typeof context === 'number') {
@@ -39,7 +47,10 @@ window.ProtoPages = (() => {
 			asset = resolvePattern(matches[1]);
 			if (asset !== null) {
 				str = str.replace(matches[0], asset);
-				templatePattern.lastIndex += asset.length - matches[0].length;
+				// subtract pattern length to start next exec from new insertion
+				// allows resolving nested patterns
+				templatePattern.lastIndex -= matches[0].length; 
+				
 			}
 		}
 		if (str !== old) { 
