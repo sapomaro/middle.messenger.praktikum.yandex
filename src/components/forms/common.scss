@@ -1,0 +1,283 @@
+.form__header {
+	font-style: normal;
+	font-weight: 500;
+	font-size: 1.5rem;
+	line-height: 1.5rem;
+	text-align: center;
+	margin: 1rem 0 2rem 0;
+}
+
+.form__element {
+	position: relative;
+	display: block;
+	margin: 1.5rem;
+	box-sizing: border-box;
+}
+
+.form__row {
+	display: flex;
+	margin: 1rem;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+.form__row>* {
+	flex: 1;
+}
+
+.form__row+.form__row {
+	border-top: 2px solid #eaeaea;
+}
+
+.form__avatar {
+	width: 10rem;
+	height: 10rem;
+	display: flex;
+	margin: 2rem auto;
+	background: #efefef url("/public/noavatar.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	border-radius: 50%;
+}
+
+.form__avatar__control {
+	visibility: hidden;
+	display: flex;
+	flex: 1;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.5);
+	color: #fff;
+	padding: 1rem;
+	font-size: 1.1rem;
+	text-align: center;
+	cursor: pointer;
+}
+
+.form__avatar:hover .form__avatar__control {
+	visibility: visible;
+}
+
+.form__space {
+	height: 20vh;
+}
+
+
+.form__button {
+	display: inline-block;
+	box-sizing: border-box;
+	padding: 1rem;
+	font-weight: 500;
+	border: none;
+	cursor: pointer;
+	background: transparent;
+	text-decoration: none;
+}
+.form__control {
+	cursor: pointer;
+}
+.form__icon {
+	margin-right: 1rem;
+	vertical-align: bottom;
+}
+.form__button_standard {
+	display: inline-block;
+	width: 100%;
+	max-width: 23rem;
+	font-size: 1.2rem;
+	color: #fff;
+	background: #3369F3;
+	border-radius: 0.8rem;
+}
+.form__button_standard:hover {
+	filter: brightness(1.3);
+}
+
+.form__button_round {
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50%;
+	padding: 1rem;
+	font-weight: bold;
+	line-height: 1rem;
+	text-align: center;
+}
+
+.form__button_bigfont {
+	font-size: 2rem;
+}
+.form__button_fileclip {
+	width: 3rem;
+	height: 3rem;
+	border: none;
+	background: url("/public/fileclip_icon.svg");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+.form__button_send {
+	align-self: flex-end;
+}
+
+
+.form__button_blank:hover, .form__toggle:checked+.form__button_blank {
+	color: #3369F3;
+	background: #F5F5F5;
+}
+
+
+
+
+.form__link_wrapper {
+	text-align: center;
+}
+.form__link {
+	color: #3369F3;
+	text-decoration: none;
+	cursor: pointer;
+}
+.form__link_red {
+	color: #f00;
+}
+.form__link_grey {
+	color: #999;
+}
+.form__link_underlined {
+	text-decoration: underline;
+}
+
+
+.form__button:active {
+	transform: scale(0.98);
+}
+
+.form__link:hover {
+	filter: brightness(0.9);
+	text-decoration: underline;
+}
+		
+
+
+
+.form__row__label {
+	font-size: 1.2rem;
+	padding: 1rem 0 0 0;
+}
+
+
+
+
+
+.form__input__field {
+	position: relative;
+	z-index: 2;
+	display: block;
+	padding: 1rem 0;
+	font-size: 1.2rem;
+	width: 100%;
+	box-sizing: border-box;
+	max-width: 30rem;
+	background: transparent;
+	border: none;
+	outline: none;
+}
+
+.form__input__field_standard {
+	padding: 1rem 0 0.7rem 0;
+	margin-bottom: 0.25rem;
+	border-bottom: 1px solid #3369F3;
+}
+.form__input__field_right {
+	text-align: right;
+	color: #999;
+	padding-bottom: 0;
+}
+
+.form__input__label {
+	position: absolute;
+	z-index: 1;
+	padding: 0.5rem 0;
+	color: #999;
+}
+
+.form__input__field_standard[value=""]+.form__input__label {
+	margin-top: -2.75rem;
+	font-size: 1rem;
+}
+.form__input__label, .form__input__field_standard:focus+.form__input__label {
+	margin-top: -4.15rem;
+	font-size: 0.75rem;
+}
+
+.form__textarea {
+	box-sizing: border-box;
+	min-height: 3rem;
+	width: 100%;
+	margin: 0 1rem;
+	padding: 1rem 2rem;
+	border: none;
+	border-radius: 1.5rem;
+	outline: none;
+	resize: none;
+	overflow: hidden;
+	font: inherit;
+	
+}
+
+
+
+
+
+.form__element_circled {
+	display: inline-block;
+	box-sizing: border-box;
+	margin-right: 0.5rem;
+	width: 2rem;
+	height: 2rem;
+	font-size: 2rem;
+	line-height: 1.5rem;
+	padding: 0;
+	color: #3369F3;
+	border: 2px solid #3369F3;
+	border-radius: 50%;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.form__element_grey {
+	background: #efefef;
+	color: #999;
+}
+.form__element_grey:focus {
+	color: #000;
+}
+
+.form__element_rounded {
+	border-radius: 0.5rem;
+}
+
+.form__element_centered {
+	text-align: center;
+
+}
+
+
+.form__text_right {
+	text-align: right;
+}
+
+.form__input__error {
+	font-size: 0.75rem;
+	color: #FF2F2F;
+}
+
+
+.form__input__file {
+	visibility: hidden;
+}
+
+
+
+.form__element_hidden {
+	display: none;
+}

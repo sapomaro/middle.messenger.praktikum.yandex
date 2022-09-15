@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<script src="../templator/ProtoPages.js"></script>
+<script type="module">
+	import('/src/layouts/NarrowMenu.js');
+	//import input from '../components/StandardInput.js';
+	import '/src/components/forms/common.scss';
+	
+	//import test from '/src/components/Test.js';
+	
+	const contents = () => `
+		<form name="auth" action="chats.html">
+			<h1 class="form__header">Вход</h1>
+			
+			<span class="test">%{test}%</span>
+				
+			<div class="form__space"></div>
+			<div class="form__element">
+				<input name="submit" type="submit" class="form__button form__button_standard" value="Авторизоваться">
+			</div>
+			<div class="form__element form__link_wrapper">
+				<a href="register.html" class="form__link">Нет аккаунта?</a>
+			</div>
+		</form>
+	`;
+	
+	
+	const title = 'Вход';
+	
+	const inputs = [
+		{ name: 'login', type: 'text', label: 'Логин' },
+		{ name: 'password', type: 'password', label: 'Пароль' }
+	]; 
+	
+	const test = '123';
+	
+	window.addEventListener('load', (event) => {
+		ProtoPages.compile({ title, contents, test });
+		
+		
+	});
+</script>

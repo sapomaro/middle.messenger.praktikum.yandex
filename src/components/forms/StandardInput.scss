@@ -1,0 +1,54 @@
+
+.test {
+	color: blue;
+	&:hover {
+		color: red;
+	}
+}
+
+.form__input__field {
+	position: relative;
+	z-index: 2;
+	display: block;
+	padding: 1rem 0;
+	font-size: 1.2rem;
+	width: 100%;
+	box-sizing: border-box;
+	max-width: 30rem;
+	background: transparent;
+	border: none;
+	outline: none;
+}
+
+.form__input__field_standard {
+	padding: 1rem 0 0.7rem 0;
+	margin-bottom: 0.25rem;
+	border-bottom: 1px solid #3369F3;
+}
+.form__input__field_right {
+	text-align: right;
+	color: #999;
+	padding-bottom: 0;
+}
+
+.form__input__label {
+	position: absolute;
+	z-index: 1;
+	padding: 0.5rem 0;
+	color: #999;
+}
+
+.form__input__field_standard[value=""]+.form__input__label {
+	margin-top: -2.75rem;
+	font-size: 1rem;
+}
+.form__input__label, .form__input__field_standard:focus+.form__input__label {
+	margin-top: -4.15rem;
+	font-size: 0.75rem;
+}
+
+
+.form__input__error {
+	font-size: 0.75rem;
+	color: #FF2F2F;
+}

@@ -4,6 +4,7 @@
 	<meta charset="utf-8">
 	<title>Вход</title>
 	<link href="main.css" rel="stylesheet">
+	<link href="../../public/favicon.ico" rel="icon" />
 </head>
 <body>
 
@@ -25,21 +26,10 @@
 					<label class="form__input__label">Пароль</label>
 					<span class="form__input__error"></span>
 				</div>
+			
 				
+				<span class="test">%{test}%</span>
 				
-				
-				
-				<script type="text/javascript">
-					var abc = 123;
-					var test = '%{abc}% %{abc}%';
-//console.log(window.test);
-					var authInputs = [
-						{ name: '', type: '', label: '' },
-						{ name: '', type: '', label: '' }
-					]; 
-				</script>
-				
-				<span>%{test}%</span>
 				
 				<div class="form__element" key="%{}%">
 					<input name="%{authInputs[*].name}%" type="%{authInputs[*].type}%" class="form__input__field form__input__field_standard" 
@@ -60,6 +50,14 @@
 		</main>
 	</div>
 	<script src="../templator/ProtoPages.js"></script>
-
+	<!--<script src="../components/Input.js" type="module"></script>-->
+	<script type="module">
+		import test from '../components/Test.js';
+		const authInputs = [
+			{ name: 'login', type: 'text', label: 'Логин' },
+			{ name: 'password', type: 'password', label: 'Пароль' }
+		]; 
+		ProtoPages.compile({ test });
+	</script>
 </body>
 </html> 
