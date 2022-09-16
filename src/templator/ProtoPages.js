@@ -14,7 +14,7 @@ window.ProtoPages = (() => {
 	const templatePartialIndex = 0;
 
 	
-	const componentPattern = /\<\>([^]*?)\<\/\>/gi;
+	const componentPattern = /^\<\>([^]*?)\<\/\>$/gi;
 	const componentTags = { start: '<>', end: '</>' }
 	
 	
@@ -101,7 +101,7 @@ window.ProtoPages = (() => {
 				if (str !== null) {
 					let matches;
 					componentPattern.lastIndex = 0;
-					if ((matches = componentPattern.exec(str)) && node.childNodes.length === 1) {
+					if ((matches = componentPattern.exec(str.trim())) && node.childNodes.length === 1) {
 						node.innerHTML = matches[1];						
 					}
 					else {
@@ -126,11 +126,33 @@ window.ProtoPages = (() => {
 	};
 	
 	
-	ProtoPages.compile = (context = window) => {
+	
+	ProtoPages.init = (context = window) => {
 		templateContext = context;
 		traverseChildren(document.head);
 		traverseChildren(document.body);
 	};
+	
+	ProtoPages.compileWhenReady = (context = window) => {
+		if (document.readyState === 'interactive' || document.readyState === 'complete') {
+			ProtoPages.init(context);
+		}
+		else {
+			window.addEventListener('DOMContentLoaded', (event) => {
+				setTimeout(() => {
+					ProtoPages.init(context);
+				}, 1);
+			});
+			window.addEventListener('load', (event) => {
+				setTimeout(() => {
+					ProtoPages.init(context);
+				}, 1);
+			});
+		}
+	};
+	
+	ProtoPages.compile = ProtoPages.compileWhenReady;
+
 	
 	/*
 element.cloneNode(true) // клонирует элемент
@@ -142,9 +164,8 @@ parent.insertBefore(elem, nextSibling) // вставляет узел
 
 	*/
 	
-	window.addEventListener('load', (event) => {
-		ProtoPages.compile();
-	});
+	ProtoPages.compile();
+	
 	
 	return ProtoPages;
 	
