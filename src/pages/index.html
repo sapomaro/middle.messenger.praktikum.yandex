@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<script src="../templator/ProtoPages.js"></script>
+<script type="module">
+	import('/src/layouts/Narrow.js');
+
+	const context = {};
+	
+	context.title = 'Карта экранов приложения';
+	
+	context.contents = () => `
+
+		<h1 class="container__header">%{title}%</h1>
+		
+		<div class="container__element container__link_wrapper">
+			<a href="auth.html" class="container__link">Вход</a>
+		</div>
+		<div class="container__element container__link_wrapper">
+			<a href="register.html" class="container__link">Регистрация</a>
+		</div>
+		<div class="container__element container__link_wrapper">
+			<a href="profile.html" class="container__link">Профиль</a>
+		</div>
+		<div class="container__element container__link_wrapper">
+			<a href="profile_newpass.html" class="container__link">Смена пароля</a>
+		</div>
+		<div class="container__element container__link_wrapper">
+			<a href="chats.html" class="container__link">Чаты</a>
+		</div>	
+		<div class="container__element container__link_wrapper">
+			<a href="404.html" class="container__link">Страница 404</a>
+		</div>	
+		<div class="container__element container__link_wrapper">
+			<a href="500.html" class="container__link">Страница 500</a>
+		</div>	
+
+	`;
+	
+	window.addEventListener('load', (event) => {
+		ProtoPages.compile(context);
+		
+		
+	});
+</script>

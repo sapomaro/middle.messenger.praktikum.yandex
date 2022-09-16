@@ -40,3 +40,45 @@ body {
 	margin: 0 auto;
 	background: #fff;
 }
+
+
+.container__header {
+	font-style: normal;
+	font-weight: 500;
+	font-size: 1.5rem;
+	line-height: 1.5rem;
+	text-align: center;
+	margin: 1rem 0 2rem 0;
+}
+.container__element {
+	position: relative;
+	display: block;
+	margin: 1.5rem;
+	box-sizing: border-box;
+}
+
+
+.container__link {
+	color: #3369F3;
+	text-decoration: none;
+	cursor: pointer;
+	
+	&_wrapper {
+		text-align: center;
+	}
+	&:hover {
+		filter: brightness(0.9);
+		text-decoration: underline;
+	}
+	&_red {
+		color: #f00;
+	}
+	&_grey {
+		color: #999;
+	}
+	
+	&_underlined {
+		text-decoration: underline;
+	}
+}
+

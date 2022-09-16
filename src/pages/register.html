@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<script src="../templator/ProtoPages.js"></script>
+<script type="module">
+	import('/src/layouts/Narrow.js');
+	import '/src/components/forms/common.scss';
+	
+	const context = {};
+	
+	context.title = 'Регистрация';
+	
+	context.contents = () => `
+		<form name="reg" action="chats.html">
+			<h1 class="container__header">%{title}%</h1>
+			
+			%{ input({}) }%
+			
+			<div class="container__element"><br></div>
+			
+			<div class="container__element">
+				<input name="submit" type="submit" class="form__button form__button_standard" value="Зарегистрироваться">
+			</div>
+			<div class="container__element container__link_wrapper">
+				<a href="auth.html" class="container__link">Войти</a>
+			</div>
+		</form>
+	`;
+	
+	
+	
+
+
+	window.addEventListener('load', (event) => {
+		ProtoPages.compile(context);
+		
+		
+	});
+</script>

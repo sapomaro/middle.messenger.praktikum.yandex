@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<script src="../templator/ProtoPages.js"></script>
+<script type="module">
+	import('/src/layouts/Wide.js');
+
+	const context = {};
+	
+	context.title = '404';
+	
+	context.contents = () => `
+		<h1 class="container__header container__header_big">%{title}%</h1>
+		<h2 class="container__header">Не туда попали</h2>
+		<br>
+		<div class="container__element container__link_wrapper">
+			<a href="chats.html" class="container__link">Назад к чатам</a>
+		</div>
+	`;
+	
+	
+	window.addEventListener('load', (event) => {
+		ProtoPages.compile(context);
+		
+		
+	});
+</script>

@@ -1,18 +1,11 @@
-.form__header {
-	font-style: normal;
-	font-weight: 500;
-	font-size: 1.5rem;
-	line-height: 1.5rem;
-	text-align: center;
-	margin: 1rem 0 2rem 0;
-}
 
-.form__element {
+
+/*.form__element {
 	position: relative;
 	display: block;
 	margin: 1.5rem;
 	box-sizing: border-box;
-}
+}*/
 
 .form__row {
 	display: flex;
@@ -128,33 +121,12 @@
 
 
 
-.form__link_wrapper {
-	text-align: center;
-}
-.form__link {
-	color: #3369F3;
-	text-decoration: none;
-	cursor: pointer;
-}
-.form__link_red {
-	color: #f00;
-}
-.form__link_grey {
-	color: #999;
-}
-.form__link_underlined {
-	text-decoration: underline;
-}
-
 
 .form__button:active {
 	transform: scale(0.98);
 }
 
-.form__link:hover {
-	filter: brightness(0.9);
-	text-decoration: underline;
-}
+
 		
 
 
