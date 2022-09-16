@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<script src="../templator/ProtoPages.js"></script>
+<script type="module">
+	import('/src/layouts/Wide+Side.js');
+	import '/src/components/forms/common.scss';
+	
+	
+	const context = {};
+	
+	context.title = 'Профиль';
+	
+	context.sidebar = () => `
+		<a href="chats.html" class="sidebar__control form__button form__button_standard form__button_round">⬅</a>
+	`;
+	
+	context.contents = () => `
+
+		<form name="profile">
+			
+			<div class="form__avatar">
+				<div class="form__avatar__control" onclick="(() => { 
+					document.querySelector('.popup').style.display = 'flex'; 
+				})();">
+					<span>Поменять аватар</span>
+				</div>
+			</div>
+			<h1 class="container__header">%{first_name}%</h1>
+			
+			<label class="form__row">
+				<span class="form__row__label">Почта</span>
+				<input name="email" type="email" class="form__input__field form__input__field_right"
+					value="%{email}%" readonly="readonly">
+			</label>
+			
+				
+			<br><br><br>
+			
+			<div class="form__row">
+				<a class="form__row__label container__link">Изменить данные</a>
+			</div>
+			<div class="form__row">
+				<a href="profile_newpass.html" class="form__row__label container__link">Изменить пароль</a>
+			</div>
+			<div class="form__row">
+				<a href="auth.html" class="form__row__label container__link container__link_red">Выйти</a>
+			</div>
+			
+			<br><br><br>
+			
+			<div class="form__element form__element_centered">
+				<input name="submit" type="button" class="form__button form__button_standard" value="Сохранить">
+			</div>
+		</form>
+	`;
+
+
+	context.popup = () => `
+		<form name="avatar">
+			<h1 class="container__header">Загрузите файл</h1>
+			<br>
+			<div class="container__element container__element_centered">
+				<label>
+					<a class="form__link form__link_underlined">Выбрать файл <br>на компьютере</a>
+					<input name="avatar" type="file" accept="image/png, image/jpeg" class="form__input__file">
+				</label>
+			</div>
+			<br>
+			<div class="container__element container__element_centered">
+				<button class="form__button form__button_standard">Поменять</button>
+				<br><br>
+				<span class="form__input__error">Нужно выбрать файл</span>
+			</div>
+		</form>
+	`;
+
+
+	
+	ProtoPages.compile(context);
+	
+
+</script>
