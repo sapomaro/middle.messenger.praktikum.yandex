@@ -6,17 +6,13 @@
 
 ## Команды для запуска 
 
-Запуск dev-сервера Parcel: 
+Запуск dev-сервера Parcel (http://localhost:1234/): 
 
 	npm run dev
-	curl http://localhost:1234/
 
+Запуск сборки и прод-сервера (http://localhost:3000/):
 
-Запуск Express-сервера для раздачи статики из папки /dist:
-
-	node ./server.js
-	curl http://localhost:3000/
-
+	npm run start
 
 ## Прочее
 
