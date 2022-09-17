@@ -22,9 +22,10 @@ export default (props) => `
 		</span>
 	</label>
 	
-	<textarea id="messageField" name="message" class="form__textarea form__element_grey" rows="1" data-placeholder="Сообщение..."></textarea>
+	<textarea id="messageField" name="message" class="chatbox__send__textarea" 
+		rows="1" data-placeholder="Сообщение..."></textarea>
 	
-	<button type="button" class="form__button form__button_standard form__button_round chatbox__send">➜</button>
+	<button type="button" class="form__button form__button_standard form__button_round chatbox__send__button">➜</button>
 `;
 
 
