@@ -2,36 +2,52 @@
 <script type="module">
 	import ProtoPages from '/src/templator/ProtoPages.js';
 	import('/src/layouts/Narrow.js');
+	
 	import '/src/components/forms/common.scss';
 	
-	const context = {};
+	import Input from '/src/components/forms/StandardInput.js';
+	import Button from '/src/components/forms/StandardButton.js';
+	import Link from '/src/components/forms/StandardLink.js';
+	
+	const context = { Input, Button, Link };
 	
 	context.title = 'Регистрация';
 	
 	context.contents = () => `
 		<form name="reg" action="chats.html">
+		
 			<h1 class="container__header">%{title}%</h1>
 			
-			%{ input({}) }%
+			%{ Input({ "name": "email", "type": "email", "label": "Почта" }) }%
 			
-			<div class="container__element"><br></div>
+			%{ Input({ "name": "login", "type": "text", "label": "Логин" }) }%
 			
-			<div class="container__element">
-				<input name="submit" type="submit" class="form__button form__button_standard" value="Зарегистрироваться">
-			</div>
-			<div class="container__element container__element_centered">
-				<a href="auth.html" class="container__link">Войти</a>
-			</div>
+			%{ Input({ "name": "first_name", "type": "text", "label": "Имя" }) }%
+			
+			%{ Input({ "name": "second_name", "type": "text", "label": "Фамилия" }) }%
+			
+			%{ Input({ "name": "phone", "type": "tel", "label": "Телефон" }) }%
+			
+			%{ Input({ "name": "password", "type": "password", "label": "Пароль" }) }%
+			
+			%{ Input({ 
+				"name": "password_again", 
+				"type": "password", 
+				"label": "Пароль (ещё раз)",
+				"error": "Пароли не совпадают" 
+			}) }%
+			
+			<br><br>
+			
+			%{ Button({ "name": "submit", "type": "submit", "label": "Зарегистрироваться" }) }%
+			
+			%{ Link({ "url": "auth.html", "label": "Войти" }) }%
+
 		</form>
 	`;
 	
-	
-	
 
+	ProtoPages.compile(context);
+		
 
-	window.addEventListener('load', (event) => {
-		ProtoPages.compile(context);
-		
-		
-	});
 </script>

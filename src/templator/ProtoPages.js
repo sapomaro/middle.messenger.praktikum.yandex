@@ -1,46 +1,71 @@
 
 const ProtoPages = {};
 
+
+///////////////////////
+/* Pattern Resolving */
+///////////////////////
+
 let templateContext;
 
-const templatePattern = /%\{\s?(.*?)\s?\}%/gi;
+const templatePattern = /%\{\s?([^]*?)\s?\}%/g;
 const templateSubpatterns = {
+	jsonFunc: /([^\( ]+)\(\s?\{([^]*?)\}\s?\)/
 	//importFunc: /import\(['"]([^'"]+)['"]\)/i,
 	//arrayExpr: /([^\[]+)\[([^\]]+)\]/
 };
-const templatePartialKey = 'key';
-const templatePartialIndex = 0;
 
 
-const componentPattern = /^\<\>([^]*?)\<\/\>$/gi;
-const componentTags = { start: '<>', end: '</>' }
+
+const partial = {};
+partial.pattern = /^<%>([^]*?)<\/%>$/g;
+partial.stripPattern = /<\/?%>/g;
+partial.tags = { start: '<%>', end: '</%>' }
+partial.strip = (str) => {
+	return str.replace(partial.stripPattern, '');
+};
+partial.key = 'key';
 
 
 
 const resolvePattern = (pattern) => {
 	pattern = pattern.trim();
 	let matches,
-		context = templateContext;
+		context = templateContext,
+		result;
 	
-
-	let props = pattern.trim().split('.');
-	for (let i = 0; i < props.length; ++i) {
-		if (typeof context[props[i]] !== 'undefined') {
-			context = context[props[i]];
+	templateSubpatterns.jsonFunc.lastIndex = 0;
+	if (matches = templateSubpatterns.jsonFunc.exec(pattern)) {
+		const func = matches[1];
+		let json = '{' + matches[2].replace(/\n+/g, '') + '}';
+		
+		try {
+			json = JSON.parse(json);
 		}
-		else {
-			//templateSubpatterns.arrayExpr.lastIndex = 0;
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
+		catch (error) {
+			console.log(error);
+			json = {};
+		}
+		if (typeof context[func] === 'function') {
+			result = partial.tags.start + context[func](json) + partial.tags.end;
 		}
 	}
-	if (typeof context === 'function') {
-		context = componentTags.start + context() + componentTags.end;
+	else {
+		let props = pattern.trim().split('.');
+		for (let i = 0; i < props.length; ++i) {
+			if (typeof context[props[i]] !== 'undefined') {
+				context = context[props[i]];
+			}
+		}
+		result = context;
+		if (typeof result === 'function') {
+			result = partial.tags.start + result() + partial.tags.end;
+		}
 	}
+		
 	
-	if (typeof context === 'string' || typeof context === 'number') {
-		return context;
+	if (typeof result === 'string' || typeof result === 'number') {
+		return result;
 	}
 	else {
 		return null;
@@ -74,12 +99,16 @@ const resolveString = (str) => {
 };
 
 
+////////////////////
+/* DOM Traversing */
+////////////////////
+
 const traverseChildren = (node) => {
 	if (!node.childNodes) { return; }
 	for (let i = node.childNodes.length - 1; i >= 0; --i) {
 		if (node.childNodes[i].nodeType === 1) {
 			traverseAttributes(node.childNodes[i]);
-			if (node.childNodes[i].hasAttribute(templatePartialKey)) {
+			if (node.childNodes[i].hasAttribute(partial.key)) {
 				const str = resolveString(node.childNodes[i].innerHTML);
 //console.log(str);
 				if (str !== null) {
@@ -98,12 +127,12 @@ const traverseChildren = (node) => {
 
 			if (str !== null) {
 				let matches;
-				componentPattern.lastIndex = 0;
-				if ((matches = componentPattern.exec(str.trim())) && node.childNodes.length === 1) {
-					node.innerHTML = matches[1];						
+				partial.pattern.lastIndex = 0;
+				if ((matches = partial.pattern.exec(str.trim())) && node.childNodes.length === 1) {
+					
+					node.innerHTML = partial.strip(matches[1]);						
 				}
 				else {
-//console.log(str);
 					node.childNodes[i].textContent = str;
 				}
 			}
@@ -127,45 +156,45 @@ ProtoPages.compileAll = (context = window) => {
 	traverseChildren(document.body);
 };
 
+///////////////////
+/* Load Handling */
+///////////////////
+
+const loadTasks = [];
+
+const runTasks = () => {
+	for (const { task, context } of loadTasks) {
+		task(context);
+	}
+};
+ProtoPages.onload = (task, context = window) => {
+	loadTasks.push({ task, context });
+};
+
+ProtoPages.init = (context = window) => {
+	if (document.readyState === 'interactive' || document.readyState === 'complete') {
+		runTasks();
+	}
+	else {
+		window.addEventListener('DOMContentLoaded', runTasks);
+		window.addEventListener('load', runTasks);
+	}
+};
+
 
 ProtoPages.compile = (context = window) => {
 	ProtoPages.onload(() => {
-		setTimeout(() => {
+		setTimeout(() => { // timer to make compileAll() run in the end
 			ProtoPages.compileAll(context);
 		}, 1);
 	});
 };
 
-ProtoPages.tasks = [];
-ProtoPages.onload = (task, context = window) => {
-	ProtoPages.tasks.push({ task, context });
-};
-ProtoPages.runTasks = () => {
-	for (const { task, context } of ProtoPages.tasks) {
-		task(context);
-	}
-};
-
-ProtoPages.init = (context = window) => {
-	if (document.readyState === 'interactive' || document.readyState === 'complete') {
-		ProtoPages.runTasks();
-	}
-	else {
-		window.addEventListener('DOMContentLoaded', (event) => {
-			setTimeout(() => {
-				ProtoPages.runTasks();
-			}, 1);
-		});
-		window.addEventListener('load', (event) => {
-			setTimeout(() => {
-				ProtoPages.runTasks();
-			}, 1);
-		});
-	}
-};
 
 ProtoPages.init();
-ProtoPages.onload(() => {
+
+// run compileAll() with global variables
+ProtoPages.onload(() => { 
 	ProtoPages.compileAll();
 });
 

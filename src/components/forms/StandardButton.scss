@@ -1,0 +1,13 @@
+.form__button_standard {
+	display: inline-block;
+	width: 100%;
+	max-width: 23rem;
+	font-size: 1.2rem;
+	color: #FFF;
+	background: #3369F3;
+	border-radius: 0.8rem;
+	
+	&:hover {
+		filter: brightness(1.3);
+	}
+}

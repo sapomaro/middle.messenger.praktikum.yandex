@@ -1,6 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
 
 
+:root {
+  --main-bg-color: brown;
+}
+
+
+
 html,
 body {
 	padding: 0;
@@ -16,7 +22,7 @@ body {
 	position: relative;
 	height: 100%;
 	min-height: 100vh;
-	background: #fff;
+	background: #FFF;
 }
 
 
@@ -47,7 +53,7 @@ body {
 
 .scrollable {
 	scrollbar-width: thin;
-	scrollbar-color: #ccc #efefef;
+	scrollbar-color: #CCC #EFEFEF;
 	height: 100vh;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -55,7 +61,7 @@ body {
 .scrollable::-webkit-scrollbar {
 	width: 5px;
 	height: 5px;
-	background-color: #efefef; 
+	background-color: #EFEFEF; 
 }
 .scrollable::-webkit-scrollbar-thumb {
 	background: #ccc;
@@ -64,7 +70,7 @@ body {
 
 .container {
 	margin: 0 auto;
-	background: #fff;
+	background: #FFF;
 }
 
 .container_chatbox {
@@ -93,8 +99,8 @@ body {
 
 .sidebar {
 	align-self: stretch;
-	background: #fbfbfb;
-	border-right: 2px solid #eaeaea;
+	background: #FBFBFB;
+	border-right: 2px solid #EAEAEA;
 }
 
 .sidebar_chatlist {
@@ -138,8 +144,8 @@ body {
 	justify-content: space-between;
 	align-items: flex-start;
 	padding: 1rem 0;
-	border-bottom: 2px solid #eaeaea;
-	background: #fff;
+	border-bottom: 2px solid #EAEAEA;
+	background: #FFF;
 }
 .chatbox__body {
 	flex: 1;
@@ -158,8 +164,8 @@ body {
 	justify-content: space-between;
 	align-items: flex-start;
 	padding: 1rem 0;
-	border-top: 2px solid #eaeaea;
-	background: #fff;
+	border-top: 2px solid #EAEAEA;
+	background: #FFF;
 }
 
 .chatbox__header__avatar {
@@ -167,7 +173,7 @@ body {
 	height: 3rem;
 	width: 3rem;
 	border-radius: 50%;
-	background: #efefef;
+	background: #EFEFEF;
 
 }
 .chatbox__header__text {
@@ -215,7 +221,7 @@ body {
 	font-size: 1.2rem;
 	box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.14);
 	border-radius: 1rem;
-	background: #fff;
+	background: #FFF;
 }
 
 .chatbox__date {
@@ -235,7 +241,7 @@ body {
 
 .chatbox__message_inc {
 	align-self: flex-start;
-	background: #f8f8f8;
+	background: #F8F8F8;
 	border-top-left-radius: 0;
 }
 .chatbox__message_out {
@@ -289,7 +295,7 @@ body {
 	height: 4rem;
 	width: 4rem;
 	border-radius: 50%;
-	background: #efefef;
+	background: #EFEFEF;
 }
 .chatlist__item__text {
 	flex: 1;
@@ -318,7 +324,7 @@ body {
 	line-height: 2rem;
 	border-radius: 50%;
 	background: #3369F3;
-	color: #fff;
+	color: #FFF;
 	text-align: center;
 	display: flex;
 	justify-content: center;
@@ -354,7 +360,7 @@ body {
 }
 
 .form__row+.form__row {
-	border-top: 2px solid #eaeaea;
+	border-top: 2px solid #EAEAEA;
 }
 
 .form__avatar {
@@ -362,7 +368,7 @@ body {
 	height: 10rem;
 	display: flex;
 	margin: 2rem auto;
-	background: #efefef url("../../public/noavatar.png");
+	background: #EFEFEF url("../../public/noavatar.png");
 	background-repeat: no-repeat;
 	background-position: center;
 	border-radius: 50%;
@@ -376,7 +382,7 @@ body {
 	align-items: center;
 	border-radius: 50%;
 	background: rgba(0, 0, 0, 0.5);
-	color: #fff;
+	color: #FFF;
 	padding: 1rem;
 	font-size: 1.1rem;
 	text-align: center;
