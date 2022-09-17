@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<script src="../templator/ProtoPages.js"></script>
 <script type="module">
+	import ProtoPages from '/src/templator/ProtoPages.js';
 	import('/src/layouts/Narrow.js');
 	//import input from '../components/StandardInput.js';
 	import '/src/components/forms/common.scss';
@@ -13,18 +13,36 @@
 	context.contents = () => `
 		<form name="auth" action="chats.html">
 			<h1 class="container__header">%{title}%</h1>
+			<div class="container__element">
+				<input name="login" type="text" class="form__input__field form__input__field_standard" 
+					value="" oninput="this.setAttribute('value', this.value);">
+				<label class="form__input__label">Логин</label>
+				<span class="form__input__error"></span>
+			</div>
+			<div class="container__element">
+				<input name="password" type="password" class="form__input__field form__input__field_standard" 
+					value="" oninput="this.setAttribute('value', this.value);">
+				<label class="form__input__label">Пароль</label>
+				<span class="form__input__error"></span>
+			</div>
 			
+				
+				
 			<span class="test">%{test}%</span>
 			
 			%{ input({ name: 'login', type: 'text', label: 'Логин' }) }%
 			
 			%{ input({ name: 'password', type: 'password', label: 'Пароль' }) }%
 				
+				
+				
+				
+				
 			<div class="form__space"></div>
 			<div class="container__element">
 				<input name="submit" type="submit" class="form__button form__button_standard" value="Авторизоваться">
 			</div>
-			<div class="container__element container__link_wrapper">
+			<div class="container__element container__element_centered">
 				<a href="register.html" class="container__link">Нет аккаунта?</a>
 			</div>
 		</form>

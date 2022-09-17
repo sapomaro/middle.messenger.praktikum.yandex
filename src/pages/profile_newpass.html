@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<script src="../templator/ProtoPages.js"></script>
 <script type="module">
+	import ProtoPages from '/src/templator/ProtoPages.js';
 	import('/src/layouts/Wide+Side.js');
 	import '/src/components/forms/common.scss';
 	
@@ -20,20 +20,20 @@
 		
 			<h1 class="container__header"></h1>
 			
-			<label class="form__row">
+			<label class="container__row">
 				<span class="form__row__label">Старый пароль</span>
 				<span class="form__text_right">
 					<input name="oldPassword" type="password" class="form__input__field form__input__field_right" value="********">
 				</span>
 			</label>
-			<label class="form__row">
+			<label class="container__row">
 				<span class="form__row__label">Новый пароль</span>
 				<span class="form__text_right">
 					<input name="newPassword" type="password" class="form__input__field form__input__field_right" value="********">
 					
 				</span>
 			</label>
-			<label class="form__row">
+			<label class="container__row">
 				<span class="form__row__label">Повторите новый пароль</span>
 				<span class="form__text_right">
 					<input name="newPassword2" type="password" class="form__input__field form__input__field_right" value="********"><br>

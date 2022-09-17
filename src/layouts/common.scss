@@ -36,12 +36,12 @@ body {
 	justify-content: center;
 	flex-direction: row;
 }
+
+
 .container {
 	margin: 0 auto;
 	background: #fff;
 }
-
-
 
 .container__header {
 	font-style: normal;
@@ -51,14 +51,31 @@ body {
 	text-align: center;
 	margin: 1rem 0 2rem 0;
 }
+
+
+.container__row {
+	display: flex;
+	margin: 1rem;
+	padding: 1rem 0 0 0;
+	justify-content: space-between;
+	align-items: flex-start;
+	
+
+	&+.container__row {
+		border-top: 2px solid #eaeaea;
+	}
+}
+
 .container__element {
 	position: relative;
 	display: block;
 	margin: 1.5rem;
 	box-sizing: border-box;
-}
-.container__element_centered {
-	text-align: center;
+	
+	&_centered {
+		text-align: center;
+		justify-content: center;
+	}
 }
 
 
@@ -67,9 +84,6 @@ body {
 	text-decoration: none;
 	cursor: pointer;
 	
-	&_wrapper {
-		text-align: center;
-	}
 	&:hover {
 		filter: brightness(0.9);
 		text-decoration: underline;

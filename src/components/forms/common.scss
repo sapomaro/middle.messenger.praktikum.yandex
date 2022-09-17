@@ -1,18 +1,5 @@
 
 
-.form__row {
-	display: flex;
-	margin: 1rem;
-	justify-content: space-between;
-	align-items: flex-start;
-}
-.form__row>* {
-	flex: 1;
-}
-
-.form__row+.form__row {
-	border-top: 2px solid #eaeaea;
-}
 
 .form__avatar {
 	width: 10rem;
@@ -126,7 +113,7 @@
 
 .form__row__label {
 	font-size: 1.2rem;
-	padding: 1rem 0 0 0;
+
 }
 
 
@@ -137,7 +124,7 @@
 	position: relative;
 	z-index: 2;
 	display: block;
-	padding: 1rem 0;
+	/*padding: 1rem 0;*/
 	font-size: 1.2rem;
 	width: 100%;
 	box-sizing: border-box;
@@ -155,7 +142,7 @@
 .form__input__field_right {
 	text-align: right;
 	color: #999;
-	padding-bottom: 0;
+	/*padding-bottom: 0;*/
 }
 
 .form__input__label {

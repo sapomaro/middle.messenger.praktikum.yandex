@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<script src="../templator/ProtoPages.js"></script>
+<!--<script src="../templator/ProtoPages.js"></script>-->
 <script type="module">
+	import ProtoPages from '/src/templator/ProtoPages.js';
+	
 	import('/src/layouts/Narrow.js');
 
 	const context = {};
@@ -11,25 +13,25 @@
 
 		<h1 class="container__header">%{title}%</h1>
 		
-		<div class="container__element container__link_wrapper">
+		<div class="container__row container__element_centered">
 			<a href="auth.html" class="container__link">Вход</a>
 		</div>
-		<div class="container__element container__link_wrapper">
+		<div class="container__row container__element_centered">
 			<a href="register.html" class="container__link">Регистрация</a>
 		</div>
-		<div class="container__element container__link_wrapper">
+		<div class="container__row container__element_centered">
 			<a href="profile.html" class="container__link">Профиль</a>
 		</div>
-		<div class="container__element container__link_wrapper">
+		<div class="container__row container__element_centered">
 			<a href="profile_newpass.html" class="container__link">Смена пароля</a>
 		</div>
-		<div class="container__element container__link_wrapper">
+		<div class="container__row container__element_centered">
 			<a href="chats.html" class="container__link">Чаты</a>
 		</div>	
-		<div class="container__element container__link_wrapper">
+		<div class="container__row container__element_centered">
 			<a href="404.html" class="container__link">Страница 404</a>
 		</div>	
-		<div class="container__element container__link_wrapper">
+		<div class="container__row container__element_centered">
 			<a href="500.html" class="container__link">Страница 500</a>
 		</div>	
 
