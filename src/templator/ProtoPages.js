@@ -164,6 +164,10 @@ ProtoPages.compileAll = (context = window) => {
 	templateContext = context;
 	traverseChildren(document.head);
 	traverseChildren(document.body);
+	
+	if (document.readyState === 'complete') {
+		runTasks(compileTasks);
+	}
 };
 
 ///////////////////
@@ -171,23 +175,31 @@ ProtoPages.compileAll = (context = window) => {
 ///////////////////
 
 const loadTasks = [];
+const compileTasks = [];
 
-const runTasks = () => {
-	for (const { task, context } of loadTasks) {
+const runTasks = (tasks) => {
+	for (const { task, context } of tasks) {
 		task(context);
 	}
 };
 ProtoPages.onload = (task, context = window) => {
 	loadTasks.push({ task, context });
 };
+ProtoPages.oncompiled = (task, context = window) => {
+	compileTasks.push({ task, context });
+};
 
 ProtoPages.init = (context = window) => {
 	if (document.readyState === 'interactive' || document.readyState === 'complete') {
-		runTasks();
+		runTasks(loadTasks);
 	}
 	else {
-		window.addEventListener('DOMContentLoaded', runTasks);
-		window.addEventListener('load', runTasks);
+		window.addEventListener('DOMContentLoaded', () => {
+			runTasks(loadTasks);
+		});
+		window.addEventListener('load', () => {
+			runTasks(loadTasks);
+		});
 	}
 };
 
@@ -204,9 +216,9 @@ ProtoPages.compile = (context = window) => {
 ProtoPages.init();
 
 // run compileAll() with global variables
-ProtoPages.onload(() => { 
+/*ProtoPages.onload(() => { 
 	ProtoPages.compileAll();
-});
+});*/
 
 
 export default ProtoPages;
