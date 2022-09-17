@@ -4,7 +4,7 @@
   "description": "sprint_1",
   "scripts": {
     "dev": "parcel ./src/pages/*.html --no-cache",
-    "build": "parcel build ./src/pages/*.html --dist-dir dist && node ./server.js"
+    "start": "parcel build ./src/pages/*.html --dist-dir dist && node ./server.js"
   },
   "keywords": [],
   "author": "",

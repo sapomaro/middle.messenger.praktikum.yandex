@@ -14,7 +14,9 @@ ProtoPages.onload(() => {
 		</div>
 		<div class="root">
 			<aside class="sidebar sidebar_nav">
-				%{sidebar}%
+				<form action="chats.html" class="sidebar__control">
+					<button class="form__button form__button_standard form__button_round">⬅</button>
+				</form>
 			</aside>
 			<main class="container container_wide">
 				%{contents}%

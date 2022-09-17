@@ -7,35 +7,34 @@
 
 	const context = {};
 	
+	const links = JSON.stringify([
+		{ url: "auth.html", label: "Вход" },
+		{ url: "register.html", label: "Регистрация" },
+		{ url: "profile.html", label: "Профиль" },
+		{ url: "profile_newpass.html", label: "Смена пароля" },
+		{ url: "chats.html", label: "Чаты" },
+		{ url: "404.html", label: "Страница 404" },
+		{ url: "500.html", label: "Страница 500" }
+	]);
+	
+	
 	context.title = 'Карта экранов приложения';
 	
 	context.contents = () => `
 
 		<h1 class="container__header">%{title}%</h1>
 		
-		<div class="container__row container__element_centered">
-			<a href="auth.html" class="container__link">Вход</a>
-		</div>
-		<div class="container__row container__element_centered">
-			<a href="register.html" class="container__link">Регистрация</a>
-		</div>
-		<div class="container__row container__element_centered">
-			<a href="profile.html" class="container__link">Профиль</a>
-		</div>
-		<div class="container__row container__element_centered">
-			<a href="profile_newpass.html" class="container__link">Смена пароля</a>
-		</div>
-		<div class="container__row container__element_centered">
-			<a href="chats.html" class="container__link">Чаты</a>
-		</div>	
-		<div class="container__row container__element_centered">
-			<a href="404.html" class="container__link">Страница 404</a>
-		</div>	
-		<div class="container__row container__element_centered">
-			<a href="500.html" class="container__link">Страница 500</a>
-		</div>	
-
+		<nav><ul>
+			%{ Link(${links}...) }%
+		</ul></nav>
 	`;
+	
+	context.Link = (props) => `
+		<li class="container__row container__element_centered">
+			<a href="${props.url}" class="container__link">${props.label}</a>
+		</li>	
+	`;
+	
 	
 	ProtoPages.compile(context);
 

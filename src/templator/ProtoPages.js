@@ -10,7 +10,7 @@ let templateContext;
 
 const templatePattern = /%\{\s?([^]*?)\s?\}%/g;
 const templateSubpatterns = {
-	jsonFunc: /([^\( ]+)\(\s?\{([^]*?)\}\s?\)/
+	jsonFunc: /^([^\( ]+)\(\s?([\{\[][^]*?[\}\]])(\.\.\.)?\s?\)$/
 	//importFunc: /import\(['"]([^'"]+)['"]\)/i,
 	//arrayExpr: /([^\[]+)\[([^\]]+)\]/
 };
@@ -37,7 +37,8 @@ const resolvePattern = (pattern) => {
 	templateSubpatterns.jsonFunc.lastIndex = 0;
 	if (matches = templateSubpatterns.jsonFunc.exec(pattern)) {
 		const func = matches[1];
-		let json = '{' + matches[2].replace(/\n+/g, '') + '}';
+		let json = matches[2].replace(/\n+/g, '');
+
 		
 		try {
 			json = JSON.parse(json);
@@ -47,7 +48,16 @@ const resolvePattern = (pattern) => {
 			json = {};
 		}
 		if (typeof context[func] === 'function') {
-			result = partial.tags.start + context[func](json) + partial.tags.end;
+			if (matches[3] && matches[3] === '...' && json instanceof Array) {
+				result = '';
+				for (const item of json) {
+					result += context[func](item);
+				}
+			}
+			else {
+				result = context[func](json);
+			}
+			result = partial.tags.start + result + partial.tags.end;
 		}
 	}
 	else {
