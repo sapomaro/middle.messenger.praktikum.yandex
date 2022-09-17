@@ -1,0 +1,63 @@
+.scrollable {
+	scrollbar-width: thin;
+	scrollbar-color: #ccc #efefef;
+	height: 100vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+.scrollable::-webkit-scrollbar {
+	width: 5px;
+	height: 5px;
+	background-color: #efefef; 
+}
+.scrollable::-webkit-scrollbar-thumb {
+	background: #ccc;
+	border-radius: 5px;
+}
+
+.container_chatbox {
+	display: flex;
+	flex: 1 1 75%;
+	align-self: stretch;
+	padding: 0 2rem;
+	flex-flow: column;
+	justify-content: space-between;
+}
+
+.sidebar_chatlist {
+	flex: 1 1 25%;
+	min-width: 11rem;
+}
+
+
+.chatbox__header {
+	position: sticky;
+	top: 0;
+	flex: 0 1 2rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	padding: 1rem 0;
+	border-bottom: 2px solid #eaeaea;
+	background: #fff;
+}
+.chatbox__body {
+	flex: 1;
+	display: flex;
+	margin: 1rem 0;
+	padding: 1rem 0;
+	flex-flow: column;
+	align-items: center;
+	justify-content: flex-end;
+}
+.chatbox__footer {
+	position: sticky;
+	bottom: 0;
+	flex: 0 1 2rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	padding: 1rem 0;
+	border-top: 2px solid #eaeaea;
+	background: #fff;
+}

@@ -77,6 +77,10 @@ body {
 		text-align: center;
 		justify-content: center;
 	}
+	&_right {
+		text-align: right;
+		justify-content: flex-end;
+	}
 }
 
 

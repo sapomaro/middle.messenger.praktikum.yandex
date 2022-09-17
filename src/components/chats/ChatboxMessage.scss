@@ -1,0 +1,45 @@
+
+.chatbox__date {
+	margin: 2rem 0;
+	color: #999;
+	text-align: center;
+}
+
+
+.chatbox__message {
+	max-width: 31rem;
+	padding: 1rem;
+	margin: 1rem 0;
+	border-radius: 1rem;
+}
+
+.chatbox__message_inc {
+	align-self: flex-start;
+	background: #f8f8f8;
+	border-top-left-radius: 0;
+}
+.chatbox__message_out {
+	align-self: flex-end;
+	background: #E4EDFD;
+	border-bottom-right-radius: 0;
+}
+.chatbox__message__text {
+	white-space: pre-wrap;
+}
+.chatbox__message__info {
+	padding: 0.25rem 0 0 1rem;
+	font-size: 0.75rem;
+	float: right;
+}
+.chatbox__message_inc .chatbox__message__info {
+	color: #999;
+}
+.chatbox__message_out .chatbox__message__info {
+	color: #3369F3;
+}
+.chatbox__message__status {
+	font-size: 0.6rem;
+	letter-spacing: -3px;
+	margin-left: -4px;
+	padding-right: 4px;
+}

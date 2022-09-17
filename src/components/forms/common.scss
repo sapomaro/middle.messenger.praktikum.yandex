@@ -11,60 +11,12 @@
 	&:active {
 		transform: scale(0.98);
 	}
-	
 }
-
-
-
-.form__control {
-	cursor: pointer;
-}
-.form__icon {
-	margin-right: 1rem;
-	vertical-align: bottom;
-}
-
-
-
-
-.form__button_bigfont {
-	font-size: 2rem;
-}
-.form__button_fileclip {
-	width: 3rem;
-	height: 3rem;
-	border: none;
-	background: url("/public/fileclip_icon.svg");
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
-}
-.form__button_send {
-	align-self: flex-end;
-}
-
-
-.form__button_blank:hover, .form__toggle:checked+.form__button_blank {
-	color: #3369F3;
-	background: #F5F5F5;
-}
-
-
-
-
-
-		
-
-
-
-
-
 
 .form__input__field {
 	position: relative;
 	z-index: 2;
 	display: block;
-	/*padding: 1rem 0;*/
 	font-size: 1.2rem;
 	width: 100%;
 	box-sizing: border-box;
@@ -73,8 +25,6 @@
 	border: none;
 	outline: none;
 }
-
-
 
 .form__textarea {
 	box-sizing: border-box;
@@ -91,49 +41,11 @@
 	
 }
 
-
-
-
-
-.form__element_circled {
-	display: inline-block;
-	box-sizing: border-box;
-	margin-right: 0.5rem;
-	width: 2rem;
-	height: 2rem;
-	font-size: 2rem;
-	line-height: 1.5rem;
-	padding: 0;
-	color: #3369F3;
-	border: 2px solid #3369F3;
-	border-radius: 50%;
-	vertical-align: middle;
-	text-align: center;
-}
-
-.form__element_grey {
-	background: #EFEFEF;
-	color: #999;
-}
-.form__element_grey:focus {
-	color: #000;
-}
-
-.form__element_rounded {
-	border-radius: 0.5rem;
-}
-
-
-
 .form__input__error {
 	line-height: 2rem;
 	font-size: 0.75rem;
 	color: #FF2F2F;
 }
-
-
-
-
 
 .form__element_hidden {
 	display: none;
