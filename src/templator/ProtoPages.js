@@ -11,11 +11,7 @@ let templateContext;
 const templatePattern = /%\{\s?([^]*?)\s?\}%/g;
 const templateSubpatterns = {
 	jsonFunc: /^([^\( ]+)\(\s?([\{\[][^]*?[\}\]])(\.\.\.)?\s?\)$/
-	//importFunc: /import\(['"]([^'"]+)['"]\)/i,
-	//arrayExpr: /([^\[]+)\[([^\]]+)\]/
 };
-
-
 
 const partial = {};
 partial.pattern = /^<%>([^]*?)<\/%>$/g;
@@ -24,7 +20,6 @@ partial.tags = { start: '<%>', end: '</%>' }
 partial.strip = (str) => {
 	return str.replace(partial.stripPattern, '');
 };
-partial.key = 'key';
 
 
 
@@ -118,18 +113,7 @@ const traverseChildren = (node) => {
 	for (let i = node.childNodes.length - 1; i >= 0; --i) {
 		if (node.childNodes[i].nodeType === 1) {
 			traverseAttributes(node.childNodes[i]);
-			if (node.childNodes[i].hasAttribute(partial.key)) {
-				const str = resolveString(node.childNodes[i].innerHTML);
-//console.log(str);
-				if (str !== null) {
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-				}
-			}
-			else {
-				traverseChildren(node.childNodes[i]);
-			}
+			traverseChildren(node.childNodes[i]);
 		}
 		else if (node.childNodes[i].nodeType === 3) {
 
@@ -215,22 +199,8 @@ ProtoPages.compile = (context = window) => {
 
 ProtoPages.init();
 
-// run compileAll() with global variables
-/*ProtoPages.onload(() => { 
-	ProtoPages.compileAll();
-});*/
-
 
 export default ProtoPages;
 
 
 
-/*
-element.cloneNode(true) // клонирует элемент
-
-parent.appendChild(el) // вставляет узел в конец
-parent.removeChild(el) // удаляет узел
-parent.replaceChild(newEl, oldEl) // заменяет узел
-parent.insertBefore(elem, nextSibling) // вставляет узел 
-
-*/
