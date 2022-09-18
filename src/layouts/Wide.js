@@ -5,7 +5,7 @@ import '/src/components/Head.js';
 import '/src/layouts/common.scss';
 import '/src/layouts/Wide.scss';
 
-ProtoPages.onload(() => {
+ProtoPages.on('init', () => {
 	document.body.innerHTML = `
 		<div class="root">
 			<main class="container container_wide">

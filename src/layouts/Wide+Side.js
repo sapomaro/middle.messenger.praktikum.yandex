@@ -6,7 +6,7 @@ import '/src/layouts/common.scss';
 import '/src/layouts/Wide.scss';
 import '/src/layouts/Narrow.scss';
 
-ProtoPages.onload(() => {
+ProtoPages.on('init', () => {
 	document.body.innerHTML = `
 		<div class="popup">
 			<div class="container container_narrow">

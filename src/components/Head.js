@@ -2,7 +2,7 @@ import ProtoPages from '/src/templator/ProtoPages.js';
 
 const favicon = new URL('../../public/favicon.ico', import.meta.url);
 
-ProtoPages.onload(() => {
+ProtoPages.on('init', () => {
 	document.head.innerHTML += `
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
