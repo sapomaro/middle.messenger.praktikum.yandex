@@ -4,7 +4,7 @@ import '/src/components/Head.js';
 import '/src/layouts/common.scss';
 import '/src/layouts/Chats.scss';
 
-ProtoPages.onload(() => {
+ProtoPages.on('init', () => {
 	document.body.innerHTML = `
 		<div class="popup">
 			<div class="container container_narrow">

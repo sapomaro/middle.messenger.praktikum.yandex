@@ -30,7 +30,7 @@ export default (props) => `
 
 
 
-ProtoPages.oncompiled(() => {
+ProtoPages.on('compile', () => {
 
 	const messageField = document.getElementById('messageField');
 	
