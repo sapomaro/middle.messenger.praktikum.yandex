@@ -167,6 +167,9 @@ const runTasks = (tasks) => {
 	}
 };
 ProtoPages.onload = (task, context = window) => {
+	if (document.readyState === 'interactive' || document.readyState === 'complete') {
+		task(context);
+	}
 	loadTasks.push({ task, context });
 };
 ProtoPages.oncompiled = (task, context = window) => {

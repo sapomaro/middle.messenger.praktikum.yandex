@@ -3,11 +3,8 @@
   "version": "1.0.0",
   "description": "sprint_1",
   "scripts": {
-	"lin-cp": "cp ./public/favicon.ico ./dist/favicon.ico",
-	"win-cp": "copy public\\favicon.ico dist\\favicon.ico",
-	"copy-favicon": "npm run lin-cp & npm run win-cp",
     "dev": "parcel ./src/pages/*.html --no-cache",
-    "start": "parcel build ./src/pages/*.html --dist-dir ./dist/ && npm run copy-favicon & node ./server.js"
+    "start": "parcel build ./src/pages/*.html --dist-dir ./dist/ && node ./server.js"
   },
   "targets": {
     "default": {
