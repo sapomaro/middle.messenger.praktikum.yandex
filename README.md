@@ -10,9 +10,13 @@
 
 	npm run dev
 
-Запуск сборки и прод-сервера (http://localhost:3000/):
+Запуск сборки и сервера для раздачи статики (http://localhost:3000/):
 
 	npm run start
+
+## Шаблонизатор ProtoPages.js
+
+В проекте используется самописный шаблонизатор ProtoPagesJS: https://github.com/sapomaro/ProtoPagesJS
 
 ## Прочее
 
