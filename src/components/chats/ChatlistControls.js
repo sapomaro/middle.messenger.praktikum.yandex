@@ -1,6 +1,6 @@
 import '/src/components/chats/ChatlistControls.scss';
 
-export default (props) => `
+export const ChatlistControls = (props) => `
 	<nav class="chatlist__controls">
 		<div class="container__element container__element_right">
 			<a href="profile.html" class="container__link container__link_grey">Профиль&ensp;<small>❯</small></a>

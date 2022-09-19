@@ -1,6 +1,6 @@
 import '/src/components/chats/ChatlistItem.scss';
 
-export default (props) => `
+export const ChatlistItem = (props) => `
 	<li class="chatlist__item ${props.active ? 'chatlist__item_active' : ''}">
 		<div class="chatlist__item__wrapper">
 			<div class="chatlist__item__avatar"></div>

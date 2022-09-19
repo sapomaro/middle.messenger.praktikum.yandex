@@ -1,6 +1,6 @@
 import '/src/components/forms/StandardInput.scss';
 
-export default (props) => `
+export const StandardInput = (props) => `
 	<div class="container__element">
 		<input name="${props.name}" type="${props.type || 'text'}" class="form__input__field form__input__field_standard" 
 			value="" oninput="this.setAttribute('value', this.value);">

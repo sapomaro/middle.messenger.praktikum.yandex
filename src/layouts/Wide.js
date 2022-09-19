@@ -1,4 +1,4 @@
-import ProtoPages from '/src/templator/ProtoPages.js';
+import { ProtoPages } from '/src/templator/ProtoPages.js';
 
 import '/src/components/Head.js';
 

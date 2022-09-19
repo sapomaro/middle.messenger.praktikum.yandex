@@ -1,9 +1,9 @@
-import ProtoPages from '/src/templator/ProtoPages.js';
+import { ProtoPages } from '/src/templator/ProtoPages.js';
 
 import '/src/components/chats/ChatboxControls.scss';
 
 
-export default (props) => `
+export const ChatboxFooter = (props) => `
 	<label class="chatbox__footer__control__wrapper">
 		<input type="checkbox" class="chatbox__dropdown__toggle chatbox__element_hidden">
 		<a class="chatbox__attach__control chatbox__dropdown__control"></a>

@@ -1,6 +1,6 @@
 import '/src/components/forms/RowInput.scss';
 
-export default (props) => `
+export const RowInput = (props) => `
 	<label class="container__row">
 		<span class="form__row__label">${props.label}</span>
 		<span class="form__text_right">

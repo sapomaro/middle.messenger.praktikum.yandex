@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <script type="module">
-	import ProtoPages from '/src/templator/ProtoPages.js';
+	import { ProtoPages } from '/src/templator/ProtoPages.js';
 	
 	import '/src/layouts/Narrow.js';
 	
 	import '/src/components/forms/common.scss';
 	
-	import Input from '/src/components/forms/StandardInput.js';
-	import Button from '/src/components/forms/StandardButton.js';
-	import Link from '/src/components/forms/StandardLink.js';
+	import { StandardInput as Input } from '/src/components/forms/StandardInput.js';
+	import { StandardButton as Button } from '/src/components/forms/StandardButton.js';
+	import { StandardLink as Link } from '/src/components/forms/StandardLink.js';
 
 	
 	const context = { Input, Button, Link };
 	
 	context.title = 'Регистрация';
 	
-	const inputs = JSON.stringify([
+	const inputs = ProtoPages.JSON.stringify([
 		{ name: 'email', type: 'email', label: 'Почта' },
 		{ name: 'login', type: 'text', label: 'Логин' },
 		{ name: 'first_name', type: 'text', label: 'Имя' },

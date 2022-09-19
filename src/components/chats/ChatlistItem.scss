@@ -1,8 +1,10 @@
+@import '/src/layouts/colors.scss';
+
 .chatlist__item {
 	cursor: pointer;
 }
 .chatlist__item:hover, .chatlist__item_active {
-	background: #E4EDFD;
+	background: $secondary-color;
 }
 
 .chatlist__item__wrapper {
@@ -45,7 +47,7 @@
 	font-size: 0.8rem;
 	line-height: 2rem;
 	border-radius: 50%;
-	background: #3369F3;
+	background: $main-color;
 	color: #fff;
 	text-align: center;
 	display: flex;

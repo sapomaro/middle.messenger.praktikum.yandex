@@ -1,7 +1,7 @@
 import '/src/components/chats/ChatboxMessage.scss';
 
 
-export default (props) => `
+export const ChatboxMessage = (props) => `
 	<div class="chatbox__message chatbox__message_${props.type}">
 		<span class="chatbox__message__text">${props.text}</span>
 		<span class="chatbox__message__info">

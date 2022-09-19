@@ -6,10 +6,10 @@ export const AvatarPic = (props) => `
 
 
 export const AvatarControl = (props) => `
-	<div class="form__avatar">
-		<div class="form__avatar__control" onclick="(() => { 
-			document.querySelector('.popup').style.display = 'flex'; 
-		})();">
+	<div class="form__avatar" onclick="(() => { 
+		document.querySelector('.popup').style.display = 'flex'; 
+	})();">
+		<div class="form__avatar__control">
 			<span>Поменять аватар</span>
 		</div>
 	</div>

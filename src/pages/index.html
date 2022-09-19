@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <script type="module">
-	import ProtoPages from '/src/templator/ProtoPages.js';
+	import { ProtoPages } from '/src/templator/ProtoPages.js';
 	
 	import '/src/layouts/Narrow.js';
 
 	const context = {};
 	
-	const links = JSON.stringify([
+	const links = ProtoPages.JSON.stringify([
 		{ url: 'auth.html', label: 'Вход' },
 		{ url: 'register.html', label: 'Регистрация' },
 		{ url: 'profile.html', label: 'Профиль' },

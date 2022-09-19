@@ -1,3 +1,5 @@
+@import '/src/layouts/colors.scss';
+
 html,
 body {
 	padding: 0;
@@ -28,11 +30,11 @@ body {
 	position: fixed;
 	z-index: 100;
 	display: none;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    overflow: hidden;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	overflow: hidden;
 	background: rgba(0, 0, 0, 0.5);
 	justify-content: center;
 	flex-direction: row;
@@ -85,7 +87,7 @@ body {
 
 
 .container__link {
-	color: #3369F3;
+	color: $main-color;
 	text-decoration: none;
 	cursor: pointer;
 	

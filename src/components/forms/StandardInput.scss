@@ -1,7 +1,9 @@
+@import '/src/layouts/colors.scss';
+
 .form__input__field_standard {
 	padding: 1rem 0 0.7rem 0;
 	margin-bottom: 0.25rem;
-	border-bottom: 1px solid #3369F3;
+	border-bottom: 1px solid $main-color;
 }
 
 .form__input__label {
