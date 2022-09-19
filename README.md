@@ -6,8 +6,6 @@
 
 Ссылка на собранную текущую версию на Netlify: https://cheery-pothos-620783.netlify.app/
 
-Ссылка на пулл-реквест в главную ветку: https://github.com/sapomaro/middle.messenger.praktikum.yandex/pull/4
-
 ## Команды для запуска 
 
 Запуск dev-сервера Parcel (http://localhost:1234/): 

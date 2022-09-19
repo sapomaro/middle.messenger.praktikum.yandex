@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<script type="module">
+	import ProtoPages from '/src/templator/ProtoPages.js';
+	
+	import '/src/layouts/Narrow.js';
+	
+	import '/src/components/forms/common.scss';
+	
+	import Input from '/src/components/forms/StandardInput.js';
+	import Button from '/src/components/forms/StandardButton.js';
+	import Link from '/src/components/forms/StandardLink.js';
+	
+	const context = { Input, Button, Link };
+	
+	context.title = 'Вход';
+	
+	context.contents = () => `
+		<form name="auth" action="chats.html">
+			<h1 class="container__header">%{title}%</h1>
+
+			%{ Input({ "name": "login", "type": "text", "label": "Логин" }) }%
+			
+			%{ Input({ "name": "password", "type": "password", "label": "Пароль" }) }%
+			
+				
+			<br><br><br>
+			
+			%{ Button({ "name": "submit", "type": "submit", "label": "Авторизоваться" }) }%
+			
+			%{ Link({ "url": "register.html", "label": "Нет аккаунта?" }) }%
+			
+		</form>
+	`;
+
+	ProtoPages.compile(context);
+
+</script>

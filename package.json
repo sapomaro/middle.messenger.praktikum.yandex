@@ -1,0 +1,28 @@
+{
+  "name": "middle.messenger.praktikum.yandex",
+  "version": "1.0.0",
+  "description": "sprint_1",
+  "scripts": {
+    "dev": "parcel ./src/pages/*.html --no-cache",
+	"build": "parcel build ./src/pages/*.html --dist-dir ./dist/",
+    "start": "npm run build && node ./server.js"
+  },
+  "targets": {
+    "default": {
+      "includeNodeModules": true
+    }
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "author": "Optimizitor",
+  "license": "ISC",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.7.0",
+    "parcel": "^2.7.0",
+    "sass": "^1.54.9"
+  },
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}

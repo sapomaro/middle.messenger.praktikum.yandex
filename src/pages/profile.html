@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<script type="module">
+	import ProtoPages from '/src/templator/ProtoPages.js';
+	
+	import '/src/layouts/Wide+Side.js';
+	
+	import '/src/components/forms/common.scss';
+	
+	import Button from '/src/components/forms/StandardButton.js';
+	import Input from '/src/components/forms/RowInput.js';
+	import Link from '/src/components/forms/RowLink.js';
+	import { AvatarControl, AvatarPopup } from '/src/components/forms/Avatar.js';
+	
+	const context = { Button, Input, Link, AvatarControl, AvatarPopup };
+	
+	context.popup = AvatarPopup;
+	
+	context.title = 'Профиль';
+	
+	const userData = {
+		email: 'pochta@yandex.ru',
+		login: 'ivanovivan',
+		first_name: 'Иван',
+		second_name: 'Иванов',
+		display_name: 'Ivan Ivanov',
+		phone: '+7-777-777-7777'
+	};
+	
+	let inputs = [
+		{ name: 'email', type: 'email', label: 'Почта' },
+		{ name: 'login', type: 'text', label: 'Логин' },
+		{ name: 'first_name', type: 'text', label: 'Имя' },
+		{ name: 'second_name', type: 'text', label: 'Фамилия' },
+		{ name: 'display_name', type: 'text', label: 'Имя в чате' },
+		{ name: 'phone', type: 'tel', label: 'Телефон' }
+	];
+	
+	for (const input of inputs) {
+		input.value = userData[input.name];
+	}
+	
+	inputs = JSON.stringify(inputs);
+	
+	context.contents = () => `
+
+		<form name="profile">
+			
+			%{ AvatarControl }%
+			
+			<h1 class="container__header">${userData.first_name}</h1>
+			
+			%{ Input(${inputs}...) }%
+			
+			
+			<br><br><br>
+			
+			%{ Link({ "url": "", "label": "Изменить данные" }) }%
+			%{ Link({ "url": "profile_newpass.html", "label": "Изменить пароль" }) }%
+			%{ Link({ "url": "auth.html", "label": "Выйти", "style": "container__link_red" }) }%
+			
+			<br><br><br>
+			
+			%{ Button({ "name": "submit", "type": "button", "label": "Сохранить" }) }%
+			
+		</form>
+	`;
+
+	ProtoPages.compile(context);
+	
+
+</script>
