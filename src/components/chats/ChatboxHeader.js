@@ -1,6 +1,6 @@
 import '/src/components/chats/ChatboxControls.scss';
 
-export const ChatboxHeader = (props) => `
+export const ChatboxHeader = () => `
 	<div class="chatbox__header__avatar"></div>
 	
 	<h2 class="chatbox__header__text">%{ user }%</h2>

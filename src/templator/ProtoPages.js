@@ -17,7 +17,7 @@ const PP = ProtoPages;
 PP.context = {};
 
 const PP_PATTERN = /%\{\s?([^]*?)\s?\}%/g;
-const PP_SUBPATTERN_JSONFUNC = /^([^\( ]+)\(\s?([\{\[][^]*?[\}\]])(\.\.\.)?\s?\)$/;
+const PP_SUBPATTERN_JSONFUNC = /^([^( ]+)\(\s?([{[][^]*?[}\]])(\.\.\.)?\s?\)$/;
 
 const PP_PARTIAL_PATTERN = /^<%>([^]*?)<\/%>$/g;
 const PP_PARTIAL_TAG_OPEN = '<%>';
@@ -58,7 +58,7 @@ const resolvePattern = (pattern) => {
 	if (matches = PP_SUBPATTERN_JSONFUNC.exec(pattern)) {
 		const func = matches[1];
 		const jsonStr = matches[2]
-			.replace(/([\{,\"])\s*(\\[\\tn]+)\s*([\},\"])/g, "$1 $3") // cleans up the mess from Parcel
+			.replace(/([{,"])\s*(\\[\\tn]+)\s*([},"])/g, "$1 $3") // cleans up the mess from Parcel
 			.replace(/&quot;/ig, '"');
 		const unwrapRule = matches[3];
 

@@ -1,11 +1,11 @@
 import '/src/components/forms/Avatar.scss';
 
-export const AvatarPic = (props) => `
+export const AvatarPic = () => `
 	<div class="form__avatar"></div>
 `;
 
 
-export const AvatarControl = (props) => `
+export const AvatarControl = () => `
 	<div class="form__avatar" onclick="(() => { 
 		document.querySelector('.popup').style.display = 'flex'; 
 	})();">
@@ -16,7 +16,7 @@ export const AvatarControl = (props) => `
 `;
 
 
-export const AvatarPopup = (props) => `
+export const AvatarPopup = () => `
 	<form name="avatar">
 		<h1 class="container__header">Загрузите файл</h1>
 		<br>
