@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <script type="module">
-	import { ProtoPages } from '/src/templator/ProtoPages.js';
-	
-	import '/src/layouts/Wide.js';
-	
-	import { ErrorStatusMsg } from '/src/components/ErrorStatusMsg.js';
-	
-	const context = {};
-	
-	context.title = '500';
-	context.comment = 'Уже фиксим';
-	
-	context.contents = ErrorStatusMsg; 
+  import { ProtoPages } from '/src/templator/ProtoPages.js';
+  
+  import '/src/layouts/Wide.js';
+  
+  import { ErrorStatusMsg } from '/src/components/ErrorStatusMsg.js';
+  
+  const context = {};
+  
+  context.title = '500';
+  context.comment = 'Уже фиксим';
+  
+  context.contents = ErrorStatusMsg; 
 
 
-	ProtoPages.compile(context);
-		
+  ProtoPages.compile(context);
+    
 
 </script>

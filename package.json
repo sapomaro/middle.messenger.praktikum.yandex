@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "parcel ./src/pages/*.html --no-cache",
     "build": "parcel build ./src/pages/*.html --dist-dir ./dist/",
-    "start": "npm run build && node ./server.js"
+    "start": "npm run build && node ./server.js",
+    "lint": "./node_modules/.bin/eslint ./src/"
   },
   "targets": {
     "default": {

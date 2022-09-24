@@ -2,44 +2,44 @@
 <script type="module">
 	import { ProtoPages } from '/src/templator/ProtoPages.js';
 	
-	import '/src/layouts/Wide+Side.js';
-	
-	import '/src/components/forms/common.scss';
-	
-	import { StandardButton as Button } from '/src/components/forms/StandardButton.js';
-	import { RowInput as Input } from '/src/components/forms/RowInput.js';
-	import { AvatarPic } from '/src/components/forms/Avatar.js';
-	
-	const context = { Button, Input, AvatarPic };
-	
-	context.title = 'Изменить пароль';
-	
-	
-	context.contents = () => `
-		<form name="profile" action="profile.html">
-			
-			%{ AvatarPic }%
-			
-			%{ Input({
-				"label": "Старый пароль", "name": "oldPassword", "type": "password",
-				"value": "********"
-			}) }%
-			%{ Input({
-				"label": "Новый пароль", "name": "newPassword", "type": "password",
-				"value": "********"
-			}) }%
-			%{ Input({
-				"label": "Повторите новый пароль", "name": "newPassword2", "type": "password",
-				"value": "********", "error": "Пароли не совпадают"
-			}) }%
-			
-			<br><br><br>
-			
-			%{ Button({ "name": "submit", "type": "submit", "label": "Сохранить" }) }%
-			
-		</form>	
-	`;
+  import '/src/layouts/Wide+Side.js';
+  
+  import '/src/components/forms/common.scss';
+  
+  import { StandardButton as Button } from '/src/components/forms/StandardButton.js';
+  import { RowInput as Input } from '/src/components/forms/RowInput.js';
+  import { AvatarPic } from '/src/components/forms/Avatar.js';
+  
+  const context = { Button, Input, AvatarPic };
+  
+  context.title = 'Изменить пароль';
+  
+  
+  context.contents = () => `
+    <form name="profile" action="profile.html">
+      
+      %{ AvatarPic }%
+      
+      %{ Input({
+        "label": "Старый пароль", "name": "oldPassword", "type": "password",
+        "value": "********"
+      }) }%
+      %{ Input({
+        "label": "Новый пароль", "name": "newPassword", "type": "password",
+        "value": "********"
+      }) }%
+      %{ Input({
+        "label": "Повторите новый пароль", "name": "newPassword2", "type": "password",
+        "value": "********", "error": "Пароли не совпадают"
+      }) }%
+      
+      <br><br><br>
+      
+      %{ Button({ "name": "submit", "type": "submit", "label": "Сохранить" }) }%
+      
+    </form>  
+  `;
 
-	ProtoPages.compile(context);
-	
+  ProtoPages.compile(context);
+  
 </script>

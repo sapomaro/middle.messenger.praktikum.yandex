@@ -2,39 +2,39 @@
 <script type="module">
 	import { ProtoPages } from '/src/templator/ProtoPages.js';
 	
-	import '/src/layouts/Narrow.js';
+  import '/src/layouts/Narrow.js';
 
-	const context = {};
-	
-	const links = ProtoPages.JSON.stringify([
-		{ url: 'auth.html', label: 'Вход' },
-		{ url: 'register.html', label: 'Регистрация' },
-		{ url: 'profile.html', label: 'Профиль' },
-		{ url: 'profile_newpass.html', label: 'Смена пароля' },
-		{ url: 'chats.html', label: 'Чаты' },
-		{ url: '404.html', label: 'Страница 404' },
-		{ url: '500.html', label: 'Страница 500' }
-	]);
-	
-	
-	context.title = 'Карта экранов приложения';
-	
-	context.contents = () => `
+  const context = {};
+  
+  const links = ProtoPages.JSON.stringify([
+    { url: 'auth.html', label: 'Вход' },
+    { url: 'register.html', label: 'Регистрация' },
+    { url: 'profile.html', label: 'Профиль' },
+    { url: 'profile_newpass.html', label: 'Смена пароля' },
+    { url: 'chats.html', label: 'Чаты' },
+    { url: '404.html', label: 'Страница 404' },
+    { url: '500.html', label: 'Страница 500' }
+  ]);
+  
+  
+  context.title = 'Карта экранов приложения';
+  
+  context.contents = () => `
 
-		<h1 class="container__header">%{title}%</h1>
-		
-		<nav><ul>
-			%{ Link(${links}...) }%
-		</ul></nav>
-	`;
-	
-	context.Link = (props) => `
-		<li class="container__row container__element_centered">
-			<a href="${props.url}" class="container__link">${props.label}</a>
-		</li>	
-	`;
-	
-	
-	ProtoPages.compile(context);
+    <h1 class="container__header">%{title}%</h1>
+    
+    <nav><ul>
+      %{ Link(${links}...) }%
+    </ul></nav>
+  `;
+  
+  context.Link = (props) => `
+    <li class="container__row container__element_centered">
+      <a href="${props.url}" class="container__link">${props.label}</a>
+    </li>  
+  `;
+  
+  
+  ProtoPages.compile(context);
 
 </script>
