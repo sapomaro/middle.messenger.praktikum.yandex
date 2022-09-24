@@ -13,13 +13,13 @@
   color: #999;
 }
 
-.form__input__label,
+.form__input__field_standard + .form__input__label,
 .form__input__field_standard:focus + .form__input__label {
   margin-top: -4.15rem;
   font-size: 0.75rem;
 }
 
-.form__input__field_standard[value=""] + .form__input__label {
+.form__input__field_standard[value=""]:not(:focus) + .form__input__label {
   margin-top: -2.75rem;
   font-size: 1rem;
 }
