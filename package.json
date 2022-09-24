@@ -6,7 +6,9 @@
     "dev": "parcel ./src/pages/*.html --no-cache",
     "build": "parcel build ./src/pages/*.html --dist-dir ./dist/",
     "start": "npm run build && node ./server.js",
-    "lint": "./node_modules/.bin/eslint ./src/"
+    "jslint": "./node_modules/.bin/eslint ./src/",
+    "csslint": "npx stylelint \"**/*.scss\"",
+    "lint": "npm run jslint && npm run csslint"
   },
   "targets": {
     "default": {
@@ -26,7 +28,10 @@
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.31.8",
     "parcel": "2.7.0",
-    "sass": "1.54.9"
+    "sass": "1.54.9",
+    "stylelint": "^14.12.1",
+    "stylelint-config-standard": "^28.0.0",
+    "stylelint-config-standard-scss": "^5.0.0"
   },
   "dependencies": {
     "express": "4.18.1"
