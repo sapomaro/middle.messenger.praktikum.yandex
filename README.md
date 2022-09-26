@@ -8,15 +8,19 @@
 
 Ссылка на пулл-реквест в главную ветку: https://github.com/sapomaro/middle.messenger.praktikum.yandex/pull/4
 
-## Команды для запуска 
+## Команды
 
 Запуск dev-сервера Parcel (http://localhost:1234/): 
 
-	npm run dev
+    npm run dev
 
 Запуск сборки и сервера для раздачи статики (http://localhost:3000/):
 
-	npm run start
+    npm run start
+
+Проверка кода линтерами ESLint и Stylelint:
+
+    npm run lint
 
 ## Шаблонизатор ProtoPages.js
 
