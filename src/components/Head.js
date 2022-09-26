@@ -1,4 +1,4 @@
-import {ProtoPages} from '/src/templator/ProtoPages.js';
+import {ProtoPages} from '/src/modules/ProtoPages.js';
 
 const favicon = new URL('../../public/favicon.ico', import.meta.url);
 

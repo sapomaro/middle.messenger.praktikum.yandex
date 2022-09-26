@@ -1,4 +1,4 @@
-import {ProtoPages} from '/src/templator/ProtoPages.js';
+import {ProtoPages} from '/src/modules/ProtoPages.js';
 
 import '/src/components/chats/ChatboxControls.scss';
 
@@ -35,7 +35,7 @@ export const ChatboxFooter = () => `
   </button>
 `;
 
-ProtoPages.on('compile', () => {
+ProtoPages.on('compiled', () => {
   const messageField = document.getElementById('messageField');
 
   messageField.togglePlaceholder = (event = {}) => {

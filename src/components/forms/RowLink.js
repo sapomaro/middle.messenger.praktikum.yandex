@@ -1,4 +1,3 @@
-
 export const RowLink = (props) => `
   <div class="container__row">
     <a href="${props.url}" 
