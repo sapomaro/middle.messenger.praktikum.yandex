@@ -105,6 +105,22 @@ const resolveString = (str) => {
   return null;
 };
 
+
+const traverseText = (node) => {
+  const str = resolveString(node.textContent);
+  if (str !== null) {
+    let matches;
+    PP_PARTIAL_PATTERN.lastIndex = 0;
+    if ((matches = PP_PARTIAL_PATTERN.exec(str.trim())) &&
+        node.parentNode.childNodes.length === 1) {
+      node.parentNode.innerHTML = stripPartialTags(matches[1]);
+    } else {
+      node.textContent = str;
+    }
+  }
+};
+
+
 const traverseChildren = (node) => {
   if (!node.childNodes) {
     return;
@@ -114,17 +130,7 @@ const traverseChildren = (node) => {
       traverseAttributes(node.childNodes[i]);
       traverseChildren(node.childNodes[i]);
     } else if (node.childNodes[i].nodeType === 3) {
-      const str = resolveString(node.childNodes[i].textContent);
-      if (str !== null) {
-        let matches;
-        PP_PARTIAL_PATTERN.lastIndex = 0;
-        if ((matches = PP_PARTIAL_PATTERN.exec(str.trim())) &&
-            node.childNodes.length === 1) {
-          node.innerHTML = stripPartialTags(matches[1]);
-        } else {
-          node.childNodes[i].textContent = str;
-        }
-      }
+      traverseText(node.childNodes[i]);
     }
   }
 };

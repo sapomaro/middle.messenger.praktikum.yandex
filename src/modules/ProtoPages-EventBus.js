@@ -72,10 +72,12 @@ PP.init = function() {
 };
 
 PP.EventBus = function() {};
-PP.EventBus.prototype.listeners = {};
-PP.EventBus.prototype.listEvents = PP.listEvents;
-PP.EventBus.prototype.on = PP.on;
-PP.EventBus.prototype.fire = PP.fire;
-PP.EventBus.prototype.off = PP.off;
+PP.EventBus.prototype = {
+  listeners: {},
+  listEvents: PP.listEvents,
+  on: PP.on,
+  fire: PP.fire,
+  off: PP.off,
+};
 
 export {ProtoPagesEventBus};
