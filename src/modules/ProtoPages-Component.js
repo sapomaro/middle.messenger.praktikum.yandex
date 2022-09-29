@@ -1,9 +1,9 @@
-import {ProtoPagesEventBus} from '/src/modules/ProtoPages-EventBus.js';
+import {EventBus} from '/src/modules/ProtoPages-EventBus.js';
 
-const ProtoPagesComponent = {...ProtoPagesEventBus};
+const ProtoPagesComponent = {};
 const PP = ProtoPagesComponent;
 
-class ProtoBlock extends PP.EventBus {
+class ProtoBlock extends EventBus {
   constructor({ template, context, rules }) {
     this.template = template;
     this.context = context;
@@ -39,4 +39,4 @@ class ProtoBlock extends PP.EventBus {
 
 PP.ProtoBlock = ProtoBlock;
 
-export {ProtoPagesComponent};
+export { ProtoPagesComponent, ProtoBlock };

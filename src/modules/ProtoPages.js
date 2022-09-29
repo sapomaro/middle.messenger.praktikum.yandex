@@ -8,8 +8,8 @@ https://github.com/sapomaro/ProtoPagesJS
 */
 
 import {ProtoPagesTemplator} from '/src/modules/ProtoPages-Templator.js';
-import {ProtoPagesEventBus} from '/src/modules/ProtoPages-EventBus.js';
-import {ProtoPagesComponent} from '/src/modules/ProtoPages-Component.js';
+import { ProtoPagesEventBus, EventBus } from '/src/modules/ProtoPages-EventBus.js';
+import { ProtoPagesComponent, ProtoBlock } from '/src/modules/ProtoPages-Component.js';
 
 const ProtoPages = {
   ...ProtoPagesEventBus,
@@ -27,8 +27,5 @@ PP.compile = (context = window) => {
 };
 
 PP.init();
-
-const EventBus = PP.EventBus;
-const ProtoBlock = PP.ProtoBlock;
 
 export { ProtoPages, EventBus, ProtoBlock };

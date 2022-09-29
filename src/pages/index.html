@@ -17,10 +17,6 @@
     { url: '500.html', label: 'Страница 500' }
   ]);
   
-  const bus = new ProtoPages.EventBus;
-  bus.on('test', () => { alert(111); });
-  bus.fire('test');
-  
   
   context.title = 'Карта экранов приложения';
   

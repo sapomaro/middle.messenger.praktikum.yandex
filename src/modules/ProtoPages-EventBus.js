@@ -80,4 +80,6 @@ PP.EventBus.prototype = {
   off: PP.off,
 };
 
-export {ProtoPagesEventBus};
+const EventBus = PP.EventBus;
+
+export { ProtoPagesEventBus, EventBus };

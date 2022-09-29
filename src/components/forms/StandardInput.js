@@ -26,7 +26,7 @@ export class StandardInput2 extends ProtoBlock {
       onBlur: () => { alert(2); },
     };
   }
-  
+
   render(props) {
     return `
       <div class="container__element">

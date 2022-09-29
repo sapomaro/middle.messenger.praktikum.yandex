@@ -1,3 +1,4 @@
+import {ProtoBlock} from '/src/modules/ProtoPages-Component.js';
 
 const ProtoPagesTemplator = {};
 const PP = ProtoPagesTemplator;
@@ -35,7 +36,7 @@ PP.JSON.stringify = (data) => {
   }
 };
 
-const resolvePattern = (pattern) => {
+const resolvePattern2 = (pattern) => {
   let context = PP.context;
   let matches;
   let result;
@@ -51,7 +52,13 @@ const resolvePattern = (pattern) => {
 
     const jsonObj = PP.JSON.parse(jsonStr);
 
+    // new component
+
     if (typeof context[func] === 'function') {
+
+//console.log(context[func] instanceof ProtoBlock);
+      // elementFactory({ template, context, rules });
+
       if (unwrapRule && unwrapRule === '...' && jsonObj instanceof Array) {
         result = '';
         for (const item of jsonObj) {
@@ -106,7 +113,7 @@ const resolveString = (str) => {
 };
 
 
-const traverseText = (node) => {
+const traverseText_old = (node) => {
   const str = resolveString(node.textContent);
   if (str !== null) {
     let matches;
@@ -121,6 +128,147 @@ const traverseText = (node) => {
 };
 
 
+
+
+const resolveVariable = (pattern, context) => {
+  const props = pattern.split('.');
+  let result;
+  for (let i = 0; i < props.length; ++i) {
+    if (typeof context[props[i]] !== 'undefined') {
+      context = context[props[i]];
+    }
+  }
+  result = context;
+  if (typeof result === 'function') {
+    result = result();
+  }
+  if (typeof result === 'string' || typeof result === 'number') {
+    return result;
+  }
+  return null;
+};
+
+const resolvePattern = (pattern) => {
+  const context = PP.context;
+  let matches;
+  let result;
+
+  PP_SUBPATTERN_JSONFUNC.lastIndex = 0;
+  if (matches = PP_SUBPATTERN_JSONFUNC.exec(pattern)) {
+    const func = matches[1];
+    // cleans up the mess from Parcel:
+    const jsonStr = matches[2]
+        .replace(/([{,"])\s*(\\[\\tn]+)\s*([},"])/g, '$1 $3')
+        .replace(/&quot;/ig, '"');
+    const unwrapRule = matches[3];
+
+    const jsonObj = PP.JSON.parse(jsonStr);
+
+    // new component
+
+    if (typeof context[func] === 'function') {
+
+//console.log(context[func] instanceof ProtoBlock);
+      // elementFactory({ template, context, rules });
+      const elem = document.createElement('SPAN');
+      elem.innerHTML = '%{test}%';
+      return elem;
+
+    }
+  } else {
+    return resolveVariable(pattern, context);
+  }
+  
+  return null;
+};
+
+const resolveAssets = (str) => {
+  PP_PATTERN.lastIndex = 0;
+  if (!PP_PATTERN.test(str)) {
+    return null;
+  }
+  const assets = [];
+  //let isStr = true;
+  let patternAsset;
+  let textAsset = '';
+  let textIndex = 0;
+  let patternIndex = 0;
+  let matches;
+  PP_PATTERN.lastIndex = 0;
+  while (matches = PP_PATTERN.exec(str)) {
+    patternIndex = PP_PATTERN.lastIndex - matches[0].length;
+    if (textIndex !== patternIndex) {
+      textAsset = str.slice(textIndex, patternIndex);
+      assets.push(textAsset);
+    }
+    textIndex = PP_PATTERN.lastIndex;
+    patternAsset = resolvePattern(matches[1].trim());
+
+    if (patternAsset !== null) {
+      assets.push(patternAsset);
+      //if (typeof patternAsset !== 'string') {
+      //  isStr = false;
+      //}
+    }
+  }
+  if (str.length > textIndex) {
+    textAsset = str.slice(textIndex, str.length - 1);
+    assets.push(textAsset);
+  }
+  if (assets.length > 0) {
+    //if (isStr) {
+    //  assets = [ assets.join('') ];
+    //}
+    return assets;
+  }
+  return null;
+};
+
+
+
+const parseText = function parseText(str) {
+  const assets = resolveAssets(str);
+  if (assets !== null) {
+    let asset;
+    for (let i = 0; i < assets.length; ++i) {
+      if (typeof assets[i] === 'string') {
+        asset = parseText(assets[i]);
+        assets.splice(i, 1, ...asset);
+        i += asset.length - 1;
+      }
+    }
+    return assets;
+  }
+  return [str];
+};
+
+
+
+const traverseText = (node) => {
+  const assets = parseText(node.textContent);
+  
+  if (assets.length === 1 && assets[0] === node.textContent) {
+    return null;
+  } else {
+    const fragment = document.createDocumentFragment();
+    let elem;
+    for (const asset of assets) {
+      if (typeof asset === 'string') {
+        elem = document.createTextNode(asset);
+      }
+      else {
+        elem = asset;
+        traverseChildren(elem);
+      }
+      fragment.appendChild(elem);
+    }
+    fragment.normalize();
+    node.parentNode.replaceChild(fragment, node);
+  }
+};
+
+
+
 const traverseChildren = (node) => {
   if (!node.childNodes) {
     return;
@@ -129,7 +277,8 @@ const traverseChildren = (node) => {
     if (node.childNodes[i].nodeType === 1) {
       traverseAttributes(node.childNodes[i]);
       traverseChildren(node.childNodes[i]);
-    } else if (node.childNodes[i].nodeType === 3) {
+    } else if (node.childNodes[i].nodeType === 3 &&
+               node.tagName !== 'SCRIPT') {
       traverseText(node.childNodes[i]);
     }
   }
