@@ -1,4 +1,4 @@
-import {ProtoBlock} from '/src/modules/ProtoPages-Component.js';
+//import {ProtoBlock} from '/src/modules/ProtoPages-Component.js';
 
 const ProtoPagesTemplator = {};
 const PP = ProtoPagesTemplator;
@@ -155,7 +155,7 @@ const resolvePattern = (pattern) => {
 
   PP_SUBPATTERN_JSONFUNC.lastIndex = 0;
   if (matches = PP_SUBPATTERN_JSONFUNC.exec(pattern)) {
-    const func = matches[1];
+    const block = matches[1];
     // cleans up the mess from Parcel:
     const jsonStr = matches[2]
         .replace(/([{,"])\s*(\\[\\tn]+)\s*([},"])/g, '$1 $3')
@@ -166,12 +166,21 @@ const resolvePattern = (pattern) => {
 
     // new component
 
-    if (typeof context[func] === 'function') {
+    if (typeof context[block] === 'function') {
 
-//console.log(context[func] instanceof ProtoBlock);
       // elementFactory({ template, context, rules });
-      const elem = document.createElement('SPAN');
-      elem.innerHTML = '%{test}%';
+      //const elem = document.createElement('SPAN');
+      //elem.innerHTML = '%{test}%';
+      
+      const elem = new context[block]({ 
+        context: jsonObj, 
+        rules: {
+          unwrap: !!unwrapRule
+        }
+      });
+
+console.log(elem);
+
       return elem;
 
     }
@@ -224,8 +233,6 @@ const resolveAssets = (str) => {
   return null;
 };
 
-
-
 const parseText = function parseText(str) {
   const assets = resolveAssets(str);
   if (assets !== null) {
@@ -241,8 +248,6 @@ const parseText = function parseText(str) {
   }
   return [str];
 };
-
-
 
 const traverseText = (node) => {
   const assets = parseText(node.textContent);
@@ -266,8 +271,6 @@ const traverseText = (node) => {
     node.parentNode.replaceChild(fragment, node);
   }
 };
-
-
 
 const traverseChildren = (node) => {
   if (!node.childNodes) {

@@ -4,26 +4,34 @@ const ProtoPagesComponent = {};
 const PP = ProtoPagesComponent;
 
 class ProtoBlock extends EventBus {
-  constructor({ template, context, rules }) {
-    this.template = template;
+  constructor({ context, rules }) {
+    super();
+    
     this.context = context;
     this.rules = rules;
+    
+    return this.buildElement();
   }
   // state - json
   // mount
   // replaceEvents
   
   buildElement() {
-    this.elementHolder = document.createElement('DIV');
+    const elementHolder = document.createElement('div');
     let htmlCode = '';
     if (this.rules.unwrap && this.context instanceof Array) {
       for (const item of this.context) {
-        htmlCode += this.template(item);
+        htmlCode += this.render(item);
       }
     } else {
-      htmlCode = this.template(this.context);
+      htmlCode = this.render(this.context);
     }
-    this.elementHolder.innerHTML = htmlCode;
+    elementHolder.innerHTML = htmlCode;
+    const fragment = document.createDocumentFragment();
+    while (elementHolder.childNodes.length !== 0) {
+      fragment.appendChild(elementHolder.childNodes[0]);
+    }
+    return fragment;
   }
   
   //traverseElement
@@ -34,7 +42,7 @@ class ProtoBlock extends EventBus {
     //this.fire('mounted');
   }
 
-  //render() {}
+  render() {}
 }
 
 PP.ProtoBlock = ProtoBlock;
