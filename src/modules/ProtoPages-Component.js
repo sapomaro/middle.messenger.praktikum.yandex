@@ -1,7 +1,46 @@
 import {EventBus} from '/src/modules/ProtoPages-EventBus.js';
+import {Templator} from '/src/modules/ProtoPages-Templator.js';
 
 const ProtoPagesComponent = {};
 const PP = ProtoPagesComponent;
+
+const ProtoBlock = function({ context, rules }) {
+  this.context = context;
+  this.rules = rules;
+  //return this.element;
+};
+ProtoBlock.prototype = {
+  __ProtoBlock: true,
+  ...EventBus.prototype,
+  ...Templator.prototype,
+  ...new Templator,
+};
+ProtoBlock.prototype.init = function() {
+  this.buildElement();
+  this.traverseChildren(this.element);
+};
+ProtoBlock.prototype.buildElement = function() {
+  const elementHolder = document.createElement('div');
+  let htmlCode = '';
+  if (this.rules.unwrap && this.context instanceof Array) {
+    for (const item of this.context) {
+      htmlCode += this.render(item);
+    }
+  } else {
+    htmlCode = this.render(this.context);
+  }
+  elementHolder.innerHTML = htmlCode;
+  const fragment = document.createDocumentFragment();
+  while (elementHolder.childNodes.length !== 0) {
+    fragment.appendChild(elementHolder.childNodes[0]);
+  }
+  this.element = fragment;
+};
+ProtoBlock.prototype.detachEvents = function() {
+  
+};
+
+/*
 
 class ProtoBlock extends EventBus {
   constructor({ context, rules }) {
@@ -10,11 +49,12 @@ class ProtoBlock extends EventBus {
     this.context = context;
     this.rules = rules;
     
-    return this.buildElement();
+    this.buildElement();
+    
+    
+    return this.element;
   }
-  // state - json
-  // mount
-  // replaceEvents
+
   
   buildElement() {
     const elementHolder = document.createElement('div');
@@ -31,12 +71,16 @@ class ProtoBlock extends EventBus {
     while (elementHolder.childNodes.length !== 0) {
       fragment.appendChild(elementHolder.childNodes[0]);
     }
-    return fragment;
+    this.element = fragment;
   }
-  
+
+  setId() {
+    
+  }
+
   //traverseElement
   //injectEventHandlers
-  
+
   swapElements() {
     
     //this.fire('mounted');
@@ -44,6 +88,7 @@ class ProtoBlock extends EventBus {
 
   render() {}
 }
+*/
 
 PP.ProtoBlock = ProtoBlock;
 

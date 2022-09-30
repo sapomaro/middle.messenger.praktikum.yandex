@@ -3,25 +3,13 @@
 const ProtoPagesTemplator = {};
 const PP = ProtoPagesTemplator;
 
-PP.context = {};
-
-const PP_PATTERN = /%\{\s?([^]*?)\s?\}%/g;
-const PP_SUBPATTERN_JSONFUNC = /^([^( ]+)\(\s?([{[][^]*?[}\]])(\.\.\.)?\s?\)$/;
-
-const PP_PARTIAL_PATTERN = /^<%>([^]*?)<\/%>$/g;
-const PP_PARTIAL_TAG_OPEN = '<%>';
-const PP_PARTIAL_TAG_CLOSE = '</%>';
-
-const stripPartialTags = (str) => {
-  return str.replace(/<\/?%>/g, '');
-};
 
 PP.JSON = {};
 PP.JSON.parse = (data) => {
   try {
     return JSON.parse(data);
   } catch (error) {
-    console.log(data);
+    console.error(data);
     console.error(error);
     return {};
   }
@@ -30,89 +18,19 @@ PP.JSON.stringify = (data) => {
   try {
     return JSON.stringify(data);
   } catch (error) {
-    console.log(data);
+    console.error(data);
     console.error(error);
     return '{}';
   }
 };
 
-const resolvePattern2 = (pattern) => {
-  let context = PP.context;
-  let matches;
-  let result;
-
-  PP_SUBPATTERN_JSONFUNC.lastIndex = 0;
-  if (matches = PP_SUBPATTERN_JSONFUNC.exec(pattern)) {
-    const func = matches[1];
-    // cleans up the mess from Parcel:
-    const jsonStr = matches[2]
-        .replace(/([{,"])\s*(\\[\\tn]+)\s*([},"])/g, '$1 $3')
-        .replace(/&quot;/ig, '"');
-    const unwrapRule = matches[3];
-
-    const jsonObj = PP.JSON.parse(jsonStr);
-
-    // new component
-
-    if (typeof context[func] === 'function') {
-
-//console.log(context[func] instanceof ProtoBlock);
-      // elementFactory({ template, context, rules });
-
-      if (unwrapRule && unwrapRule === '...' && jsonObj instanceof Array) {
-        result = '';
-        for (const item of jsonObj) {
-          result += context[func](item);
-        }
-      } else {
-        result = context[func](jsonObj);
-      }
-      result = PP_PARTIAL_TAG_OPEN + result + PP_PARTIAL_TAG_CLOSE;
-    }
-  } else {
-    const props = pattern.split('.');
-    for (let i = 0; i < props.length; ++i) {
-      if (typeof context[props[i]] !== 'undefined') {
-        context = context[props[i]];
-      }
-    }
-    result = context;
-    if (typeof result === 'function') {
-      result = PP_PARTIAL_TAG_OPEN + result() + PP_PARTIAL_TAG_CLOSE;
-    }
-  }
-  if (typeof result === 'string' || typeof result === 'number') {
-    return result;
-  }
-  return null;
+/*
+const PP_PARTIAL_PATTERN = /^<%>([^]*?)<\/%>$/g;
+const PP_PARTIAL_TAG_OPEN = '<%>';
+const PP_PARTIAL_TAG_CLOSE = '</%>';
+const stripPartialTags = (str) => {
+  return str.replace(/<\/?%>/g, '');
 };
-
-const resolveString = (str) => {
-  PP_PATTERN.lastIndex = 0;
-  if (!PP_PATTERN.test(str)) {
-    return null;
-  }
-  let matches;
-  let asset;
-  const old = str;
-
-  PP_PATTERN.lastIndex = 0;
-  while (matches = PP_PATTERN.exec(str)) {
-    asset = resolvePattern(matches[1].trim());
-    if (asset !== null) {
-      str = str.replace(matches[0], asset);
-      // subtract pattern length to start next exec from new insertion
-      // allows resolving nested patterns
-      PP_PATTERN.lastIndex -= matches[0].length;
-    }
-  }
-  if (str !== old) {
-    return str;
-  }
-  return null;
-};
-
-
 const traverseText_old = (node) => {
   const str = resolveString(node.textContent);
   if (str !== null) {
@@ -126,11 +44,16 @@ const traverseText_old = (node) => {
     }
   }
 };
+*/
 
+const Templator = function(context = window) {
+  this.context = context;
+  this.PP_PATTERN = /%\{\s?([^]*?)\s?\}%/g;
+  this.PP_SUBPATTERN_JSONFUNC = /^([^( ]+)\(\s?([{[][^]*?[}\]])(\.\.\.)?\s?\)$/;
+};
 
-
-
-const resolveVariable = (pattern, context) => {
+Templator.prototype.resolveVariable = function(pattern) {
+  let context = this.context;
   const props = pattern.split('.');
   let result;
   for (let i = 0; i < props.length; ++i) {
@@ -140,7 +63,8 @@ const resolveVariable = (pattern, context) => {
   }
   result = context;
   if (typeof result === 'function') {
-    result = result();
+    //result = result();
+    return result;
   }
   if (typeof result === 'string' || typeof result === 'number') {
     return result;
@@ -148,14 +72,14 @@ const resolveVariable = (pattern, context) => {
   return null;
 };
 
-const resolvePattern = (pattern) => {
-  const context = PP.context;
+Templator.prototype.resolvePattern = function(pattern) {
+  const context = this.context;
   let matches;
   let result;
 
-  PP_SUBPATTERN_JSONFUNC.lastIndex = 0;
-  if (matches = PP_SUBPATTERN_JSONFUNC.exec(pattern)) {
-    const block = matches[1];
+  this.PP_SUBPATTERN_JSONFUNC.lastIndex = 0;
+  if (matches = this.PP_SUBPATTERN_JSONFUNC.exec(pattern)) {
+    const blockName = matches[1];
     // cleans up the mess from Parcel:
     const jsonStr = matches[2]
         .replace(/([{,"])\s*(\\[\\tn]+)\s*([},"])/g, '$1 $3')
@@ -166,34 +90,56 @@ const resolvePattern = (pattern) => {
 
     // new component
 
-    if (typeof context[block] === 'function') {
-
-      // elementFactory({ template, context, rules });
-      //const elem = document.createElement('SPAN');
-      //elem.innerHTML = '%{test}%';
-      
-      const elem = new context[block]({ 
-        context: jsonObj, 
+    if (typeof context[blockName] === 'function') {
+      const block = context[blockName];
+      const elem = new block({
+        context: jsonObj,
         rules: {
           unwrap: !!unwrapRule
         }
       });
 
-console.log(elem);
+//console.log(elem);
 
-      return elem;
+      return elem.element;
 
     }
   } else {
-    return resolveVariable(pattern, context);
+    return this.resolveVariable(pattern);
   }
   
   return null;
 };
 
-const resolveAssets = (str) => {
-  PP_PATTERN.lastIndex = 0;
-  if (!PP_PATTERN.test(str)) {
+Templator.prototype.resolveString = function(str) { // for plain text nodes
+  this.PP_PATTERN.lastIndex = 0;
+  if (!this.PP_PATTERN.test(str)) {
+    return null;
+  }
+  let matches;
+  let asset;
+  const old = str;
+
+  this.PP_PATTERN.lastIndex = 0;
+  while (matches = this.PP_PATTERN.exec(str)) {
+    asset = this.resolvePattern(matches[1].trim());
+    if (asset !== null) {
+      str = str.replace(matches[0], asset);
+      // subtract pattern length to start next exec from new insertion
+      // allows resolving nested patterns
+      this.PP_PATTERN.lastIndex -= matches[0].length;
+    }
+  }
+  if (str !== old) {
+    return str;
+  }
+  return null;
+};
+
+
+Templator.prototype.resolveAssets = function(str) {
+  this.PP_PATTERN.lastIndex = 0;
+  if (!this.PP_PATTERN.test(str)) {
     return null;
   }
   const assets = [];
@@ -203,15 +149,15 @@ const resolveAssets = (str) => {
   let textIndex = 0;
   let patternIndex = 0;
   let matches;
-  PP_PATTERN.lastIndex = 0;
-  while (matches = PP_PATTERN.exec(str)) {
-    patternIndex = PP_PATTERN.lastIndex - matches[0].length;
+  this.PP_PATTERN.lastIndex = 0;
+  while (matches = this.PP_PATTERN.exec(str)) {
+    patternIndex = this.PP_PATTERN.lastIndex - matches[0].length;
     if (textIndex !== patternIndex) {
       textAsset = str.slice(textIndex, patternIndex);
       assets.push(textAsset);
     }
-    textIndex = PP_PATTERN.lastIndex;
-    patternAsset = resolvePattern(matches[1].trim());
+    textIndex = this.PP_PATTERN.lastIndex;
+    patternAsset = this.resolvePattern(matches[1].trim());
 
     if (patternAsset !== null) {
       assets.push(patternAsset);
@@ -233,13 +179,13 @@ const resolveAssets = (str) => {
   return null;
 };
 
-const parseText = function parseText(str) {
-  const assets = resolveAssets(str);
+Templator.prototype.parseText = function(str) {
+  const assets = this.resolveAssets(str);
   if (assets !== null) {
     let asset;
     for (let i = 0; i < assets.length; ++i) {
       if (typeof assets[i] === 'string') {
-        asset = parseText(assets[i]);
+        asset = this.parseText(assets[i]);
         assets.splice(i, 1, ...asset);
         i += asset.length - 1;
       }
@@ -249,9 +195,8 @@ const parseText = function parseText(str) {
   return [str];
 };
 
-const traverseText = (node) => {
-  const assets = parseText(node.textContent);
-  
+Templator.prototype.traverseText = function(node) {
+  const assets = this.parseText(node.textContent);
   if (assets.length === 1 && assets[0] === node.textContent) {
     return null;
   } else {
@@ -263,7 +208,7 @@ const traverseText = (node) => {
       }
       else {
         elem = asset;
-        traverseChildren(elem);
+        this.traverseChildren(elem);
       }
       fragment.appendChild(elem);
     }
@@ -272,34 +217,50 @@ const traverseText = (node) => {
   }
 };
 
-const traverseChildren = (node) => {
+Templator.prototype.traverseChildren = function(node) {
   if (!node.childNodes) {
     return;
   }
   for (let i = node.childNodes.length - 1; i >= 0; --i) {
     if (node.childNodes[i].nodeType === 1) {
-      traverseAttributes(node.childNodes[i]);
-      traverseChildren(node.childNodes[i]);
+      this.traverseAttributes(node.childNodes[i]);
+      this.traverseChildren(node.childNodes[i]);
     } else if (node.childNodes[i].nodeType === 3 &&
                node.tagName !== 'SCRIPT') {
-      traverseText(node.childNodes[i]);
+      this.traverseText(node.childNodes[i]);
     }
   }
 };
 
-const traverseAttributes = (node) => {
+Templator.prototype.traverseAttributes = function(node) {
   for (let i = node.attributes.length - 1; i >= 0; --i) {
-    const attr = resolveString(node.attributes[i].nodeValue);
-    if (attr !== null) {
-      node.setAttribute(node.attributes[i].nodeName, attr);
+    const attrName = node.attributes[i].nodeName;
+    const attrValue = node.attributes[i].nodeValue;
+    if (attrName.slice(0, 2) === 'on') {
+      const asset = this.resolveAssets(attrValue);
+//console.log(attrValue);
+
+      if (asset && typeof asset[0] === 'function') {
+        node.addEventListener(attrName.slice(2), asset[0]);
+        node.removeAttribute(attrName);
+      }
+    } else {
+      const str = this.resolveString(attrValue);
+      if (str !== null) {
+        node.setAttribute(attrName, str);
+      }
     }
   }
 };
+
+
 
 PP.compileAll = (context = window) => {
-  PP.context = context;
-  traverseChildren(document.head);
-  traverseChildren(document.body);
+  let templator = new Templator(context);
+  templator.traverseChildren(document.head);
+  templator.traverseChildren(document.body);
 };
 
-export {ProtoPagesTemplator};
+PP.Templator = Templator;
+
+export { ProtoPagesTemplator, Templator };

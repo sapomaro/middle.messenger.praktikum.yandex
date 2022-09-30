@@ -20,11 +20,10 @@ export class StandardInput2 extends ProtoBlock {
   constructor(data) {
     super(data);
     
-    this.context = {
-      ...this.context,
-      onFocus: () => { alert(1); },
-      onBlur: () => { alert(2); },
-    };
+    this.context.onFocus = () => { console.log("focus"); };
+    this.context.onBlur = () => { console.log("blur"); };
+    
+    this.init();
   }
 
   render(props) {
