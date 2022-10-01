@@ -1,7 +1,4 @@
 
-const ProtoPagesEventBus = {};
-const PP = ProtoPagesEventBus;
-
 let DOMLoaded = false;
 
 const isDOMReady = () => {
@@ -16,8 +13,9 @@ const isDOMReady = () => {
   }
 };
 
-PP.listeners = {};
-PP.listEvents = function(events, action) {
+const EventBus = function() {};
+EventBus.listeners = {};
+EventBus.listEvents = function(events, action) {
   events.split(/[, ]+/).forEach(eventType => {
     if (!this.listeners[eventType]) {
       this.listeners[eventType] = [];
@@ -25,7 +23,7 @@ PP.listEvents = function(events, action) {
     action(eventType);
   });
 };
-PP.on = function(events, callback) {
+EventBus.on = function(events, callback) {
   this.listEvents(events, (eventType) => {
     this.listeners[eventType].push(callback);
     if (eventType === 'init' || eventType === 'load') {
@@ -36,14 +34,14 @@ PP.on = function(events, callback) {
     }
   });
 };
-PP.fire = function(events, ...args) {
+EventBus.fire = function(events, ...args) {
   this.listEvents(events, (eventType) => {
     this.listeners[eventType].forEach(listener => {
       listener(...args);
     });
   });
 };
-PP.off = function(events, callback) {
+EventBus.off = function(events, callback) {
   this.listEvents(events, (eventType) => {
     this.listeners[eventType] = this.listeners[eventType].filter(
       listener => listener !== callback
@@ -51,7 +49,7 @@ PP.off = function(events, callback) {
   });
 }
   
-PP.init = function() {
+EventBus.init = function() {
   if (isDOMReady()) {
     this.fire('init, load');
     DOMLoaded = true;
@@ -71,15 +69,13 @@ PP.init = function() {
   }
 };
 
-PP.EventBus = function() {};
-PP.EventBus.prototype = {
+EventBus.prototype = {
+  ...EventBus,
   listeners: {},
-  listEvents: PP.listEvents,
-  on: PP.on,
-  fire: PP.fire,
-  off: PP.off,
 };
 
-const EventBus = PP.EventBus;
+const ProtoPagesEventBus = {
+  ...EventBus,
+};
 
 export { ProtoPagesEventBus, EventBus };
