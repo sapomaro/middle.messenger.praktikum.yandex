@@ -1,4 +1,4 @@
-export const ValidationMessage = ({name, value, label}) => {
+export const ValidationMessage = ({name, value, value2, label}) => {
   switch(name) {
     case 'login':
       if (value.length === 0) return `Поле не может быть пустым`;
@@ -14,17 +14,20 @@ export const ValidationMessage = ({name, value, label}) => {
       break;
 
     case 'password':
-    case 'password2':
+    case 'oldPassword':
     case 'newPassword':
-    case 'newPassword2':
       if (value.length === 0) return `Поле не может быть пустым`;
       if (value.length < 8) return `${label} должен быть больше 8 символов`;
       if (value.length > 40) return `${label} не может быть больше 40 символов`;
-      if (!/[0-9]/.test(value)) {
-        return `${label} должен содержать хотя бы одну цифру`;
+      if (!/[0-9]/.test(value) || value === value.toLowerCase()) {
+        return `${label} должен содержать хотя бы одну цифру и заглавную букву`;
       }
-      if (value === value.toLowerCase()) {
-        return `${label} должен содержать хотя бы одну заглавную букву`;
+      break;
+
+    case 'password2':
+    case 'newPassword2':
+      if (typeof value2 !== 'undefined' && value !== value2) {
+        return `Пароли не совпадают`;
       }
       break;
 

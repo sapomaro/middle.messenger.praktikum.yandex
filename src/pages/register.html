@@ -11,11 +11,11 @@
   import {StandardButton as Button} from '/src/components/forms/StandardButton.js';
   import {StandardLink as Link} from '/src/components/forms/StandardLink.js';
 
-  
+
   const context = {Form, Input, Button, Link};
-  
+
   context.title = 'Регистрация';
-  
+
   const inputs = ProtoPages.JSON.stringify([
     { name: 'email', type: 'email', label: 'Почта' },
     { name: 'login', type: 'text', label: 'Логин' },
@@ -23,8 +23,7 @@
     { name: 'second_name', type: 'text', label: 'Фамилия' },
     { name: 'phone', type: 'tel', label: 'Телефон' },
     { name: 'password', type: 'password', label: 'Пароль' },
-    { name: 'password2', type: 'password', label: 'Пароль (ещё раз)', 
-      error: 'Пароли не совпадают' }
+    { name: 'password2', type: 'password', label: 'Пароль (ещё раз)' }
   ]);
   
   context.contents = `%{ Form({ "name": "reg", "action": "chats.html" }) }%`;

@@ -14,6 +14,7 @@ export class StandardInput extends Input {
           class="form__input__field form__input__field_standard"
           value="${props.value || ''}"
           onblur="%{onBlur}%"
+          onfocus="%{onFocus}%"
           oninput="%{onInput}%">
         <label class="form__input__label">${props.label}</label>
         <span class="form__input__error">${props.error || ''}</span>
