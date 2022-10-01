@@ -33,20 +33,14 @@ const Templator = function(context = window) {
 Templator.prototype.resolveVariable = function(pattern) {
   let context = this.context;
   const props = pattern.split('.');
-  let result;
   for (let i = 0; i < props.length; ++i) {
     if (typeof context[props[i]] !== 'undefined') {
       context = context[props[i]];
+    } else {
+      return null;
     }
   }
-  result = context;
-  if (typeof result === 'function') {
-    //result = result();
-    return result;
-  } else if (typeof result === 'string' || typeof result === 'number') {
-    return result;
-  }
-  return null;
+  return context;
 };
 
 Templator.prototype.resolvePattern = function(pattern) {
@@ -82,6 +76,7 @@ Templator.prototype.resolvePattern = function(pattern) {
       return blocksList;
     }
   } else {
+//console.log(pattern);
     return this.resolveVariable(pattern);
   }
   
@@ -149,9 +144,6 @@ Templator.prototype.resolveAssets = function(str) {
     } else {
       assets.push(matches[0]);
     }
-
-//console.log(str.trim());
-//console.log(assets);
   }
   if (str.length > textIndex) {
     textAsset = str.slice(textIndex, str.length - 1);
@@ -161,6 +153,8 @@ Templator.prototype.resolveAssets = function(str) {
     //if (isStr) {
     //  assets = [ assets.join('') ];
     //}
+//console.log(str.trim());
+//console.log(assets);
     return assets;
   }
   return null;
@@ -287,8 +281,21 @@ Templator.prototype.traverseAttributes = function(node) {
   }
 };
 
-PP.compileAll = (context = window) => {
-  let templator = new Templator(context);
+
+const templator = new Templator();
+
+PP.use = (moreContext) => {
+  templator.context = {
+    ...templator.context,
+    ...moreContext,
+  };
+  return templator.context;
+};
+
+PP.compileAll = (context) => {
+  if (context && context !== window) {
+    templator.context = context;
+  }
   templator.traverseChildren(document.head);
   templator.traverseChildren(document.body);
 };

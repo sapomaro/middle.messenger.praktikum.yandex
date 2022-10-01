@@ -46,10 +46,7 @@ ProtoBlock.prototype.refresh = function() {
   this.build();
   this.replaceMultipleNodes(`[data-proto-uid=${this.rules.uid}]`, [this]);
 };
-ProtoBlock.prototype.detachEvents = function() {
-  
-};
 
 PP.ProtoBlock = ProtoBlock;
 
-export { ProtoPagesComponent, ProtoBlock };
+export {ProtoPagesComponent, ProtoBlock};
