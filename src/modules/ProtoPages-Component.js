@@ -4,10 +4,28 @@ import {Templator} from '/src/modules/ProtoPages-Templator.js';
 const ProtoPagesComponent = {};
 const PP = ProtoPagesComponent;
 
+
+const uids = {};
+const generateUid = () => {
+  const min = 1;
+  const max = 99999;
+  let uid = '';
+  let num;
+  do {
+    num = Math.floor(Math.random() * (max - min + 1)) + min;
+    uid = `pp${num}`;
+  } while (uids[uid]);
+  return uid;
+};
+
+
 const ProtoBlock = function({ context, rules }) {
   this.context = context;
-  this.rules = rules;
-  //return this.element;
+  this.rules = {
+    ...rules,
+    uid: generateUid(),
+  };
+  this.listeners = {};
 };
 ProtoBlock.prototype = {
   __ProtoBlock: true,
@@ -15,80 +33,22 @@ ProtoBlock.prototype = {
   ...Templator.prototype,
   ...new Templator,
 };
-ProtoBlock.prototype.init = function() {
-  this.buildElement();
-  this.traverseChildren(this.element);
+ProtoBlock.prototype.setProps = function(obj) {
+  Object.assign(this.context, obj);
+  this.refresh();
 };
-ProtoBlock.prototype.buildElement = function() {
-  const elementHolder = document.createElement('div');
-  let htmlCode = '';
-  if (this.rules.unwrap && this.context instanceof Array) {
-    for (const item of this.context) {
-      htmlCode += this.render(item);
-    }
-  } else {
-    htmlCode = this.render(this.context);
-  }
-  elementHolder.innerHTML = htmlCode;
-  const fragment = document.createDocumentFragment();
-  while (elementHolder.childNodes.length !== 0) {
-    fragment.appendChild(elementHolder.childNodes[0]);
-  }
-  this.element = fragment;
+ProtoBlock.prototype.build = function() {
+  this.element = this.buildNode(this.render, this.context, this.rules);
+  this.traverseChildren(this.element);
+  this.fire('built');
+};
+ProtoBlock.prototype.refresh = function() {
+  this.build();
+  this.replaceMultipleNodes(`[data-proto-uid=${this.rules.uid}]`, [this]);
 };
 ProtoBlock.prototype.detachEvents = function() {
   
 };
-
-/*
-
-class ProtoBlock extends EventBus {
-  constructor({ context, rules }) {
-    super();
-    
-    this.context = context;
-    this.rules = rules;
-    
-    this.buildElement();
-    
-    
-    return this.element;
-  }
-
-  
-  buildElement() {
-    const elementHolder = document.createElement('div');
-    let htmlCode = '';
-    if (this.rules.unwrap && this.context instanceof Array) {
-      for (const item of this.context) {
-        htmlCode += this.render(item);
-      }
-    } else {
-      htmlCode = this.render(this.context);
-    }
-    elementHolder.innerHTML = htmlCode;
-    const fragment = document.createDocumentFragment();
-    while (elementHolder.childNodes.length !== 0) {
-      fragment.appendChild(elementHolder.childNodes[0]);
-    }
-    this.element = fragment;
-  }
-
-  setId() {
-    
-  }
-
-  //traverseElement
-  //injectEventHandlers
-
-  swapElements() {
-    
-    //this.fire('mounted');
-  }
-
-  render() {}
-}
-*/
 
 PP.ProtoBlock = ProtoBlock;
 

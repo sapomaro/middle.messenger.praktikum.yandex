@@ -22,8 +22,21 @@ export class StandardInput2 extends ProtoBlock {
     
     this.context.onFocus = () => { console.log("focus"); };
     this.context.onBlur = () => { console.log("blur"); };
+
     
-    this.init();
+
+    this.build();
+    
+    setTimeout(() => {
+      this.setProps({label: 123});
+    }, 2000);
+      
+    this.on('mounted', () => {
+
+console.log(this.context.name + ': mounted;');
+
+    });
+    
   }
 
   render(props) {

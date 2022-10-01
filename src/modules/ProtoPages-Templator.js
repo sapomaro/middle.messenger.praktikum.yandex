@@ -24,28 +24,6 @@ PP.JSON.stringify = (data) => {
   }
 };
 
-/*
-const PP_PARTIAL_PATTERN = /^<%>([^]*?)<\/%>$/g;
-const PP_PARTIAL_TAG_OPEN = '<%>';
-const PP_PARTIAL_TAG_CLOSE = '</%>';
-const stripPartialTags = (str) => {
-  return str.replace(/<\/?%>/g, '');
-};
-const traverseText_old = (node) => {
-  const str = resolveString(node.textContent);
-  if (str !== null) {
-    let matches;
-    PP_PARTIAL_PATTERN.lastIndex = 0;
-    if ((matches = PP_PARTIAL_PATTERN.exec(str.trim())) &&
-        node.parentNode.childNodes.length === 1) {
-      node.parentNode.innerHTML = stripPartialTags(matches[1]);
-    } else {
-      node.textContent = str;
-    }
-  }
-};
-*/
-
 const Templator = function(context = window) {
   this.context = context;
   this.PP_PATTERN = /%\{\s?([^]*?)\s?\}%/g;
@@ -65,8 +43,7 @@ Templator.prototype.resolveVariable = function(pattern) {
   if (typeof result === 'function') {
     //result = result();
     return result;
-  }
-  if (typeof result === 'string' || typeof result === 'number') {
+  } else if (typeof result === 'string' || typeof result === 'number') {
     return result;
   }
   return null;
@@ -85,24 +62,16 @@ Templator.prototype.resolvePattern = function(pattern) {
         .replace(/([{,"])\s*(\\[\\tn]+)\s*([},"])/g, '$1 $3')
         .replace(/&quot;/ig, '"');
     const unwrapRule = matches[3];
-
     const jsonObj = PP.JSON.parse(jsonStr);
-
-    // new component
 
     if (typeof context[blockName] === 'function') {
       const block = context[blockName];
-      const elem = new block({
+      return new block({
         context: jsonObj,
         rules: {
           unwrap: !!unwrapRule
         }
       });
-
-//console.log(elem);
-
-      return elem.element;
-
     }
   } else {
     return this.resolveVariable(pattern);
@@ -195,25 +164,81 @@ Templator.prototype.parseText = function(str) {
   return [str];
 };
 
+Templator.prototype.buildNode = function(templator, context = {}, rules = {}) {
+  const elementHolder = document.createElement('div');
+  let htmlCode = '';
+  if (rules.unwrap && context instanceof Array) {
+    for (const item of context) {
+      htmlCode += templator(item);
+    }
+  } else {
+    htmlCode = templator(context);
+  }
+  elementHolder.innerHTML = htmlCode.trim();
+  const fragment = document.createDocumentFragment();
+  while (elementHolder.childNodes.length !== 0) {
+    const node = elementHolder.childNodes[0];
+    if (rules.uid && node.nodeType === 1) {
+      node.setAttribute('data-proto-uid', rules.uid);
+    }
+    fragment.appendChild(node);
+  }
+  return fragment;
+};
+
+Templator.prototype.replaceMultipleNodes = function(selector, assets) {
+  const nodeList = document.querySelectorAll(selector);
+  if (nodeList && nodeList.length) {
+    for (let i = nodeList.length - 1; i > 0; --i) {
+      nodeList[i].parentNode.removeChild(nodeList[i]);
+    }
+    this.replaceNode(nodeList[0], assets);
+  }
+};
+
+
+Templator.prototype.replaceNode = function(node, assets) {
+//console.log('replace: ' + node.textContent);
+  const fragment = document.createDocumentFragment();
+  const blocksList = [];
+  let elem;
+  for (const asset of assets) {
+    if (typeof asset === 'string') {
+      elem = document.createTextNode(asset);
+
+    } else if (typeof asset === 'function') {
+      elem = this.buildNode(asset);
+
+    } else if (typeof asset === 'object' && asset.__ProtoBlock) {
+      elem = asset.element;
+      this.traverseChildren(elem);
+      blocksList.push(asset);
+
+    } else if (asset.nodeType && 
+              (asset.nodeType === 1 || asset.nodeType === 11)) {
+      elem = asset;
+      this.traverseChildren(elem);
+
+    }
+    fragment.appendChild(elem);
+  }
+  fragment.normalize();
+  node.parentNode.replaceChild(fragment, node);
+
+//console.log(blocksList);
+  for (elem of blocksList) {
+    elem.fire('mounted');
+  }
+};
+
+
+
 Templator.prototype.traverseText = function(node) {
   const assets = this.parseText(node.textContent);
   if (assets.length === 1 && assets[0] === node.textContent) {
     return null;
   } else {
-    const fragment = document.createDocumentFragment();
-    let elem;
-    for (const asset of assets) {
-      if (typeof asset === 'string') {
-        elem = document.createTextNode(asset);
-      }
-      else {
-        elem = asset;
-        this.traverseChildren(elem);
-      }
-      fragment.appendChild(elem);
-    }
-    fragment.normalize();
-    node.parentNode.replaceChild(fragment, node);
+    this.replaceNode(node, assets);
   }
 };
 
