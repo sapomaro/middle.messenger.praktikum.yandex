@@ -4,25 +4,25 @@
 	
 	import '/src/layouts/Chats.js';
 	
-  import { StandardInput as Input } from '/src/components/forms/StandardInput.js';
-  import { StandardButton as Button } from '/src/components/forms/StandardButton.js';
+  import {StandardInput as Input} from '/src/components/forms/StandardInput.js';
+  import {StandardButton as Button} from '/src/components/forms/StandardButton.js';
   
-  import { ChatlistItem } from '/src/components/chats/ChatlistItem.js';
-  import { ChatlistControls } from '/src/components/chats/ChatlistControls.js';
-  import { ChatboxMessage } from '/src/components/chats/ChatboxMessage.js';
-  import { ChatboxHeader } from '/src/components/chats/ChatboxHeader.js';
-  import { ChatboxFooter } from '/src/components/chats/ChatboxFooter.js';
+  import {ChatlistItem} from '/src/components/chats/ChatlistItem.js';
+  import {ChatlistControls} from '/src/components/chats/ChatlistControls.js';
+  import {ChatboxMessage} from '/src/components/chats/ChatboxMessage.js';
+  import {ChatboxHeader} from '/src/components/chats/ChatboxHeader.js';
+  import {ChatboxFooter} from '/src/components/chats/ChatboxFooter.js';
   
-  const context = { 
-    Input, Button, 
-    ChatlistItem, ChatlistControls, 
-    ChatboxMessage, ChatboxHeader, ChatboxFooter 
+  const context = {
+    Input, Button,
+    ChatlistItem, ChatlistControls,
+    ChatboxMessage, ChatboxHeader, ChatboxFooter
   };
-  
+
   context.title = 'Чаты';
-  
+
   context.user = 'Собеседник';
-  
+
   const chats = ProtoPages.JSON.stringify([
     { user: 'Андрей', quote: 'Изображение', when: '10:49', unreads: 2, active: true },
     { user: 'Илья', quote: 'Друзья, у меня для вас особенный выпуск новостей!...', when: '15:12', unreads: 4222 },
@@ -34,8 +34,7 @@
 Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.` },
     { type: 'out', when: '12:00', status: 1, text: 'Круто!' }
   ]);
-  
-  
+
   context.Chatlist = () => `
     %{ ChatlistControls }%
     <ul>
@@ -43,11 +42,9 @@
     </ul>
   `; 
 
-  
-  
   context.ChatboxBody = () => `
     <div class="chatbox__date">19 июня (вс)</div>
-    
+
     %{ ChatboxMessage(${messages}...) }%
   `;
 
@@ -61,7 +58,7 @@
       %{ Button({ "name": "add", "label": "Добавить" }) }%
     </form>
   `;
-  
+
   ProtoPages.compile(context);
 
 </script>

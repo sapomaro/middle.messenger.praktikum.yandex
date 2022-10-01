@@ -5,13 +5,14 @@
   import '/src/layouts/Narrow.js';
   
   import '/src/components/forms/common.scss';
-  
-  import { StandardInput as Input } from '/src/components/forms/StandardInput.js';
-  import { StandardButton as Button } from '/src/components/forms/StandardButton.js';
-  import { StandardLink as Link } from '/src/components/forms/StandardLink.js';
+
+  import {Form} from '/src/components/forms/Form.js';
+  import {StandardInput as Input} from '/src/components/forms/StandardInput.js';
+  import {StandardButton as Button} from '/src/components/forms/StandardButton.js';
+  import {StandardLink as Link} from '/src/components/forms/StandardLink.js';
 
   
-  const context = { Input, Button, Link };
+  const context = {Form, Input, Button, Link};
   
   context.title = 'Регистрация';
   
@@ -22,24 +23,18 @@
     { name: 'second_name', type: 'text', label: 'Фамилия' },
     { name: 'phone', type: 'tel', label: 'Телефон' },
     { name: 'password', type: 'password', label: 'Пароль' },
-    { name: 'password_again', type: 'password', label: 'Пароль (ещё раз)', 
+    { name: 'password2', type: 'password', label: 'Пароль (ещё раз)', 
       error: 'Пароли не совпадают' }
   ]);
   
-  context.contents = () => `
-    <form name="reg" action="chats.html">
-    
-      <h1 class="container__header">%{title}%</h1>
-      
-      %{ Input(${inputs}...) }%
-      
-      <br><br>
-      
-      %{ Button({ "name": "submit", "type": "submit", "label": "Зарегистрироваться" }) }%
-      
-      %{ Link({ "url": "auth.html", "label": "Войти" }) }%
+  context.contents = `%{ Form({ "name": "reg", "action": "chats.html" }) }%`;
 
-    </form>
+  context.fieldset = () => `
+    <h1 class="container__header">%{title}%</h1>
+    %{ Input(${inputs}...) }%
+    <br><br>
+    %{ Button({ "name": "submit", "type": "submit", "label": "Зарегистрироваться" }) }%
+    %{ Link({ "url": "auth.html", "label": "Войти" }) }%
   `;
 
   ProtoPages.compile(context);

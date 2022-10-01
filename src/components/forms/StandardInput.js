@@ -1,42 +1,10 @@
-import {ProtoBlock} from '/src/modules/ProtoPages.js';
+import {Input} from '/src/components/forms/Input.js';
 
 import '/src/components/forms/StandardInput.scss';
 
-export const StandardInput = (props) => `
-  <div class="container__element">
-    <input name="${props.name}" type="${props.type || 'text'}"
-      class="form__input__field form__input__field_standard"
-      value="${props.value || ''}"
-      onfocus="%{onFocus}%"
-      onblur="%{onBlur}%"
-      oninput="this.setAttribute('value', this.value);">
-    <label class="form__input__label">${props.label}</label>
-    <span class="form__input__error">${props.error || ''}</span>
-  </div>
-`;
-
-
-export class StandardInput2 extends ProtoBlock {
-  constructor(data) {
-    super(data);
-    
-    this.context.onFocus = () => { console.log("focus"); };
-    this.context.onBlur = () => { console.log("blur"); };
-
-    
-
-    this.build();
-    
-    setTimeout(() => {
-      this.setProps({label: 123});
-    }, 2000);
-      
-    this.on('mounted', () => {
-
-console.log(this.context.name + ': mounted;');
-
-    });
-    
+export class StandardInput extends Input {
+  constructor(context) {
+    super(context);
   }
 
   render(props) {
@@ -45,15 +13,11 @@ console.log(this.context.name + ': mounted;');
         <input name="${props.name}" type="${props.type || 'text'}"
           class="form__input__field form__input__field_standard"
           value="${props.value || ''}"
-          onfocus="%{onFocus}%"
           onblur="%{onBlur}%"
-          oninput="this.setAttribute('value', this.value);">
+          oninput="%{onInput}%">
         <label class="form__input__label">${props.label}</label>
         <span class="form__input__error">${props.error || ''}</span>
       </div>
     `;
   }
 }
-
-
-

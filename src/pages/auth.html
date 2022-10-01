@@ -1,35 +1,29 @@
 <!DOCTYPE html>
 <script type="module">
 	import {ProtoPages} from '/src/modules/ProtoPages.js';
-  
-  import '/src/layouts/Narrow.js';
-  
-  import '/src/components/forms/common.scss';
-  
-  import { StandardInput as Input } from '/src/components/forms/StandardInput.js';
-  import { StandardButton as Button } from '/src/components/forms/StandardButton.js';
-  import { StandardLink as Link } from '/src/components/forms/StandardLink.js';
-  
-  const context = { Input, Button, Link };
-  
-  context.title = 'Вход';
-  
-  context.contents = () => `
-    <form name="auth" action="chats.html">
-      <h1 class="container__header">%{title}%</h1>
 
-      %{ Input({ "name": "login", "type": "text", "label": "Логин" }) }%
-      
-      %{ Input({ "name": "password", "type": "password", "label": "Пароль" }) }%
-      
-        
-      <br><br><br>
-      
-      %{ Button({ "name": "submit", "type": "submit", "label": "Авторизоваться" }) }%
-      
-      %{ Link({ "url": "register.html", "label": "Нет аккаунта?" }) }%
-      
-    </form>
+  import '/src/layouts/Narrow.js';
+
+  import '/src/components/forms/common.scss';
+
+  import {Form} from '/src/components/forms/Form.js';
+  import {StandardInput as Input} from '/src/components/forms/StandardInput.js';
+  import {StandardButton as Button} from '/src/components/forms/StandardButton.js';
+  import {StandardLink as Link} from '/src/components/forms/StandardLink.js';
+  
+  const context = {Form, Input, Button, Link};
+
+  context.title = 'Вход';
+
+  context.contents = `%{ Form({ "name": "auth", "action": "chats.html" }) }%`;
+
+  context.fieldset = () => `
+    <h1 class="container__header">%{title}%</h1>
+    %{ Input({ "name": "login", "type": "text", "label": "Логин" }) }%
+    %{ Input({ "name": "password", "type": "password", "label": "Пароль" }) }%
+    <br><br><br>
+    %{ Button({ "name": "submit", "type": "submit", "label": "Авторизоваться" }) }%
+    %{ Link({ "url": "register.html", "label": "Нет аккаунта?" }) }%
   `;
 
   ProtoPages.compile(context);

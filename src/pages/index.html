@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <script type="module">
 	import {ProtoPages} from '/src/modules/ProtoPages.js';
-	//import {EventBus} from '/src/modules/EventBus.js';
-	
+
   import '/src/layouts/Narrow.js';
 
   const context = {};
-  
+
   const links = ProtoPages.JSON.stringify([
     { url: 'auth.html', label: 'Вход' },
     { url: 'register.html', label: 'Регистрация' },
@@ -16,26 +15,22 @@
     { url: '404.html', label: 'Страница 404' },
     { url: '500.html', label: 'Страница 500' }
   ]);
-  
-  
-  context.title = 'Карта экранов приложения';
-  
-  context.contents = () => `
 
-    <h1 class="container__header">%{title}%</h1>
-    
-    <nav><ul>
-      %{ Link(${links}...) }%
-    </ul></nav>
-  `;
-  
+  context.title = 'Карта экранов приложения';
+
   context.Link = (props) => `
     <li class="container__row container__element_centered">
       <a href="${props.url}" class="container__link">${props.label}</a>
     </li>  
   `;
-  
-  
+
+  context.contents = () => `
+    <h1 class="container__header">%{title}%</h1>
+    <nav><ul>
+      %{ Link(${links}...) }%
+    </ul></nav>
+  `;
+
   ProtoPages.compile(context);
 
 </script>
