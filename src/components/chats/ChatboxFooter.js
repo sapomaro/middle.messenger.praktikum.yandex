@@ -1,8 +1,12 @@
 import {ProtoPages} from '/src/modules/ProtoPages.js';
+import {Form} from '/src/components/forms/Form.js';
+import {ChatboxTextarea} from '/src/components/chats/ChatboxTextarea.js';
 
 import '/src/components/chats/ChatboxControls.scss';
 
-export const ChatboxFooter = () => `
+ProtoPages.use({ChatboxTextarea});
+
+const ChatboxFooterChildren = () => `
   <label class="chatbox__footer__control__wrapper">
     <input type="checkbox" 
       class="chatbox__dropdown__toggle chatbox__element_hidden">
@@ -25,58 +29,16 @@ export const ChatboxFooter = () => `
     </span>
   </label>
   
-  <textarea id="messageField" name="message" class="chatbox__send__textarea" 
-    rows="1" data-placeholder="Сообщение..."></textarea>
-  
-  <button type="button" 
+  %{ ChatboxTextarea({"name": "message", "placeholder": "Сообщение..."}) }%
+
+  <button type="submit" 
     class="form__button form__button_standard form__button_round 
       chatbox__send__button">
       ➜
   </button>
 `;
 
-ProtoPages.on('compiled', () => {
-  const messageField = document.getElementById('messageField');
-
-  messageField.togglePlaceholder = (event = {}) => {
-    if (messageField.dataset && event.type) {
-      const placeholder = messageField.dataset.placeholder;
-      if (placeholder) {
-        if (event.type === 'blur' && messageField.value === '') {
-          messageField.value = placeholder;
-        } else if (event.type === 'focus' &&
-                   messageField.value === placeholder) {
-          messageField.value = '';
-        }
-      }
-    }
-  };
-
-  messageField.autoResize = () => {
-    const style = messageField.currentStyle ||
-      window.getComputedStyle(messageField);
-    const boxSizing = (style.boxSizing === 'border-box') ?
-      parseInt(style.borderBottomWidth, 10) +
-      parseInt(style.borderTopWidth, 10) : 0;
-
-    messageField.style.overflowY = 'hidden';
-    messageField.style.height = 'auto';
-    messageField.style.height = (messageField.scrollHeight + boxSizing) + 'px';
-  };
-
-  messageField.addEventListener('input', () => {
-    messageField.autoResize();
-  });
-
-  messageField.addEventListener('focus', (event) => {
-    messageField.togglePlaceholder(event);
-  });
-
-  messageField.addEventListener('blur', (event) => {
-    messageField.togglePlaceholder(event);
-  });
-
-  messageField.togglePlaceholder({type: 'blur'});
-  messageField.autoResize();
+export const ChatboxFooter = new Form({
+  name: "msg", 
+  fieldset: ChatboxFooterChildren,
 });
-

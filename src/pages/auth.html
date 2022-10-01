@@ -11,7 +11,8 @@
   import {StandardButton as Button} from '/src/components/forms/StandardButton.js';
   import {StandardLink as Link} from '/src/components/forms/StandardLink.js';
   
-  const context = {Form, Input, Button, Link};
+
+  const context = ProtoPages.use({Form, Input, Button, Link});
 
   context.title = 'Вход';
 

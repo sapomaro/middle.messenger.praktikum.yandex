@@ -10,11 +10,17 @@ export class Input extends ProtoBlock {
     const self = this;
     this.setProps({
       value: context.value || context.placeholder || '',
-      onFocus: this.togglePlaceholder.bind(this),
-      onBlur: this.validate.bind(this),
+      onFocus: function(event) {
+        self.togglePlaceholder.call(self, event);
+      },
+      onBlur: function(event) {
+        self.validate.call(self, event);
+        self.togglePlaceholder.call(self, event);
+      },
       onInput: function() {
         this.setAttribute('value', this.value);
         self.context.value = this.value;
+        self.autoResize(this);
       },
     });
 
@@ -29,9 +35,12 @@ export class Input extends ProtoBlock {
     }
   }
 
-  togglePlaceholder(event) {
+  togglePlaceholder(event, elem) {
     if (this.context.placeholder && event.type && event.target) {
       if (event.type === 'blur' && event.target.value === '') {
+
+//console.log(event.target.parentNode);
+
         event.target.value = this.context.placeholder;
       } else if (event.type === 'focus' &&
                  event.target.value === this.context.placeholder) {
@@ -39,13 +48,29 @@ export class Input extends ProtoBlock {
       }
     }
   }
+  
+  autoResize(messageField) {
+    if (!messageField.nodeName || messageField.nodeName !== 'TEXTAREA') {
+      return;
+    }
+    const style = messageField.currentStyle ||
+      window.getComputedStyle(messageField);
+    const boxSizing = (style.boxSizing === 'border-box') ?
+      parseInt(style.borderBottomWidth, 10) +
+      parseInt(style.borderTopWidth, 10) : 0;
+
+    messageField.style.overflowY = 'hidden';
+    messageField.style.height = 'auto';
+    messageField.style.height = (messageField.scrollHeight + boxSizing) + 'px';
+  };
+
+
 
   validate(event, state) {
     if (this.context.type === 'password' &&
         this.context.name.slice(-1) !== repeatFieldNameSuffix) {
       EventBus.fire('passwordChange', this.context.value);
     }
-
     const msg = ValidationMessage(this.context);
     if (msg) {
       this.setProps({error: msg});
@@ -57,6 +82,5 @@ export class Input extends ProtoBlock {
       this.setProps({error: null});
     }
 
-    this.togglePlaceholder(event);
   }
 }

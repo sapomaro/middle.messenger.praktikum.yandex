@@ -1,5 +1,12 @@
 @import "/src/layouts/colors.scss";
 
+.form {
+  width: inherit;
+  display: inherit;
+  justify-content: inherit;
+  align-items: inherit;
+}
+
 .form__button {
   display: inline-block;
   box-sizing: border-box;

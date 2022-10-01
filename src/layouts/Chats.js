@@ -19,14 +19,12 @@ ProtoPages.on('init', () => {
         <div class="chatbox__header">
           %{ ChatboxHeader }%
         </div>
-        
         <div class="chatbox__body">
           %{ ChatboxBody }%
         </div>
-      
-        <form name="send" class="chatbox__footer">
+        <div class="chatbox__footer">
           %{ ChatboxFooter }%
-        </form>
+        </div>
       </main>
     </div>
   `;

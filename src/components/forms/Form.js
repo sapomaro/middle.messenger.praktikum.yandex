@@ -33,7 +33,7 @@ export class Form extends ProtoBlock {
 
   render(props) {
     return `
-      <form name="${props.name}"
+      <form name="${props.name}" class="form"
         action="${props.action || ''}"
         onsubmit="%{onSubmit}%">
           %{fieldset}%
