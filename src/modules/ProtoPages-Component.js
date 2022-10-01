@@ -19,10 +19,9 @@ const generateUid = () => {
 };
 
 
-const ProtoBlock = function({ context, rules }) {
+const ProtoBlock = function(context) {
   this.context = context;
   this.rules = {
-    ...rules,
     uid: generateUid(),
   };
   this.listeners = {};
@@ -41,6 +40,7 @@ ProtoBlock.prototype.build = function() {
   this.element = this.buildNode(this.render, this.context, this.rules);
   this.traverseChildren(this.element);
   this.fire('built');
+  return this.element;
 };
 ProtoBlock.prototype.refresh = function() {
   this.build();

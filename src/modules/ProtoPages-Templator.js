@@ -62,16 +62,24 @@ Templator.prototype.resolvePattern = function(pattern) {
         .replace(/([{,"])\s*(\\[\\tn]+)\s*([},"])/g, '$1 $3')
         .replace(/&quot;/ig, '"');
     const unwrapRule = matches[3];
-    const jsonObj = PP.JSON.parse(jsonStr);
+    let jsonObj = PP.JSON.parse(jsonStr);
 
     if (typeof context[blockName] === 'function') {
+      
       const block = context[blockName];
-      return new block({
-        context: jsonObj,
-        rules: {
-          unwrap: !!unwrapRule
+      const blocksList = [];
+      if (!(unwrapRule && jsonObj instanceof Array)) {
+        jsonObj = [jsonObj];
+      }
+
+      for (const item of jsonObj) {
+        if (block.prototype && block.prototype.__ProtoBlock) {
+          blocksList.push(new block(item));
+        } else {
+          blocksList.push(this.buildNode(block, item));
         }
-      });
+      }
+      return blocksList;
     }
   } else {
     return this.resolveVariable(pattern);
@@ -92,7 +100,7 @@ Templator.prototype.resolveString = function(str) { // for plain text nodes
   this.PP_PATTERN.lastIndex = 0;
   while (matches = this.PP_PATTERN.exec(str)) {
     asset = this.resolvePattern(matches[1].trim());
-    if (asset !== null) {
+    if (asset !== null && typeof asset === 'string') {
       str = str.replace(matches[0], asset);
       // subtract pattern length to start next exec from new insertion
       // allows resolving nested patterns
@@ -129,11 +137,21 @@ Templator.prototype.resolveAssets = function(str) {
     patternAsset = this.resolvePattern(matches[1].trim());
 
     if (patternAsset !== null) {
-      assets.push(patternAsset);
+      if (patternAsset instanceof Array) {
+        assets.push(...patternAsset);
+      }
+      else {
+        assets.push(patternAsset);
+      }
       //if (typeof patternAsset !== 'string') {
       //  isStr = false;
       //}
+    } else {
+      assets.push(matches[0]);
     }
+
+//console.log(str.trim());
+//console.log(assets);
   }
   if (str.length > textIndex) {
     textAsset = str.slice(textIndex, str.length - 1);
@@ -148,33 +166,9 @@ Templator.prototype.resolveAssets = function(str) {
   return null;
 };
 
-Templator.prototype.parseText = function(str) {
-  const assets = this.resolveAssets(str);
-  if (assets !== null) {
-    let asset;
-    for (let i = 0; i < assets.length; ++i) {
-      if (typeof assets[i] === 'string') {
-        asset = this.parseText(assets[i]);
-        assets.splice(i, 1, ...asset);
-        i += asset.length - 1;
-      }
-    }
-    return assets;
-  }
-  return [str];
-};
-
 Templator.prototype.buildNode = function(templator, context = {}, rules = {}) {
   const elementHolder = document.createElement('div');
-  let htmlCode = '';
-  if (rules.unwrap && context instanceof Array) {
-    for (const item of context) {
-      htmlCode += templator(item);
-    }
-  } else {
-    htmlCode = templator(context);
-  }
-  elementHolder.innerHTML = htmlCode.trim();
+  elementHolder.innerHTML = templator(context).trim();
   const fragment = document.createDocumentFragment();
   while (elementHolder.childNodes.length !== 0) {
     const node = elementHolder.childNodes[0];
@@ -208,9 +202,10 @@ Templator.prototype.replaceNode = function(node, assets) {
 
     } else if (typeof asset === 'function') {
       elem = this.buildNode(asset);
+      this.traverseChildren(elem);
 
     } else if (typeof asset === 'object' && asset.__ProtoBlock) {
-      elem = asset.element;
+      elem = asset.build();
       this.traverseChildren(elem);
       blocksList.push(asset);
 
@@ -231,7 +226,21 @@ Templator.prototype.replaceNode = function(node, assets) {
   }
 };
 
-
+Templator.prototype.parseText = function(str) {
+  const assets = this.resolveAssets(str);
+  if (assets && !(assets.length === 1 && assets[0] === str)) {
+    let asset;
+    for (let i = 0; i < assets.length; ++i) {
+      if (typeof assets[i] === 'string') {
+        asset = this.parseText(assets[i]);
+        assets.splice(i, 1, ...asset);
+        i += asset.length - 1;
+      }
+    }
+    return assets;
+  }
+  return [str];
+};
 
 Templator.prototype.traverseText = function(node) {
   const assets = this.parseText(node.textContent);
@@ -277,8 +286,6 @@ Templator.prototype.traverseAttributes = function(node) {
     }
   }
 };
-
-
 
 PP.compileAll = (context = window) => {
   let templator = new Templator(context);
