@@ -1,10 +1,6 @@
-import {ProtoPages} from '/src/modules/ProtoPages.js';
 import {Form} from '/src/components/forms/Form.js';
-import {ChatboxTextarea} from '/src/components/chats/ChatboxTextarea.js';
 
 import '/src/components/chats/ChatboxControls.scss';
-
-ProtoPages.use({ChatboxTextarea});
 
 const ChatboxFooterChildren = () => `
   <label class="chatbox__footer__control__wrapper">
