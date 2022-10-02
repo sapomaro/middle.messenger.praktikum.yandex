@@ -110,7 +110,7 @@ Templator.prototype.resolveAssets = function(str) {
     }
   }
   if (str.length > textIndex) {
-    textAsset = str.slice(textIndex, str.length - 1);
+    textAsset = str.slice(textIndex, str.length);
     assets.push(textAsset);
   }
   if (assets.length > 0) {

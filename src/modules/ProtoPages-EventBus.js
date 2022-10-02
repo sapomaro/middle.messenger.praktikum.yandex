@@ -77,4 +77,6 @@ EventBus.prototype = {
   listeners: {},
 };
 
+EventBus.init();
+
 export {EventBus};
