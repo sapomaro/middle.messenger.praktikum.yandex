@@ -1,28 +1,4 @@
-//import {ProtoBlock} from '/src/modules/ProtoPages-Component.js';
-
-const ProtoPagesTemplator = {};
-const PP = ProtoPagesTemplator;
-
-
-PP.JSON = {};
-PP.JSON.parse = (data) => {
-  try {
-    return JSON.parse(data);
-  } catch (error) {
-    console.error(data);
-    console.error(error);
-    return {};
-  }
-};
-PP.JSON.stringify = (data) => {
-  try {
-    return JSON.stringify(data);
-  } catch (error) {
-    console.error(data);
-    console.error(error);
-    return '{}';
-  }
-};
+import {JSONWrapper} from '/src/modules/ProtoPages-Utils.js';
 
 const Templator = function(context = window) {
   this.context = context;
@@ -56,7 +32,7 @@ Templator.prototype.resolvePattern = function(pattern) {
         .replace(/([{,"])\s*(\\[\\tn]+)\s*([},"])/g, '$1 $3')
         .replace(/&quot;/ig, '"');
     const unwrapRule = matches[3];
-    let jsonObj = PP.JSON.parse(jsonStr);
+    let jsonObj = JSONWrapper.parse(jsonStr);
 
     if (typeof context[blockName] === 'function') {
       
@@ -192,6 +168,7 @@ Templator.prototype.resolveNode = function(asset) {
 
   } else if (typeof asset === 'object' && asset.__ProtoBlock) {
     elem = asset.build();
+    // traverse using global context of the app
     this.traverseChildren(elem);
 
   } else if (asset.nodeType && 
@@ -263,11 +240,14 @@ Templator.prototype.traverseAttributes = function(node) {
   for (let i = node.attributes.length - 1; i >= 0; --i) {
     const attrName = node.attributes[i].nodeName;
     const attrValue = node.attributes[i].nodeValue;
-    if (attrName.slice(0, 2) === 'on') {
+    if (attrName.slice(0, 2) === 'on') { // event attachment
       const asset = this.resolveAssets(attrValue);
       if (asset && typeof asset[0] === 'function') {
-        node.addEventListener(attrName.slice(2), asset[0]);
+        const eventType = attrName.slice(2);
+        const callback = asset[0];
+        node.addEventListener(eventType, callback);
         node.removeAttribute(attrName);
+        this.fire('eventAttached', {node, eventType, callback});
       }
     } else {
       const str = this.resolveString(attrValue);
@@ -278,25 +258,4 @@ Templator.prototype.traverseAttributes = function(node) {
   }
 };
 
-
-const templator = new Templator();
-
-PP.use = (moreContext) => {
-  templator.context = {
-    ...templator.context,
-    ...moreContext,
-  };
-  return templator.context;
-};
-
-PP.compileAll = (context) => {
-  if (context && context !== window) {
-    templator.context = context;
-  }
-  templator.traverseChildren(document.head);
-  templator.traverseChildren(document.body);
-};
-
-PP.Templator = Templator;
-
-export { ProtoPagesTemplator, Templator };
+export {Templator};

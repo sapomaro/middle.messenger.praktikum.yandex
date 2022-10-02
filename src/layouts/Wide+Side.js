@@ -1,12 +1,10 @@
-import {ProtoPages} from '/src/modules/ProtoPages.js';
-
 import '/src/components/Head.js';
 
 import '/src/layouts/common.scss';
 import '/src/layouts/Wide.scss';
 import '/src/layouts/Narrow.scss';
 
-ProtoPages.on('init', () => {
+export const WideSideLayout = () => {
   document.body.innerHTML = `
     <div class="popup">
       <div class="container container_narrow">
@@ -15,7 +13,7 @@ ProtoPages.on('init', () => {
     </div>
     <div class="root">
       <aside class="sidebar sidebar_nav">
-        <form action="chats.html" class="sidebar__control">
+        <form action="%{backButtonLink}%" class="sidebar__control">
           <button 
             class="form__button form__button_standard form__button_round">
               ⬅
@@ -34,4 +32,4 @@ ProtoPages.on('init', () => {
       popup.style.display = 'none';
     }
   });
-});
+};

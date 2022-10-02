@@ -6,23 +6,22 @@
   import {StandardButton as Button} from '/src/components/forms/StandardButton.js';
   import {RowInput as Input} from '/src/components/forms/RowInput.js';
   import {RowLink as Link} from '/src/components/forms/RowLink.js';
-  import {AvatarControl, AvatarPopup} from '/src/components/forms/Avatar.js';
+  import {AvatarPic} from '/src/components/forms/Avatar.js';
 
   const view = new ProtoView(WideSideLayout);
-  const context = view.use({Form, Button, Input, Link, AvatarControl, AvatarPopup});
+  const context = view.use({Form, Button, Input, Link, AvatarPic});
 
-  context.title = 'Профиль';
-  context.backButtonLink = 'chats.html';
-  context.popup = AvatarPopup;
+  context.title = 'Изменить данные';
+  context.backButtonLink = 'profile.html';
   context.contents = `%{ Form({ "name": "profile", "action": "" }) }%`;
-
+  
   const userData = {
     email: 'pochta@yandex.ru',
     login: 'ivanovivan',
     first_name: 'Иван',
     second_name: 'Иванов',
     display_name: 'Ivan Ivanov',
-    phone: '+77777777777'
+    phone: '+7-777-777-7777'
   };
 
   let inputs = [
@@ -36,19 +35,15 @@
 
   for (const input of inputs) {
     input.value = userData[input.name];
-    input.readonly = true;
   }
 
   inputs = ProtoView.JSON.stringify(inputs);
 
   context.fieldset = () => `
-    %{ AvatarControl }%
-    <h1 class="container__header">${userData.first_name}</h1>
+    %{ AvatarPic }%
     %{ Input(${inputs}...) }%
     <br><br><br>
-    %{ Link({ "url": "profile_edit.html", "label": "Изменить данные" }) }%
-    %{ Link({ "url": "profile_newpass.html", "label": "Изменить пароль" }) }%
-    %{ Link({ "url": "auth.html", "label": "Выйти", "style": "container__link_red" }) }%
+    %{ Button({ "name": "submit", "type": "submit", "label": "Сохранить" }) }%
     <br><br>
   `;
 

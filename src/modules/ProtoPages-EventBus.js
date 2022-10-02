@@ -1,4 +1,3 @@
-
 let DOMLoaded = false;
 
 const isDOMReady = () => {
@@ -14,7 +13,9 @@ const isDOMReady = () => {
 };
 
 const EventBus = function() {};
+
 EventBus.listeners = {};
+
 EventBus.listEvents = function(events, action) {
   events.split(/[, ]+/).forEach(eventType => {
     if (!this.listeners[eventType]) {
@@ -23,6 +24,7 @@ EventBus.listEvents = function(events, action) {
     action(eventType);
   });
 };
+
 EventBus.on = function(events, callback) {
   this.listEvents(events, (eventType) => {
     this.listeners[eventType].push(callback);
@@ -34,6 +36,7 @@ EventBus.on = function(events, callback) {
     }
   });
 };
+
 EventBus.fire = function(events, ...args) {
   this.listEvents(events, (eventType) => {
     this.listeners[eventType].forEach(listener => {
@@ -41,14 +44,15 @@ EventBus.fire = function(events, ...args) {
     });
   });
 };
+
 EventBus.off = function(events, callback) {
   this.listEvents(events, (eventType) => {
     this.listeners[eventType] = this.listeners[eventType].filter(
       listener => listener !== callback
     );
   });
-}
-  
+};
+
 EventBus.init = function() {
   if (isDOMReady()) {
     this.fire('init, load');
@@ -74,8 +78,4 @@ EventBus.prototype = {
   listeners: {},
 };
 
-const ProtoPagesEventBus = {
-  ...EventBus,
-};
-
-export { ProtoPagesEventBus, EventBus };
+export {EventBus};

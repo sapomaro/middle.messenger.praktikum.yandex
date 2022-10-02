@@ -1,15 +1,9 @@
 import {EventBus} from '/src/modules/ProtoPages-EventBus.js';
 import {Templator} from '/src/modules/ProtoPages-Templator.js';
-
-const ProtoPagesComponent = {};
-const PP = ProtoPagesComponent;
-
-
-const rand = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+import {rand, objIntersect} from '/src/modules/ProtoPages-Utils.js';
 
 const uids = {};
+
 const generateUid = () => {
   let uid = '';
   let num;
@@ -21,59 +15,60 @@ const generateUid = () => {
   return uid;
 };
 
-
-const objIntersect = function objIntersect(baseObj, chunkObj) {
-  const entries = Object.entries(chunkObj);
-  for (const [key, value] of entries) {
-    if (typeof baseObj[key] !== 'undefined') {
-      if (typeof baseObj[key] === 'object' && typeof value === 'object') {
-        if (objIntersect(baseObj[key], value)) {
-          continue;
-        } else {
-          return false;
-        }
-      }
-      if (baseObj[key] !== value) {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
-  return true;
-}
-
 const protoblocks = {};
 
 const ProtoBlock = function(context) {
   this.context = context;
   this.protouid = generateUid();
   protoblocks[this.protouid] = this;
-  this.listeners = {};
+  this.registerEvents();
 };
+
 ProtoBlock.prototype = {
   __ProtoBlock: true,
   ...EventBus.prototype,
   ...Templator.prototype,
   ...new Templator,
 };
+
+ProtoBlock.prototype.registerEvents = function() {
+  this.listeners = {};
+  this.nativeEventsList = [];
+  this.on('propsUpdated', () => {
+    this.replaceMultipleNodes(`[data-protouid=${this.protouid}]`, [this]);
+  });
+  this.on('eventAttached', ({node, eventType, callback}) => {
+    this.nativeEventsList.push({node, eventType, callback});
+  });
+  this.on('renderStart', () => {
+    for (const {node, eventType, callback} of this.nativeEventsList) {
+      node.removeEventListener(eventType, callback);
+    }
+    this.nativeEventsList = [];
+  });
+};
+
 ProtoBlock.prototype.setProps = function(obj, norefresh) {
   if (!objIntersect(this.context, obj)) {
     Object.assign(this.context, obj);
     if (!norefresh) {
-      this.refresh();
+      this.fire('propsUpdated');
     }
   }
 };
-ProtoBlock.prototype.listDescendants = function(callback) {
-  const nodeList = document.querySelectorAll(`[data-protouid=${this.protouid}]`) ||
+ProtoBlock.prototype.getContent = function() {
+  return document.querySelectorAll(`[data-protouid=${this.protouid}]`) ||
     this.element;
-  if (!nodeList) {
+};
+
+ProtoBlock.prototype.listDescendants = function(callback) {
+  const elementNodes = this.getContent();
+  if (!elementNodes) {
     return;
   }
-  for (const node of nodeList) {
-    const nestedNodeList = node.querySelectorAll('[data-protouid]');
-    for (const nestedNode of nestedNodeList) {
+  for (const node of elementNodes) {
+    const nestedElementNodes = node.querySelectorAll('[data-protouid]');
+    for (const nestedNode of nestedElementNodes) {
       const block = protoblocks[nestedNode.dataset.protouid];
       if (block) {
         callback(block);
@@ -81,20 +76,20 @@ ProtoBlock.prototype.listDescendants = function(callback) {
     }
   }
 };
+
 ProtoBlock.prototype.build = function() {
+  this.fire('renderStart');
   this.element = this.buildNode(this.render, this.context, (node) => {
     if (node.nodeType === 1) {
       node.setAttribute('data-protouid', this.protouid);
     }
   });
+  // traverse using local context of the block
   this.traverseChildren(this.element);
-  this.fire('built');
+  this.fire('renderFinish');
   return this.element;
 };
-ProtoBlock.prototype.refresh = function() {
-  this.replaceMultipleNodes(`[data-protouid=${this.protouid}]`, [this]);
-};
 
-PP.ProtoBlock = ProtoBlock;
+ProtoBlock.prototype.render = function() {};
 
-export {ProtoPagesComponent, ProtoBlock};
+export {ProtoBlock};

@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <script type="module">
-	import {ProtoPages} from '/src/modules/ProtoPages.js';
-  
-  import '/src/layouts/Wide.js';
-  
+	import {ProtoView} from '/src/modules/ProtoPages.js';
+
+  import {WideLayout} from '/src/layouts/Wide.js';
   import {ErrorStatusMsg} from '/src/components/ErrorStatusMsg.js';
-  
-  const context = {};
+
+  const view = new ProtoView(WideLayout);
+  const context = view.use({});
   
   context.title = '500';
   context.comment = 'Уже фиксим';
-  
   context.contents = ErrorStatusMsg; 
 
-
-  ProtoPages.compile(context);
-    
+  view.render();
 
 </script>
