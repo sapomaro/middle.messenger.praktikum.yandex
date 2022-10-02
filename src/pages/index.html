@@ -7,7 +7,7 @@
   const context = view.use({});
 
   context.title = 'Карта экранов приложения';
-  
+
   const links = ProtoView.JSON.stringify([
     { url: 'auth.html', label: 'Вход' },
     { url: 'register.html', label: 'Регистрация' },
@@ -16,7 +16,8 @@
     { url: 'profile_newpass.html', label: 'Смена пароля' },
     { url: 'chats.html', label: 'Чаты' },
     { url: '404.html', label: 'Страница 404' },
-    { url: '500.html', label: 'Страница 500' }
+    { url: '500.html', label: 'Страница 500' },
+    { url: 'test.html', label: 'Тест XHR' },
   ]);
 
   context.Link = (props) => `

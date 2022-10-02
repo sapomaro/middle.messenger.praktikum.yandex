@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<script type="module">
+	import {ProtoView} from '/src/modules/ProtoPages.js';
+  import {WideLayout} from '/src/layouts/Wide.js';
+	import {AjaxRequest} from '/src/modules/AjaxService.js';
+
+  const view = new ProtoView(WideLayout);
+  const context = view.use({});
+
+  context.title = 'Тест XHR';
+
+  context.contents = () => `
+    <h1>%{title}%:</h1>
+    <textarea>%{result1}%</textarea>
+    <textarea>%{result2}%</textarea>
+  `;
+
+  const ajax1 = AjaxRequest({
+    url: 'http://localhost:1234/'
+  })
+  .then(({response}) => {
+    console.log(response);
+    context.result1 = 'success';
+  })
+  .catch(({error}) => {
+    console.warn(error);
+    context.result1 = 'error';
+  })
+  .finally(() => {
+    console.log('finally');
+    context.result1 += ' finally';
+    view.render();
+  });
+  
+  const ajax2 = AjaxRequest({
+    url: 'http://localhost:1235/'
+  })
+  .then(({response}) => {
+    console.log(response);
+    context.result2 = 'success';
+  })
+  .catch(({error}) => {
+    console.warn(error);
+    context.result2 = 'error';
+  })
+  .finally(() => {
+    console.log('finally');
+    context.result2 += ' finally';
+    view.render();
+  });
+  
+  view.render();
+
+</script>
