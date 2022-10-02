@@ -11,6 +11,11 @@ export class Input extends ProtoBlock {
     this.setProps({
       value: context.value || context.placeholder || '',
       onFocus: function(event) {
+        if (self.context.value !== '' &&
+             (!self.context.placeholder ||
+              self.context.placeholder !== self.context.value)) {
+          self.validate.call(self, event);
+        }
         self.togglePlaceholder.call(self, event);
       },
       onBlur: function(event) {
@@ -26,12 +31,15 @@ export class Input extends ProtoBlock {
 
     this.on('submit', (event, state) => {
       this.validate.call(this, event, state);
+      setTimeout(() => {
+        self.togglePlaceholder.call(self, event);
+      }, 10);
     });
 
 
     if (this.context.type === 'password' &&
         this.context.name.slice(-1) === repeatFieldNameSuffix) {
-      EventBus.on('passwordChange', (password) => {
+      EventBus.on('passwordFieldChange', (password) => {
         this.context.value2 = password;
       });
     }
@@ -40,9 +48,6 @@ export class Input extends ProtoBlock {
   togglePlaceholder(event, elem) {
     if (this.context.placeholder && event.type && event.target) {
       if (event.type === 'blur' && event.target.value === '') {
-
-//console.log(event.target.parentNode);
-
         event.target.value = this.context.placeholder;
       } else if (event.type === 'focus' &&
                  event.target.value === this.context.placeholder) {
@@ -71,7 +76,7 @@ export class Input extends ProtoBlock {
   validate(event, state) {
     if (this.context.type === 'password' &&
         this.context.name.slice(-1) !== repeatFieldNameSuffix) {
-      EventBus.fire('passwordChange', this.context.value);
+      EventBus.fire('passwordFieldChange', this.context.value);
     }
     
     let actualValue = '';
