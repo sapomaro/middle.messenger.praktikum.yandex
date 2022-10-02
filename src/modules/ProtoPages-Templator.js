@@ -22,7 +22,6 @@ Templator.prototype.resolveVariable = function(pattern) {
 Templator.prototype.resolvePattern = function(pattern) {
   const context = this.context;
   let matches;
-  let result;
 
   this.PP_SUBPATTERN_JSONFUNC.lastIndex = 0;
   if (matches = this.PP_SUBPATTERN_JSONFUNC.exec(pattern)) {
@@ -35,18 +34,16 @@ Templator.prototype.resolvePattern = function(pattern) {
     let jsonObj = JSONWrapper.parse(jsonStr);
 
     if (typeof context[blockName] === 'function') {
-      
-      const block = context[blockName];
+      const Block = context[blockName];
       const blocksList = [];
       if (!(unwrapRule && jsonObj instanceof Array)) {
         jsonObj = [jsonObj];
       }
-
       for (const item of jsonObj) {
-        if (block.prototype && block.prototype.__ProtoBlock) {
-          blocksList.push(new block(item));
+        if (Block.prototype && Block.prototype.__ProtoBlock) {
+          blocksList.push(new Block(item));
         } else {
-          blocksList.push(this.buildNode(block, item));
+          blocksList.push(this.buildNode(Block, item));
         }
       }
       return blocksList;
@@ -54,7 +51,6 @@ Templator.prototype.resolvePattern = function(pattern) {
   } else {
     return this.resolveVariable(pattern);
   }
-  
   return null;
 };
 
@@ -66,7 +62,6 @@ Templator.prototype.resolveString = function(str) { // for plain text nodes
   let matches;
   let asset;
   const old = str;
-
   this.PP_PATTERN.lastIndex = 0;
   while (matches = this.PP_PATTERN.exec(str)) {
     asset = this.resolveVariable(matches[1].trim());
@@ -83,14 +78,12 @@ Templator.prototype.resolveString = function(str) { // for plain text nodes
   return null;
 };
 
-
 Templator.prototype.resolveAssets = function(str) {
   this.PP_PATTERN.lastIndex = 0;
   if (!this.PP_PATTERN.test(str)) {
     return null;
   }
   const assets = [];
-  //let isStr = true;
   let patternAsset;
   let textAsset = '';
   let textIndex = 0;
@@ -109,13 +102,9 @@ Templator.prototype.resolveAssets = function(str) {
     if (patternAsset !== null) {
       if (patternAsset instanceof Array) {
         assets.push(...patternAsset);
-      }
-      else {
+      } else {
         assets.push(patternAsset);
       }
-      //if (typeof patternAsset !== 'string') {
-      //  isStr = false;
-      //}
     } else {
       assets.push(matches[0]);
     }
@@ -125,9 +114,6 @@ Templator.prototype.resolveAssets = function(str) {
     assets.push(textAsset);
   }
   if (assets.length > 0) {
-    //if (isStr) {
-    //  assets = [ assets.join('') ];
-    //}
     return assets;
   }
   return null;
@@ -161,17 +147,14 @@ Templator.prototype.resolveNode = function(asset) {
   let elem = null;
   if (typeof asset === 'string') {
     elem = document.createTextNode(asset);
-
   } else if (typeof asset === 'function') {
     elem = this.buildNode(asset);
     this.traverseChildren(elem);
-
   } else if (typeof asset === 'object' && asset.__ProtoBlock) {
     elem = asset.build();
     // traverse using global context of the app
     this.traverseChildren(elem);
-
-  } else if (asset.nodeType && 
+  } else if (asset.nodeType &&
             (asset.nodeType === 1 || asset.nodeType === 11)) {
     elem = asset;
     this.traverseChildren(elem);

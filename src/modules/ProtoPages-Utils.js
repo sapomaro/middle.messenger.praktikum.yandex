@@ -16,7 +16,7 @@ export const JSONWrapper = {
       console.error(error);
       return '{}';
     }
-  }
+  },
 };
 
 export const rand = (min, max) => {
@@ -42,4 +42,4 @@ export const objIntersect = function objIntersect(baseObj, chunkObj) {
     }
   }
   return true;
-}
+};

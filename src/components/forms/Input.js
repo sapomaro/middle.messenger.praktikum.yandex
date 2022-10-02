@@ -1,5 +1,5 @@
 import {ProtoBlock, EventBus} from '/src/modules/ProtoPages.js';
-import {ValidationMessage} from '/src/components/forms/ValidationMessage.js';
+import {getValidationMessage} from '/src/components/forms/ValidationMessage.js';
 
 // имя поля для повторного ввода оканчивается на 2
 const repeatFieldNameSuffix = '2';
@@ -55,7 +55,7 @@ export class Input extends ProtoBlock {
       }
     }
   }
-  
+
   autoResize(messageField) {
     if (!messageField.nodeName || messageField.nodeName !== 'TEXTAREA') {
       return;
@@ -71,14 +71,12 @@ export class Input extends ProtoBlock {
     messageField.style.height = (messageField.scrollHeight + boxSizing) + 'px';
   };
 
-
-
   validate(event, state) {
     if (this.context.type === 'password' &&
         this.context.name.slice(-1) !== repeatFieldNameSuffix) {
       EventBus.fire('passwordFieldChange', this.context.value);
     }
-    
+
     let actualValue = '';
     if (typeof this.context.placeholder !== 'undefined' &&
         typeof this.context.value !== 'undefined' &&
@@ -87,7 +85,7 @@ export class Input extends ProtoBlock {
     } else {
       actualValue = this.context.value;
     }
-    const msg = ValidationMessage({
+    const msg = getValidationMessage({
       ...this.context,
       value: actualValue,
     });

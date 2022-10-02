@@ -1,5 +1,5 @@
-export const ValidationMessage = ({name, value, value2, label}) => {
-  switch(name) {
+export const getValidationMessage = ({name, value, value2, label}) => {
+  switch (name) {
     case 'login':
     case 'user':
       if (value.length === 0) return `Поле не может быть пустым`;
@@ -71,7 +71,7 @@ export const ValidationMessage = ({name, value, value2, label}) => {
         return `Неверный телефонный номер`;
       }
       break;
-      
+
     case 'display_name':
       if (value.length === 0) return `Поле не может быть пустым`;
       if (value.length < 3) return `${label} должен быть больше 3 символов`;

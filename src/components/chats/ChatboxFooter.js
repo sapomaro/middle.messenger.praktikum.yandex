@@ -35,6 +35,6 @@ const ChatboxFooterChildren = () => `
 `;
 
 export const ChatboxFooter = new Form({
-  name: "msg", 
+  name: 'msg',
   fieldset: ChatboxFooterChildren,
 });

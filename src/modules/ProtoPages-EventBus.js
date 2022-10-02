@@ -17,7 +17,7 @@ const EventBus = function() {};
 EventBus.listeners = {};
 
 EventBus.listEvents = function(events, action) {
-  events.split(/[, ]+/).forEach(eventType => {
+  events.split(/[, ]+/).forEach((eventType) => {
     if (!this.listeners[eventType]) {
       this.listeners[eventType] = [];
     }
@@ -39,7 +39,7 @@ EventBus.on = function(events, callback) {
 
 EventBus.fire = function(events, ...args) {
   this.listEvents(events, (eventType) => {
-    this.listeners[eventType].forEach(listener => {
+    this.listeners[eventType].forEach((listener) => {
       listener(...args);
     });
   });
@@ -47,9 +47,8 @@ EventBus.fire = function(events, ...args) {
 
 EventBus.off = function(events, callback) {
   this.listEvents(events, (eventType) => {
-    this.listeners[eventType] = this.listeners[eventType].filter(
-      listener => listener !== callback
-    );
+    this.listeners[eventType] = this.listeners[eventType]
+        .filter((listener) => (listener !== callback));
   });
 };
 

@@ -1,6 +1,6 @@
 /*
   SYNTAX:
-  
+
   const ajax = AjaxRequest({
     url: 'http://localhost:1235/'
   })
@@ -51,7 +51,7 @@ const ajaxRequest = function ajaxRequest(url, options = {}) {
         }
       }
     }
-  }
+  };
 
   const handleError = (error) => {
     if (options.tries) {
@@ -77,8 +77,7 @@ export const AjaxRequest = function(request) {
     for (const callback of request.then.callbacks) {
       try {
         callback(request);
-      }
-      catch(error) {
+      } catch (error) {
         request.error = error;
         request.catch.trigger();
         break;
@@ -118,7 +117,7 @@ export const AjaxRequest = function(request) {
         request.catch.trigger();
       },
     });
-  } catch(error) {
+  } catch (error) {
     request.error = error;
     request.catch.trigger();
   }
