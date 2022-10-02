@@ -27,6 +27,7 @@ export const ValidationMessage = ({name, value, value2, label}) => {
 
     case 'password2':
     case 'newPassword2':
+      if (value.length === 0) return `Поле не может быть пустым`;
       if (typeof value2 !== 'undefined' && value !== value2) {
         return `Пароли не совпадают`;
       }
