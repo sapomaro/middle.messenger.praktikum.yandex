@@ -76,7 +76,6 @@ Templator.prototype.resolvePattern = function(pattern) {
       return blocksList;
     }
   } else {
-//console.log(pattern);
     return this.resolveVariable(pattern);
   }
   
@@ -94,7 +93,7 @@ Templator.prototype.resolveString = function(str) { // for plain text nodes
 
   this.PP_PATTERN.lastIndex = 0;
   while (matches = this.PP_PATTERN.exec(str)) {
-    asset = this.resolvePattern(matches[1].trim());
+    asset = this.resolveVariable(matches[1].trim());
     if (asset !== null && typeof asset === 'string') {
       str = str.replace(matches[0], asset);
       // subtract pattern length to start next exec from new insertion
@@ -153,21 +152,19 @@ Templator.prototype.resolveAssets = function(str) {
     //if (isStr) {
     //  assets = [ assets.join('') ];
     //}
-//console.log(str.trim());
-//console.log(assets);
     return assets;
   }
   return null;
 };
 
-Templator.prototype.buildNode = function(templator, context = {}, rules = {}) {
+Templator.prototype.buildNode = function(templator, context = {}, callback) {
   const elementHolder = document.createElement('div');
   elementHolder.innerHTML = templator(context).trim();
   const fragment = document.createDocumentFragment();
   while (elementHolder.childNodes.length !== 0) {
     const node = elementHolder.childNodes[0];
-    if (rules.uid && node.nodeType === 1) {
-      node.setAttribute('data-proto-uid', rules.uid);
+    if (callback) {
+      callback(node);
     }
     fragment.appendChild(node);
   }
@@ -184,39 +181,41 @@ Templator.prototype.replaceMultipleNodes = function(selector, assets) {
   }
 };
 
+Templator.prototype.resolveNode = function(asset) {
+  let elem = null;
+  if (typeof asset === 'string') {
+    elem = document.createTextNode(asset);
+
+  } else if (typeof asset === 'function') {
+    elem = this.buildNode(asset);
+    this.traverseChildren(elem);
+
+  } else if (typeof asset === 'object' && asset.__ProtoBlock) {
+    elem = asset.build();
+    this.traverseChildren(elem);
+
+  } else if (asset.nodeType && 
+            (asset.nodeType === 1 || asset.nodeType === 11)) {
+    elem = asset;
+    this.traverseChildren(elem);
+  }
+  return elem;
+};
 
 Templator.prototype.replaceNode = function(node, assets) {
-//console.log('replace: ' + node.textContent);
   const fragment = document.createDocumentFragment();
   const blocksList = [];
-  let elem;
   for (const asset of assets) {
-    if (typeof asset === 'string') {
-      elem = document.createTextNode(asset);
-
-    } else if (typeof asset === 'function') {
-      elem = this.buildNode(asset);
-      this.traverseChildren(elem);
-
-    } else if (typeof asset === 'object' && asset.__ProtoBlock) {
-      elem = asset.build();
-      this.traverseChildren(elem);
+    if (typeof asset === 'object' && asset.__ProtoBlock) {
       blocksList.push(asset);
-
-    } else if (asset.nodeType && 
-              (asset.nodeType === 1 || asset.nodeType === 11)) {
-      elem = asset;
-      this.traverseChildren(elem);
-
     }
+    const elem = this.resolveNode(asset);
     fragment.appendChild(elem);
   }
   fragment.normalize();
   node.parentNode.replaceChild(fragment, node);
-
-//console.log(blocksList);
-  for (elem of blocksList) {
-    elem.fire('mounted');
+  for (const block of blocksList) {
+    block.fire('mounted');
   }
 };
 
@@ -266,8 +265,6 @@ Templator.prototype.traverseAttributes = function(node) {
     const attrValue = node.attributes[i].nodeValue;
     if (attrName.slice(0, 2) === 'on') {
       const asset = this.resolveAssets(attrValue);
-//console.log(attrValue);
-
       if (asset && typeof asset[0] === 'function') {
         node.addEventListener(attrName.slice(2), asset[0]);
         node.removeAttribute(attrName);

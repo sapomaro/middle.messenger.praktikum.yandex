@@ -10,8 +10,9 @@ export class Form extends ProtoBlock {
       onSubmit: (event) => {
         event.preventDefault();
         const state = {errorMsgs: {}};
-        EventBus.fire('submit', event, state);
-        
+        this.listDescendants((block) => {
+          block.fire('submit', event, state);
+        });
         const form = document.forms[this.context.name];
         const formData = new FormData(form);
         const data = {};

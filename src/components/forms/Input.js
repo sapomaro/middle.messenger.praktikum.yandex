@@ -24,7 +24,9 @@ export class Input extends ProtoBlock {
       },
     });
 
-    EventBus.on('submit', this.validate.bind(this));
+    this.on('submit', (event, state) => {
+      this.validate.call(this, event, state);
+    });
 
 
     if (this.context.type === 'password' &&
@@ -71,16 +73,28 @@ export class Input extends ProtoBlock {
         this.context.name.slice(-1) !== repeatFieldNameSuffix) {
       EventBus.fire('passwordChange', this.context.value);
     }
-    const msg = ValidationMessage(this.context);
+    
+    let actualValue = '';
+    if (typeof this.context.placeholder !== 'undefined' &&
+        typeof this.context.value !== 'undefined' &&
+        this.context.placeholder === this.context.value) {
+      actualValue = '';
+    } else {
+      actualValue = this.context.value;
+    }
+    const msg = ValidationMessage({
+      ...this.context,
+      value: actualValue,
+    });
+    const norefresh = (this.context.name === 'message');
     if (msg) {
-      this.setProps({error: msg});
+      this.setProps({error: msg}, norefresh);
       if (state) {
         state.errorMsgs[this.context.name] = msg;
       }
       event.preventDefault();
     } else if (this.context.error) {
-      this.setProps({error: null});
+      this.setProps({error: null}, norefresh);
     }
-
   }
 }
