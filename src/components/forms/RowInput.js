@@ -18,7 +18,7 @@ export class RowInput extends Input {
             onblur="%{onBlur}%"
             onfocus="%{onFocus}%"
             oninput="%{onInput}%"
-            ${ props.readyonly ? 'readonly="readonly"' : '' }>
+            ${ props.readonly ? 'readonly="readonly"' : '' }>
           <span class="form__input__error">${props.error || ''}</span>
         </span>
       </label>
