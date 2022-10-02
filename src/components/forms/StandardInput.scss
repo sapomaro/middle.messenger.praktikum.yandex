@@ -6,6 +6,10 @@
   border-bottom: 1px solid $main-color;
 }
 
+.form__input__field_error {
+  border-bottom: 1px solid $error-color;
+}
+
 .form__input__label {
   position: absolute;
   z-index: 1;
