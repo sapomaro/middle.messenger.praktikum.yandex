@@ -1,15 +1,15 @@
-import {ProtoBlock} from '/src/modules/ProtoPages.js';
+import {Block} from '/src/modules/Block.js';
 
 import '/src/components/forms/common.scss';
 
-export class Form extends ProtoBlock {
-  constructor(data) {
-    super(data);
+export class Form extends Block {
+  constructor(props) {
+    super(props);
     this.setProps({
       onSubmit: (event) => {
         event.preventDefault();
 
-        const form = document.forms[this.context.name];
+        const form = document.forms[this.props.name];
         const formData = new FormData(form);
         const data = {};
         for (const [key, value] of formData.entries()) {

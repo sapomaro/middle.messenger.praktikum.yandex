@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <script type="module">
-	import {ProtoView} from '/src/modules/ProtoPages.js';
-  import {NarrowLayout} from '/src/layouts/Narrow.js';
+  import {NarrowLayout} from '/src/components/layouts/Narrow.js';
+  import {JSONWrapper} from '/src/modules/Utils.js';
 
-  const view = new ProtoView(NarrowLayout);
-  const context = view.use({});
+  const view = new NarrowLayout({
+    title: 'Карта экранов приложения'
+  });
 
-  context.title = 'Карта экранов приложения';
-
-  const links = ProtoView.JSON.stringify([
+  const links = JSONWrapper.stringify([
     { url: 'auth.html', label: 'Вход' },
     { url: 'register.html', label: 'Регистрация' },
     { url: 'profile.html', label: 'Профиль' },
@@ -20,19 +19,19 @@
     { url: 'test.html', label: 'Тест XHR' },
   ]);
 
-  context.Link = (props) => `
+  view.props.Link = (props) => `
     <li class="container__row container__element_centered">
       <a href="${props.url}" class="container__link">${props.label}</a>
     </li>  
   `;
 
-  context.contents = () => `
+  view.props.contents = () => `
     <h1 class="container__header">%{title}%</h1>
     <nav><ul>
       %{ Link(${links}...) }%
     </ul></nav>
   `;
 
-  view.render();
+  view.renderToBody();
 
 </script>

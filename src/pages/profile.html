@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <script type="module">
-  import {ProtoView} from '/src/modules/ProtoPages.js';
-  import {WideSideLayout} from '/src/layouts/Wide+Side.js';
+  import {WideSideLayout} from '/src/components/layouts/Wide+Side.js';
   import {Form} from '/src/components/forms/Form.js';
   import {StandardButton as Button} from '/src/components/forms/StandardButton.js';
   import {RowInput as Input} from '/src/components/forms/RowInput.js';
   import {RowLink as Link} from '/src/components/forms/RowLink.js';
   import {AvatarControl, AvatarPopup} from '/src/components/forms/Avatar.js';
+  import {JSONWrapper} from '/src/modules/Utils.js';
 
-  const view = new ProtoView(WideSideLayout);
-  const context = view.use({Form, Button, Input, Link, AvatarControl, AvatarPopup});
+  const view = new WideSideLayout({
+    title: 'Профиль',
+    backButtonLink: 'chats.html',
+    Form, Button, Input, Link, AvatarControl, AvatarPopup
+  });
 
-  context.title = 'Профиль';
-  context.backButtonLink = 'chats.html';
-  context.popup = AvatarPopup;
-  context.contents = `%{ Form({ "name": "profile", "action": "" }) }%`;
+  view.props.popup = AvatarPopup;
+  view.props.contents = `%{ Form({ "name": "profile", "action": "" }) }%`;
 
   const userData = {
     email: 'pochta@yandex.ru',
@@ -39,9 +40,9 @@
     input.readonly = true;
   }
 
-  inputs = ProtoView.JSON.stringify(inputs);
+  inputs = JSONWrapper.stringify(inputs);
 
-  context.fieldset = () => `
+  view.props.fieldset = () => `
     %{ AvatarControl }%
     <h1 class="container__header">${userData.first_name}</h1>
     %{ Input(${inputs}...) }%
@@ -52,6 +53,6 @@
     <br><br>
   `;
 
-  view.render();
+  view.renderToBody();
 
 </script>

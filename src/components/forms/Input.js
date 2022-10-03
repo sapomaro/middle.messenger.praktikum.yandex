@@ -1,19 +1,20 @@
-import {ProtoBlock, EventBus} from '/src/modules/ProtoPages.js';
+import {EventBus} from '/src/modules/EventBus.js';
+import {Block} from '/src/modules/Block.js';
 import {getValidationMessage} from '/src/components/forms/ValidationMessage.js';
 
 // имя поля для повторного ввода оканчивается на 2
 const repeatFieldNameSuffix = '2';
 
-export class Input extends ProtoBlock {
-  constructor(context) {
-    super(context);
+export class Input extends Block {
+  constructor(props) {
+    super(props);
     const self = this;
     this.setProps({
-      value: context.value || context.placeholder || '',
+      value: props.value || props.placeholder || '',
       onFocus: function(event) {
-        if (self.context.value !== '' &&
-             (!self.context.placeholder ||
-              self.context.placeholder !== self.context.value)) {
+        if (self.props.value !== '' &&
+             (!self.props.placeholder ||
+              self.props.placeholder !== self.props.value)) {
           self.validate.call(self, event);
         }
         self.togglePlaceholder.call(self, event);
@@ -24,7 +25,7 @@ export class Input extends ProtoBlock {
       },
       onInput: function() {
         this.setAttribute('value', this.value);
-        self.context.value = this.value;
+        self.props.value = this.value;
         self.autoResize(this);
       },
     });
@@ -37,20 +38,20 @@ export class Input extends ProtoBlock {
     });
 
 
-    if (this.context.type === 'password' &&
-        this.context.name.slice(-1) === repeatFieldNameSuffix) {
+    if (this.props.type === 'password' &&
+        this.props.name.slice(-1) === repeatFieldNameSuffix) {
       EventBus.on('passwordFieldChange', (password) => {
-        this.context.value2 = password;
+        this.props.value2 = password;
       });
     }
   }
 
   togglePlaceholder(event, elem) {
-    if (this.context.placeholder && event.type && event.target) {
+    if (this.props.placeholder && event.type && event.target) {
       if (event.type === 'blur' && event.target.value === '') {
-        event.target.value = this.context.placeholder;
+        event.target.value = this.props.placeholder;
       } else if (event.type === 'focus' &&
-                 event.target.value === this.context.placeholder) {
+                 event.target.value === this.props.placeholder) {
         event.target.value = '';
       }
     }
@@ -72,31 +73,31 @@ export class Input extends ProtoBlock {
   };
 
   validate(event, state) {
-    if (this.context.type === 'password' &&
-        this.context.name.slice(-1) !== repeatFieldNameSuffix) {
-      EventBus.fire('passwordFieldChange', this.context.value);
+    if (this.props.type === 'password' &&
+        this.props.name.slice(-1) !== repeatFieldNameSuffix) {
+      EventBus.fire('passwordFieldChange', this.props.value);
     }
 
     let actualValue = '';
-    if (typeof this.context.placeholder !== 'undefined' &&
-        typeof this.context.value !== 'undefined' &&
-        this.context.placeholder === this.context.value) {
+    if (typeof this.props.placeholder !== 'undefined' &&
+        typeof this.props.value !== 'undefined' &&
+        this.props.placeholder === this.props.value) {
       actualValue = '';
     } else {
-      actualValue = this.context.value;
+      actualValue = this.props.value;
     }
     const msg = getValidationMessage({
-      ...this.context,
+      ...this.props,
       value: actualValue,
     });
-    const norefresh = (this.context.name === 'message');
+    const norefresh = (this.props.name === 'message');
     if (msg) {
       this.setProps({error: msg}, norefresh);
       if (state) {
-        state.errorMsgs[this.context.name] = msg;
+        state.errorMsgs[this.props.name] = msg;
       }
       event.preventDefault();
-    } else if (this.context.error) {
+    } else if (this.props.error) {
       this.setProps({error: null}, norefresh);
     }
   }

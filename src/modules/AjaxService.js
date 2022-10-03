@@ -16,7 +16,7 @@
 
 */
 
-import {JSONWrapper} from '/src/modules/ProtoPages-Utils.js';
+import {JSONWrapper} from '/src/modules/Utils.js';
 
 const METHODS = {
   GET: 'GET',

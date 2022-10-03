@@ -1,4 +1,4 @@
-import {EventBus} from '/src/modules/ProtoPages.js';
+import {EventBus} from '/src/modules/EventBus.js';
 
 const favicon = new URL('../../public/favicon.ico', import.meta.url);
 

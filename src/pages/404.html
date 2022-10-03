@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <script type="module">
-	import {ProtoView} from '/src/modules/ProtoPages.js';
-
-  import {WideLayout} from '/src/layouts/Wide.js';
+  import {WideLayout} from '/src/components/layouts/Wide.js';
   import {ErrorStatusMsg} from '/src/components/ErrorStatusMsg.js';
 
-  const view = new ProtoView(WideLayout);
-  const context = view.use({});
+  const view = new WideLayout({
+    title: '404',
+    comment: 'Не туда попали',
+    contents: ErrorStatusMsg,
+  });
 
-  context.title = '404';
-  context.comment = 'Не туда попали';
-  context.contents = ErrorStatusMsg; 
-  
-  view.render();
-  
+  view.renderToBody(); 
+
 </script>
