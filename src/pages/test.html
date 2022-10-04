@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <script type="module">
-  import {WideLayout} from '/src/components/layouts/Wide.js';
-	import {AjaxRequest} from '/src/modules/AjaxService.js';
+  import {WideLayout} from '/src/components/layouts/Wide';
+	import {AjaxRequest} from '/src/modules/AjaxService';
 
   const view = new WideLayout({
     title: 'Тест XHR'
   });
 
   view.props.contents = () => `
-    <h1>%{title}%:</h1>
+    <h1>%{title}%</h1>
+    <h2>Успешный запрос:</h2>
     <textarea>%{result1}%</textarea>
+    <h2>Неверный запрос (к несуществующей странице):</h2>
     <textarea>%{result2}%</textarea>
   `;
 
@@ -31,7 +33,8 @@
   });
   
   const ajax2 = AjaxRequest({
-    url: 'http://localhost:1235/'
+    url: 'http://localhost:1235/',
+    tries: 2
   })
   .then(({response}) => {
     console.log(response);

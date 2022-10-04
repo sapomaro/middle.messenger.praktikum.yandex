@@ -1,6 +1,6 @@
-import {Input} from '/src/components/forms/Input.js';
-
 import '/src/components/chats/ChatboxTextarea.scss';
+
+import {Input} from '/src/components/forms/Input';
 
 export class ChatboxTextarea extends Input {
   constructor(context) {

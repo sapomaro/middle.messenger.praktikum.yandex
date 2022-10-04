@@ -1,8 +1,8 @@
 import '/src/components/layouts/common.scss';
 import '/src/components/layouts/Wide.scss';
 
-import '/src/components/Head.js';
-import {Block} from '/src/modules/Block.js';
+import '/src/components/Head';
+import {Block} from '/src/modules/Block';
 
 export class WideLayout extends Block {
   constructor(props) {

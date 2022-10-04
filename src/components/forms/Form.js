@@ -1,6 +1,6 @@
-import {Block} from '/src/modules/Block.js';
-
 import '/src/components/forms/common.scss';
+
+import {Block} from '/src/modules/Block';
 
 export class Form extends Block {
   constructor(props) {

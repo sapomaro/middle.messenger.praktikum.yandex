@@ -1,6 +1,6 @@
-import {EventBus} from '/src/modules/EventBus.js';
-import {Block} from '/src/modules/Block.js';
-import {getValidationMessage} from '/src/components/forms/ValidationMessage.js';
+import {EventBus} from '/src/modules/EventBus';
+import {Block} from '/src/modules/Block';
+import {getValidationMessage} from '/src/components/forms/ValidationMessage';
 
 // имя поля для повторного ввода оканчивается на 2
 const repeatFieldNameSuffix = '2';

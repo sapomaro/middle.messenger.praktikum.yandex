@@ -1,5 +1,5 @@
 import '/src/components/forms/RowInput.scss';
-import {Input} from '/src/components/forms/Input.js';
+import {Input} from '/src/components/forms/Input';
 
 export class RowInput extends Input {
   constructor(context) {

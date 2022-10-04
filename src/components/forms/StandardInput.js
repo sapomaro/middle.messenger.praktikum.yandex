@@ -1,6 +1,6 @@
-import {Input} from '/src/components/forms/Input.js';
-
 import '/src/components/forms/StandardInput.scss';
+
+import {Input} from '/src/components/forms/Input';
 
 export class StandardInput extends Input {
   constructor(context) {

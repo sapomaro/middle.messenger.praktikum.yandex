@@ -1,6 +1,6 @@
-import {EventBus} from '/src/modules/EventBus.js';
-import {Templator} from '/src/modules/Templator.js';
-import {rand, objIntersect} from '/src/modules/Utils.js';
+import {EventBus} from '/src/modules/EventBus';
+import {Templator} from '/src/modules/Templator';
+import {rand, objIntersect} from '/src/modules/Utils';
 
 const uids = {};
 
@@ -126,8 +126,8 @@ export class Block extends EventBus {
       this.traverseChildren(elem);
     } else if (typeof asset === 'object' && asset.blockuid) {
       elem = asset.build();
-      // traverse using global context of the app
-      //this.traverseChildren(elem);
+      // traverse using context of the parent
+      this.traverseChildren(elem);
     } else if (asset.nodeType &&
               (asset.nodeType === 1 || asset.nodeType === 11)) {
       elem = asset;

@@ -1,6 +1,6 @@
-import {Form} from '/src/components/forms/Form.js';
-
 import '/src/components/chats/ChatboxControls.scss';
+
+import {Form} from '/src/components/forms/Form';
 
 const ChatboxFooterChildren = () => `
   <label class="chatbox__footer__control__wrapper">

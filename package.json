@@ -8,7 +8,8 @@
     "start": "npm run build && node ./server.js",
     "jslint": "./node_modules/.bin/eslint ./src/",
     "csslint": "npx stylelint \"**/*.scss\"",
-    "lint": "npm run jslint && npm run csslint"
+    "tscheck": "npx tsc --noEmit",
+    "lint": "npm run jslint && npm run tscheck && npm run csslint"
   },
   "targets": {
     "default": {

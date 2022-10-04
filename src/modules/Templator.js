@@ -1,10 +1,12 @@
-import {JSONWrapper} from '/src/modules/Utils.js';
+import {JSONWrapper} from '/src/modules/Utils';
 
 export class Templator {
   constructor(context = window) {
     this.context = context;
-    this.PP_PATTERN = /%\{\s?([^]*?)\s?\}%/g;
-    this.PP_SUBPATTERN_JSONFUNC = /^([^( ]+)\(\s?([{[][^]*?[}\]])(\.\.\.)?\s?\)$/;
+    this.PP_PATTERN =
+      /%\{\s?([^]*?)\s?\}%/g;
+    this.PP_SUBPATTERN_JSONFUNC =
+      /^([^( ]+)\(\s?([{[][^]*?[}\]])(\.\.\.)?\s?\)$/;
   }
 
   resolveVariable(pattern) {
@@ -45,7 +47,7 @@ export class Templator {
           if (Block.hasOwnProperty('prototype')) { // normal function or class
             asset = new Block(item);
           } else { // arrow function
-            asset = Block(item);
+            asset = context[blockName](item);
           }
           if (typeof asset === 'object') {
             blocksList.push(asset);

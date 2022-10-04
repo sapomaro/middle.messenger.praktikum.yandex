@@ -16,7 +16,7 @@
 
 */
 
-import {JSONWrapper} from '/src/modules/Utils.js';
+import {JSONWrapper} from '/src/modules/Utils';
 
 const METHODS = {
   GET: 'GET',

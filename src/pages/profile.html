@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <script type="module">
-  import {WideSideLayout} from '/src/components/layouts/Wide+Side.js';
-  import {Form} from '/src/components/forms/Form.js';
-  import {StandardButton as Button} from '/src/components/forms/StandardButton.js';
-  import {RowInput as Input} from '/src/components/forms/RowInput.js';
-  import {RowLink as Link} from '/src/components/forms/RowLink.js';
-  import {AvatarControl, AvatarPopup} from '/src/components/forms/Avatar.js';
-  import {JSONWrapper} from '/src/modules/Utils.js';
+  import {WideLayoutWithSidebar} from '/src/components/layouts/Wide+Side';
+  import {Form} from '/src/components/forms/Form';
+  import {StandardButton as Button} from '/src/components/forms/StandardButton';
+  import {RowInput as Input} from '/src/components/forms/RowInput';
+  import {RowLink as Link} from '/src/components/forms/RowLink';
+  import {AvatarControl, AvatarPopup} from '/src/components/forms/Avatar';
+  import {JSONWrapper} from '/src/modules/Utils';
 
-  const view = new WideSideLayout({
+  const view = new WideLayoutWithSidebar({
     title: 'Профиль',
     backButtonLink: 'chats.html',
     Form, Button, Input, Link, AvatarControl, AvatarPopup
