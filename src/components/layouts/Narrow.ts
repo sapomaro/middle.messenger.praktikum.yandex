@@ -1,14 +1,14 @@
-import '/src/components/layouts/common.scss';
-import '/src/components/layouts/Narrow.scss';
+import './common.scss';
+import './Narrow.scss';
 
-import '/src/components/Head';
-import {Block} from '/src/modules/Block';
+import '../Head';
+import {Block} from '../../modules/Block';
 
 export class NarrowLayout extends Block {
-  constructor(props) {
+  constructor(props: Record<string, any>) {
     super(props);
   }
-  render(props) {
+  render(): string {
     return `
       <div class="root">
         <main class="container container_narrow">

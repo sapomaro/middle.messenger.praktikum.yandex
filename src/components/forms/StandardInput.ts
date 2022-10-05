@@ -1,13 +1,22 @@
-import '/src/components/forms/StandardInput.scss';
+import './StandardInput.scss';
 
-import {Input} from '/src/components/forms/Input';
+import {Input} from './Input';
+
+type IncomingProps = {
+  name: string;
+  label: string;
+  value?: string;
+  type?: string;
+  placeholder?: string;
+  error?: string;
+  readonly?: boolean;
+}
 
 export class StandardInput extends Input {
-  constructor(context) {
-    super(context);
+  constructor(props: IncomingProps) {
+    super(props);
   }
-
-  render(props) {
+  render(props: IncomingProps): string {
     return `
       <div class="container__element">
         <input name="${props.name}" type="${props.type || 'text'}"

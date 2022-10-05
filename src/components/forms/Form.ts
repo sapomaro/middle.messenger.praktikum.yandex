@@ -1,23 +1,29 @@
-import '/src/components/forms/common.scss';
+import './common.scss';
 
-import {Block} from '/src/modules/Block';
+import {Block} from '../../modules/Block';
+
+type IncomingProps = {
+  name: string;
+  action?: string;
+  fieldset?: () => string;
+}
 
 export class Form extends Block {
-  constructor(props) {
+  constructor(props: IncomingProps) {
     super(props);
     this.setProps({
-      onSubmit: (event) => {
+      onSubmit: (event: Event) => {
         event.preventDefault();
 
-        const form = document.forms[this.props.name];
-        const formData = new FormData(form);
-        const data = {};
+        const form: HTMLFormElement = document.forms[this.props.name];
+        const formData: FormData = new FormData(form);
+        const data: Record<string, string> = {};
         for (const [key, value] of formData.entries()) {
           data[key] = value;
         }
 
-        const state = {errorMsgs: {}};
-        this.listDescendants((block) => {
+        const state: Record<string, any> = {errorMsgs: {}};
+        this.listDescendants((block: Block) => {
           block.fire('submit', event, state);
         });
 
@@ -32,8 +38,7 @@ export class Form extends Block {
       },
     });
   }
-
-  render(props) {
+  render(props: IncomingProps): string {
     return `
       <form name="${props.name}" class="form"
         action="${props.action || ''}"

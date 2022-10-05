@@ -1,7 +1,16 @@
-import {JSONWrapper} from '/src/modules/Utils';
+import {JSONWrapper} from './Utils';
+
+type Context<T> = T | Window | undefined;
+
+type Assets = Array<any> | null;
 
 export class Templator {
-  constructor(context = window) {
+
+  public context: Context;
+  private PP_PATTERN: RegExp;
+  private PP_SUBPATTERN_JSONFUNC: RegExp;
+
+  constructor(context?: Context = window) {
     this.context = context;
     this.PP_PATTERN =
       /%\{\s?([^]*?)\s?\}%/g;
@@ -9,7 +18,7 @@ export class Templator {
       /^([^( ]+)\(\s?([{[][^]*?[}\]])(\.\.\.)?\s?\)$/;
   }
 
-  resolveVariable(pattern) {
+  resolveVariable(pattern: string): unknown {
     let context = this.context;
     const props = pattern.split('.');
     for (let i = 0; i < props.length; ++i) {
@@ -22,7 +31,7 @@ export class Templator {
     return context;
   }
 
-  resolveSubPattern(pattern) {
+  resolveSubPattern(pattern: string): unknown | null {
     const context = this.context;
     let matches;
 
@@ -65,7 +74,7 @@ export class Templator {
     return null;
   }
 
-  resolveString(str) { // for plain text nodes
+  resolveString(str: string): string | null { // for plain text nodes
     this.PP_PATTERN.lastIndex = 0;
     if (!this.PP_PATTERN.test(str)) {
       return null;
@@ -89,17 +98,17 @@ export class Templator {
     return null;
   }
 
-  resolveAssets(str) {
+  resolveAssets(str: string): Assets {
     this.PP_PATTERN.lastIndex = 0;
     if (!this.PP_PATTERN.test(str)) {
       return null;
     }
     const assets = [];
-    let patternAsset;
-    let textAsset = '';
-    let textIndex = 0;
-    let patternIndex = 0;
-    let matches;
+    let patternAsset: unknown;
+    let textAsset: string = '';
+    let textIndex: number = 0;
+    let patternIndex: number = 0;
+    let matches: Array<string> | null;
     this.PP_PATTERN.lastIndex = 0;
     while (matches = this.PP_PATTERN.exec(str)) {
       patternIndex = this.PP_PATTERN.lastIndex - matches[0].length;
@@ -130,10 +139,10 @@ export class Templator {
     return null;
   }
 
-  resolveAssetsRecursive(str) {
-    const assets = this.resolveAssets(str);
+  resolveAssetsRecursive(str: string): Assets {
+    const assets: Assets = this.resolveAssets(str);
     if (assets && !(assets.length === 1 && assets[0] === str)) {
-      let asset;
+      let asset: Assets;
       for (let i = 0; i < assets.length; ++i) {
         if (typeof assets[i] === 'string') {
           asset = this.resolveAssetsRecursive(assets[i]);
@@ -146,7 +155,7 @@ export class Templator {
     return [str];
   }
 
-  resolve(str) {
+  resolve(str: string): Assets {
     return this.resolveAssetsRecursive(str);
   }
 }

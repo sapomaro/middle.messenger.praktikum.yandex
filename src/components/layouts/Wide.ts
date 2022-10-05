@@ -1,14 +1,14 @@
-import '/src/components/layouts/common.scss';
-import '/src/components/layouts/Wide.scss';
+import './common.scss';
+import './Wide.scss';
 
-import '/src/components/Head';
-import {Block} from '/src/modules/Block';
+import '../Head';
+import {Block} from '../../modules/Block';
 
 export class WideLayout extends Block {
-  constructor(props) {
+  constructor(props: Record<string, any>) {
     super(props);
   }
-  render(props) {
+  render(): string {
     return `
       <div class="root">
         <main class="container container_wide">

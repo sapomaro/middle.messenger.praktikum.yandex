@@ -1,15 +1,22 @@
-import '/src/components/chats/ChatboxTextarea.scss';
+import './ChatboxTextarea.scss';
 
-import {Input} from '/src/components/forms/Input';
+import {Input} from '../forms/Input';
+
+type IncomingProps = {
+  name: string;
+  label?: string;
+  value?: string;
+  placeholder?: string;
+}
 
 export class ChatboxTextarea extends Input {
-  constructor(context) {
-    super(context);
-    this.on('submit', () => {
+  constructor(props: IncomingProps) {
+    super(props);
+    this.on('submit', (): void => {
       this.setProps({value: ''});
     });
   }
-  render(props) {
+  render(props: IncomingProps): string {
     return `
       <textarea name="${props.name}" class="chatbox__send__textarea" rows="1"
         onblur="%{onBlur}%"

@@ -1,22 +1,23 @@
-import '/src/components/layouts/common.scss';
-import '/src/components/layouts/Chats.scss';
+import './common.scss';
+import './Chats.scss';
 
-import '/src/components/Head';
-import {Block} from '/src/modules/Block';
+import '../Head';
+import {Block} from '../../modules/Block';
 
 export class ChatsLayout extends Block {
-  constructor(props) {
+
+  constructor(props: Record<string, any>) {
     super(props);
     this.on('mounted', () => {
-      const popup = document.querySelector('.popup');
-      popup.addEventListener('click', (event) => {
+      const popup: HTMLElement = document.querySelector('.popup');
+      popup.addEventListener('click', (event: Event) => {
         if (event.target === popup) {
           popup.style.display = 'none';
         }
       });
     });
   }
-  render(props) {
+  render(): string {
     return `
       <div class="popup">
         <div class="container container_narrow">

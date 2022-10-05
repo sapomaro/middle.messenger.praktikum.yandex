@@ -1,11 +1,21 @@
-import '/src/components/forms/RowInput.scss';
-import {Input} from '/src/components/forms/Input';
+import './RowInput.scss';
+import {Input} from './Input';
+
+type IncomingProps = {
+  name: string;
+  label: string;
+  value?: string;
+  type?: string;
+  placeholder?: string;
+  error?: string;
+  readonly?: boolean;
+}
 
 export class RowInput extends Input {
-  constructor(context) {
-    super(context);
+  constructor(props: IncomingProps) {
+    super(props);
   }
-  render(props) {
+  render(props: IncomingProps): string {
     return `
       <label class="container__row">
         <span class="form__row__label">${props.label}</span>

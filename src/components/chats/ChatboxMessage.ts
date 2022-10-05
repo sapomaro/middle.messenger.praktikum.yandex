@@ -1,6 +1,6 @@
-import '/src/components/chats/ChatboxMessage.scss';
+import './ChatboxMessage.scss';
 
-export const ChatboxMessage = (props) => `
+export const ChatboxMessage = (props: Record<string, string>): string => `
   <div class="chatbox__message chatbox__message_${props.type}">
     <span class="chatbox__message__text">${props.text}</span>
     <span class="chatbox__message__info">

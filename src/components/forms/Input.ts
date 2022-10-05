@@ -1,17 +1,27 @@
-import {EventBus} from '/src/modules/EventBus';
-import {Block} from '/src/modules/Block';
-import {getValidationMessage} from '/src/components/forms/ValidationMessage';
+import {EventBus} from '../../modules/EventBus';
+import {Block} from '../../modules/Block';
+import {getValidationMessage} from './ValidationMessage';
 
 // имя поля для повторного ввода оканчивается на 2
 const repeatFieldNameSuffix = '2';
 
+type IncomingProps = {
+  name: string;
+  label: string;
+  value?: string;
+  type?: string;
+  placeholder?: string;
+  error?: string;
+  readonly?: boolean;
+}
+
 export class Input extends Block {
-  constructor(props) {
+  constructor(props: IncomingProps) {
     super(props);
     const self = this;
     this.setProps({
       value: props.value || props.placeholder || '',
-      onFocus: function(event) {
+      onFocus: function(event: Event): void {
         if (self.props.value !== '' &&
              (!self.props.placeholder ||
               self.props.placeholder !== self.props.value)) {
@@ -19,20 +29,20 @@ export class Input extends Block {
         }
         self.togglePlaceholder.call(self, event);
       },
-      onBlur: function(event) {
+      onBlur: function(event: Event): void {
         self.validate.call(self, event);
         self.togglePlaceholder.call(self, event);
       },
-      onInput: function() {
+      onInput: function(): void {
         this.setAttribute('value', this.value);
         self.props.value = this.value;
         self.autoResize(this);
       },
     });
 
-    this.on('submit', (event, state) => {
+    this.on('submit', (event: Event, state: Record<string, any>): void => {
       this.validate.call(this, event, state);
-      setTimeout(() => {
+      setTimeout((): void => {
         self.togglePlaceholder.call(self, event);
       }, 10);
     });
@@ -40,13 +50,13 @@ export class Input extends Block {
 
     if (this.props.type === 'password' &&
         this.props.name.slice(-1) === repeatFieldNameSuffix) {
-      EventBus.on('passwordFieldChange', (password) => {
+      EventBus.on('passwordFieldChange', (password: string) => {
         this.props.value2 = password;
       });
     }
   }
 
-  togglePlaceholder(event, elem) {
+  togglePlaceholder(event: Event) {
     if (this.props.placeholder && event.type && event.target) {
       if (event.type === 'blur' && event.target.value === '') {
         event.target.value = this.props.placeholder;
@@ -57,13 +67,13 @@ export class Input extends Block {
     }
   }
 
-  autoResize(messageField) {
+  autoResize(messageField: HTMLTextAreaElement) {
     if (!messageField.nodeName || messageField.nodeName !== 'TEXTAREA') {
       return;
     }
-    const style = messageField.currentStyle ||
-      window.getComputedStyle(messageField);
-    const boxSizing = (style.boxSizing === 'border-box') ?
+    // type of style??
+    const style = window.getComputedStyle(messageField);
+    const boxSizing: number = (style.boxSizing === 'border-box') ?
       parseInt(style.borderBottomWidth, 10) +
       parseInt(style.borderTopWidth, 10) : 0;
 
@@ -72,7 +82,7 @@ export class Input extends Block {
     messageField.style.height = (messageField.scrollHeight + boxSizing) + 'px';
   };
 
-  validate(event, state) {
+  validate(event: Event, state: Record<string, any>) {
     if (this.props.type === 'password' &&
         this.props.name.slice(-1) !== repeatFieldNameSuffix) {
       EventBus.fire('passwordFieldChange', this.props.value);
@@ -86,11 +96,11 @@ export class Input extends Block {
     } else {
       actualValue = this.props.value;
     }
-    const msg = getValidationMessage({
+    const msg: string = getValidationMessage({
       ...this.props,
       value: actualValue,
     });
-    const norefresh = (this.props.name === 'message');
+    const norefresh: boolean = (this.props.name === 'message');
     if (msg) {
       this.setProps({error: msg}, norefresh);
       if (state) {

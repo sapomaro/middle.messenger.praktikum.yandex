@@ -1,6 +1,6 @@
-import '/src/components/chats/ChatlistControls.scss';
+import './ChatlistControls.scss';
 
-export const ChatlistControls = () => `
+export const ChatlistControls = (): string => `
   <nav class="chatlist__controls">
     <div class="container__element container__element_right">
       <a href="profile.html" class="container__link container__link_grey">
@@ -17,7 +17,6 @@ export const ChatlistControls = () => `
           <span class="chatlist__search__label__text">Поиск...</span>
         </label>
       </div>
-      
     </div>
   </nav>
 `;

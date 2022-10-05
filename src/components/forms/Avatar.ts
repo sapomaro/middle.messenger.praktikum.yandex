@@ -1,10 +1,10 @@
-import '/src/components/forms/Avatar.scss';
+import './Avatar.scss';
 
-export const AvatarPic = () => `
+export const AvatarPic = (): string => `
   <div class="form__avatar"></div>
 `;
 
-export const AvatarControl = () => `
+export const AvatarControl = (): string => `
   <div class="form__avatar" onclick="(() => { 
     document.querySelector('.popup').style.display = 'flex'; 
   })();">
@@ -14,7 +14,7 @@ export const AvatarControl = () => `
   </div>
 `;
 
-export const AvatarPopup = () => `
+export const AvatarPopup = (): string => `
   <form name="avatar">
     <h1 class="container__header">Загрузите файл</h1>
     <br>
@@ -28,11 +28,9 @@ export const AvatarPopup = () => `
       </label>
     </div>
     <br>
-    
     %{ Button({ 
       "name": "submit", "type": "button", "label": "Поменять",
       "error": "Нужно выбрать файл"
     }) }%
-    
   </form>
 `;

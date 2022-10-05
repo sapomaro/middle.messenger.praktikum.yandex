@@ -1,5 +1,5 @@
 export const JSONWrapper = {
-  parse: (data) => {
+  parse: (data: string): Object => {
     try {
       return JSON.parse(data);
     } catch (error) {
@@ -8,7 +8,7 @@ export const JSONWrapper = {
       return {};
     }
   },
-  stringify: (data) => {
+  stringify: (data: Object): string => {
     try {
       return JSON.stringify(data);
     } catch (error) {
@@ -19,12 +19,14 @@ export const JSONWrapper = {
   },
 };
 
-export const rand = (min, max) => {
+export const rand = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const objIntersect = function objIntersect(baseObj, chunkObj) {
-  const entries = Object.entries(chunkObj);
+export const objIntersect = function objIntersect(
+    baseObj: Object, chunkObj: Object
+  ): boolean {
+  const entries: [string, any][] = Object.entries(chunkObj);
   for (const [key, value] of entries) {
     if (typeof baseObj[key] !== 'undefined') {
       if (typeof baseObj[key] === 'object' && typeof value === 'object') {

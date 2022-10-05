@@ -1,6 +1,6 @@
-import {EventBus} from '/src/modules/EventBus';
-import {Templator} from '/src/modules/Templator';
-import {rand, objIntersect} from '/src/modules/Utils';
+import {EventBus} from './EventBus';
+import {Templator} from './Templator';
+import {rand, objIntersect} from './Utils';
 
 const uids = {};
 
@@ -12,13 +12,28 @@ const generateUid = () => {
     num2 = rand(1, 99999);
     uid = `pp_${num}_${num2}_uid`;
   } while (uids[uid]);
+  uids[uid] = true;
   return uid;
 };
 
 const instancesOfBlock = {};
 
-export class Block extends EventBus {
-  constructor(props = {}) {
+export class Block<P = any> extends EventBus {
+
+  static EVENTS = {
+    PREPARE: 'preparing',
+    RENDER: 'rendered',
+    MOUNT: 'mounted',
+    UPDATE: 'updated',
+  };
+
+  private blockuid: string;
+  private templator: Templator;
+  private listeners: Record<string, any>;
+  private nativeEventsList: Array<Record<string, any>>;
+  public props: P;
+
+  constructor(props?: P = {}) {
     super();
     this.props = props;
     this.blockuid = generateUid();
@@ -27,34 +42,41 @@ export class Block extends EventBus {
     this.registerEvents();
   }
 
-  registerEvents() {
+  registerEvents(): void {
     this.listeners = {};
     this.nativeEventsList = [];
-    this.on('refresh, propsUpdated', () => {
+    this.on(Block.EVENTS.UPDATE, () => {
       this.replaceMultipleNodes(`[data-blockuid=${this.blockuid}]`, [this]);
     });
     this.on('eventAttached', ({node, eventType, callback}) => {
       this.nativeEventsList.push({node, eventType, callback});
     });
-    this.on('renderStart', () => {
+    this.on(Block.EVENTS.PREPARE, () => {
       for (const {node, eventType, callback} of this.nativeEventsList) {
         node.removeEventListener(eventType, callback);
       }
       this.nativeEventsList = [];
+      this.listDescendants((block) => {
+        block.fire(Block.EVENTS.PREPARE);
+      });
     });
   }
 
-  setProps(obj, norefresh) {
+  setProps(obj, norefresh): void {
     if (!objIntersect(this.props, obj)) {
       Object.assign(this.props, obj);
       if (!norefresh) {
-        this.fire('propsUpdated');
+        this.fire(Block.EVENTS.UPDATE);
       }
     }
   }
 
-  refresh() {
-    this.fire('refresh');
+  refresh(): void {
+    this.fire(Block.EVENTS.UPDATE);
+  }
+
+  isInDOM(): boolean {
+    return (document.querySelector(`[data-blockuid=${this.blockuid}]`) !== null);
   }
 
   getContent() {
@@ -62,7 +84,7 @@ export class Block extends EventBus {
       this.element;
   }
 
-  listDescendants(callback) {
+  listDescendants(callback): void {
     const elementNodes = this.getContent();
     if (!elementNodes) {
       return;
@@ -79,7 +101,7 @@ export class Block extends EventBus {
   }
 
   build() {
-    this.fire('renderStart');
+    this.fire(Block.EVENTS.PREPARE);
     this.element = this.buildNode(this.render, this.props, (node) => {
       if (node.nodeType === 1) {
         node.setAttribute('data-blockuid', this.blockuid);
@@ -87,11 +109,11 @@ export class Block extends EventBus {
     });
     // traverse using local context of the block
     this.traverseChildren(this.element);
-    this.fire('renderFinish');
+    this.fire(Block.EVENTS.RENDER);
     return this.element;
   }
 
-  render() {}
+  render(): void {}
 
   buildNode(renderer, props = {}, callback) {
     const elementHolder = document.createElement('DIV');
@@ -107,7 +129,7 @@ export class Block extends EventBus {
     return fragment;
   }
 
-  replaceMultipleNodes(selector, assets) {
+  replaceMultipleNodes(selector, assets): void {
     const nodeList = document.querySelectorAll(selector);
     if (nodeList && nodeList.length) {
       for (let i = nodeList.length - 1; i > 0; --i) {
@@ -117,7 +139,7 @@ export class Block extends EventBus {
     }
   }
 
-  resolveNode(asset) {
+  resolveNode(asset): unknown {
     let elem = null;
     if (typeof asset === 'string') {
       elem = document.createTextNode(asset);
@@ -136,7 +158,7 @@ export class Block extends EventBus {
     return elem;
   }
 
-  replaceNode(node, assets) {
+  replaceNode(node, assets): void {
     const fragment = document.createDocumentFragment();
     const blocksList = [];
     for (const asset of assets) {
@@ -149,11 +171,13 @@ export class Block extends EventBus {
     fragment.normalize();
     node.parentNode.replaceChild(fragment, node);
     for (const block of blocksList) {
-      block.fire('planted');
+      if (block.isInDOM()) {
+        block.fire(Block.EVENTS.MOUNT);
+      }
     }
   }
 
-  traverseText(node) {
+  traverseText(node): void {
     const assets = this.templator.resolve(node.textContent);
     if (assets.length === 1 && assets[0] === node.textContent) {
       return null;
@@ -162,7 +186,7 @@ export class Block extends EventBus {
     }
   }
 
-  traverseChildren(node) {
+  traverseChildren(node): void {
     if (!node.childNodes) {
       return;
     }
@@ -177,7 +201,7 @@ export class Block extends EventBus {
     }
   }
 
-  traverseAttributes(node) {
+  traverseAttributes(node): void {
     for (let i = node.attributes.length - 1; i >= 0; --i) {
       const attrName = node.attributes[i].nodeName;
       const attrValue = node.attributes[i].nodeValue;
@@ -199,7 +223,7 @@ export class Block extends EventBus {
     }
   }
 
-  renderToBody() {
+  renderToBody(): void {
     EventBus.on('load', () => {
       this.traverseChildren(document.head);
       document.body.innerHTML = '';
@@ -208,9 +232,9 @@ export class Block extends EventBus {
       this.traverseChildren(elem);
       document.body.appendChild(elem);
 
-      this.fire('mounted');
+      this.fire(Block.EVENTS.MOUNT);
       this.listDescendants((block) => {
-        block.fire('mounted');
+        block.fire(Block.EVENTS.MOUNT);
       });
     });
   }

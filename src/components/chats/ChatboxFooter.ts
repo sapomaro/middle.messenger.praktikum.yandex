@@ -1,8 +1,8 @@
-import '/src/components/chats/ChatboxControls.scss';
+import './ChatboxControls.scss';
 
-import {Form} from '/src/components/forms/Form';
+import {Form} from '../forms/Form';
 
-const ChatboxFooterChildren = () => `
+const ChatboxFooterChildren = (): string => `
   <label class="chatbox__footer__control__wrapper">
     <input type="checkbox" 
       class="chatbox__dropdown__toggle chatbox__element_hidden">
