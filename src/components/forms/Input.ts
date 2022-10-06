@@ -7,7 +7,7 @@ const repeatFieldNameSuffix = '2';
 
 type IncomingProps = {
   name: string;
-  label: string;
+  label?: string;
   value?: string;
   type?: string;
   placeholder?: string;

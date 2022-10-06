@@ -16,7 +16,7 @@
 
 */
 
-import {JSONWrapper} from '/src/modules/Utils';
+import {JSONWrapper} from './Utils';
 
 const METHODS = {
   GET: 'GET',
@@ -72,7 +72,9 @@ const ajaxRequest = function ajaxRequest(url: string,
 type Request = {
   url: string;
   xhr: XMLHttpRequest;
-  
+  then: () => Request;
+  catch: () => Request;
+  finally: () => Request;
 };
 
 export const AjaxRequest = function(request: Request): Request {

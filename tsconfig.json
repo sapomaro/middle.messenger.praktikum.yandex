@@ -8,8 +8,9 @@
     "sourceMap": true,
     "strictNullChecks": true,
     "lib": [
-      "DOM",
-      "es2020"
+      "dom",
+      "dom.iterable",
+      "es2020",
     ],
     "module": "es2020"
   },

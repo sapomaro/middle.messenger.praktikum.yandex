@@ -12,7 +12,13 @@ const isDOMReady = (): boolean => {
   }
 };
 
-const EventBus = function(): void {};
+const EventBus = function(transmitter): void {
+  transmitter.on = EventBus.on;
+  transmitter.off = EventBus.off;
+  transmitter.fire = EventBus.fire;
+  transmitter.listEvents = EventBus.listEvents;
+  transmitter.listeners = {};
+};
 
 EventBus.listeners = {};
 
@@ -72,10 +78,11 @@ EventBus.init = function(): void {
   }
 };
 
+/*
 EventBus.prototype = {
   ...EventBus,
   listeners: {},
-};
+};*/
 
 EventBus.init();
 

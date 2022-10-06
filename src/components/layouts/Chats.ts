@@ -9,7 +9,7 @@ export class ChatsLayout extends Block {
   constructor(props: Record<string, any>) {
     super(props);
     this.on('mounted', () => {
-      const popup: HTMLElement = document.querySelector('.popup');
+      const popup = document.querySelector('.popup') as HTMLElement;
       popup.addEventListener('click', (event: Event) => {
         if (event.target === popup) {
           popup.style.display = 'none';

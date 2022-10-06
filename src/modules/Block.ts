@@ -5,8 +5,9 @@ import {rand, objIntersect} from './Utils';
 const uids = {};
 
 const generateUid = () => {
-  let uid = '';
-  let num;
+  let uid: string = '';
+  let num: number;
+  let num2: number;
   do {
     num = rand(1, 99999);
     num2 = rand(1, 99999);
@@ -18,7 +19,7 @@ const generateUid = () => {
 
 const instancesOfBlock = {};
 
-export class Block<P = any> extends EventBus {
+export class Block<P = any> { // extends EventBus
 
   static EVENTS = {
     PREPARE: 'preparing',
@@ -29,12 +30,13 @@ export class Block<P = any> extends EventBus {
 
   private blockuid: string;
   private templator: Templator;
+  private eventbus: EventBus;
   private listeners: Record<string, any>;
   private nativeEventsList: Array<Record<string, any>>;
   public props: P;
 
   constructor(props?: P = {}) {
-    super();
+    //super();
     this.props = props;
     this.blockuid = generateUid();
     instancesOfBlock[this.blockuid] = this;
@@ -43,7 +45,7 @@ export class Block<P = any> extends EventBus {
   }
 
   registerEvents(): void {
-    this.listeners = {};
+    this.eventbus = new EventBus(this);
     this.nativeEventsList = [];
     this.on(Block.EVENTS.UPDATE, () => {
       this.replaceMultipleNodes(`[data-blockuid=${this.blockuid}]`, [this]);
@@ -62,7 +64,7 @@ export class Block<P = any> extends EventBus {
     });
   }
 
-  setProps(obj, norefresh): void {
+  setProps(obj: Record<string, any>, norefresh: boolean = false): void {
     if (!objIntersect(this.props, obj)) {
       Object.assign(this.props, obj);
       if (!norefresh) {
@@ -84,7 +86,7 @@ export class Block<P = any> extends EventBus {
       this.element;
   }
 
-  listDescendants(callback): void {
+  listDescendants(callback: Function): void {
     const elementNodes = this.getContent();
     if (!elementNodes) {
       return;
@@ -113,9 +115,13 @@ export class Block<P = any> extends EventBus {
     return this.element;
   }
 
-  render(): void {}
+  public render(props?: any): string {
+    return '';
+  }
 
-  buildNode(renderer, props = {}, callback) {
+  buildNode(renderer: Function, 
+            props: Record<string, any> = {}, 
+            callback: Function) {
     const elementHolder = document.createElement('DIV');
     elementHolder.innerHTML = renderer(props).trim();
     const fragment = document.createDocumentFragment();
@@ -129,8 +135,8 @@ export class Block<P = any> extends EventBus {
     return fragment;
   }
 
-  replaceMultipleNodes(selector, assets): void {
-    const nodeList = document.querySelectorAll(selector);
+  replaceMultipleNodes(selector: string, assets: Array<Block>): void {
+    const nodeList = document.querySelectorAll(selector)!;
     if (nodeList && nodeList.length) {
       for (let i = nodeList.length - 1; i > 0; --i) {
         nodeList[i].parentNode.removeChild(nodeList[i]);
@@ -139,7 +145,7 @@ export class Block<P = any> extends EventBus {
     }
   }
 
-  resolveNode(asset): unknown {
+  resolveNode(asset: unknown): unknown {
     let elem = null;
     if (typeof asset === 'string') {
       elem = document.createTextNode(asset);
@@ -158,7 +164,7 @@ export class Block<P = any> extends EventBus {
     return elem;
   }
 
-  replaceNode(node, assets): void {
+  replaceNode(node, assets: Array<any>): void {
     const fragment = document.createDocumentFragment();
     const blocksList = [];
     for (const asset of assets) {
