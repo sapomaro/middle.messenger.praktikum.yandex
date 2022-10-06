@@ -72,9 +72,9 @@ const ajaxRequest = function ajaxRequest(url: string,
 type Request = {
   url: string;
   xhr: XMLHttpRequest;
-  then: () => Request;
-  catch: () => Request;
-  finally: () => Request;
+  then: (callback: Function) => Request;
+  catch: (callback: Function) => Request;
+  finally: (callback: Function) => Request;
 };
 
 export const AjaxRequest = function(request: Request): Request {

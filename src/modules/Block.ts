@@ -2,7 +2,7 @@ import {EventBus} from './EventBus';
 import {Templator} from './Templator';
 import {rand, objIntersect} from './Utils';
 
-const uids = {};
+const uids: Record<string, boolean> = {};
 
 const generateUid = () => {
   let uid: string = '';
@@ -17,9 +17,9 @@ const generateUid = () => {
   return uid;
 };
 
-const instancesOfBlock = {};
+const instancesOfBlock: Record<string, Block> = {};
 
-export class Block<P = any> { // extends EventBus
+export class Block { // extends EventBus
 
   static EVENTS = {
     PREPARE: 'preparing',
@@ -30,12 +30,16 @@ export class Block<P = any> { // extends EventBus
 
   private blockuid: string;
   private templator: Templator;
-  private eventbus: EventBus;
   private listeners: Record<string, any>;
   private nativeEventsList: Array<Record<string, any>>;
-  public props: P;
+  private element: HTMLElement | DocumentFragment;
+  public on: Function;
+  public off: Function;
+  public fire: Function;
+  private listEvents: Function;
+  public props: Record<string, any>;
 
-  constructor(props?: P = {}) {
+  constructor(props: Record<string, any> = {}) {
     //super();
     this.props = props;
     this.blockuid = generateUid();
@@ -45,7 +49,12 @@ export class Block<P = any> { // extends EventBus
   }
 
   registerEvents(): void {
-    this.eventbus = new EventBus(this);
+    this.on = EventBus.on;
+    this.off = EventBus.off;
+    this.fire = EventBus.fire;
+    this.listEvents = EventBus.listEvents;
+    this.listeners = {};
+    
     this.nativeEventsList = [];
     this.on(Block.EVENTS.UPDATE, () => {
       this.replaceMultipleNodes(`[data-blockuid=${this.blockuid}]`, [this]);
@@ -58,7 +67,7 @@ export class Block<P = any> { // extends EventBus
         node.removeEventListener(eventType, callback);
       }
       this.nativeEventsList = [];
-      this.listDescendants((block) => {
+      this.listDescendants((block: Block) => {
         block.fire(Block.EVENTS.PREPARE);
       });
     });
@@ -81,7 +90,7 @@ export class Block<P = any> { // extends EventBus
     return (document.querySelector(`[data-blockuid=${this.blockuid}]`) !== null);
   }
 
-  getContent() {
+  getContent(): HTMLElement | DocumentFragment {
     return document.querySelectorAll(`[data-blockuid=${this.blockuid}]`) ||
       this.element;
   }
@@ -94,7 +103,7 @@ export class Block<P = any> { // extends EventBus
     for (const node of elementNodes) {
       const nestedElementNodes = node.querySelectorAll('[data-blockuid]');
       for (const nestedNode of nestedElementNodes) {
-        const block = instancesOfBlock[nestedNode.dataset.blockuid];
+        const block: Block = instancesOfBlock[nestedNode.dataset.blockuid];
         if (block) {
           callback(block);
         }
@@ -122,11 +131,11 @@ export class Block<P = any> { // extends EventBus
   buildNode(renderer: Function, 
             props: Record<string, any> = {}, 
             callback: Function) {
-    const elementHolder = document.createElement('DIV');
+    const elementHolder: HTMLElement = document.createElement('DIV');
     elementHolder.innerHTML = renderer(props).trim();
-    const fragment = document.createDocumentFragment();
+    const fragment: DocumentFragment = document.createDocumentFragment();
     while (elementHolder.childNodes.length !== 0) {
-      const node = elementHolder.childNodes[0];
+      const node: HTMLElement = elementHolder.childNodes[0];
       if (callback) {
         callback(node);
       }
@@ -136,7 +145,7 @@ export class Block<P = any> { // extends EventBus
   }
 
   replaceMultipleNodes(selector: string, assets: Array<Block>): void {
-    const nodeList = document.querySelectorAll(selector)!;
+    const nodeList: NodeList = document.querySelectorAll(selector)!;
     if (nodeList && nodeList.length) {
       for (let i = nodeList.length - 1; i > 0; --i) {
         nodeList[i].parentNode.removeChild(nodeList[i]);
@@ -146,7 +155,7 @@ export class Block<P = any> { // extends EventBus
   }
 
   resolveNode(asset: unknown): unknown {
-    let elem = null;
+    let elem: unknown = null;
     if (typeof asset === 'string') {
       elem = document.createTextNode(asset);
     } else if (typeof asset === 'function') {
@@ -165,7 +174,7 @@ export class Block<P = any> { // extends EventBus
   }
 
   replaceNode(node, assets: Array<any>): void {
-    const fragment = document.createDocumentFragment();
+    const fragment: DocumentFragment = document.createDocumentFragment();
     const blocksList = [];
     for (const asset of assets) {
       if (typeof asset === 'object' && asset.blockuid) {
@@ -183,7 +192,7 @@ export class Block<P = any> { // extends EventBus
     }
   }
 
-  traverseText(node): void {
+  traverseText(node: HTMLElement): void {
     const assets = this.templator.resolve(node.textContent);
     if (assets.length === 1 && assets[0] === node.textContent) {
       return null;
@@ -192,7 +201,7 @@ export class Block<P = any> { // extends EventBus
     }
   }
 
-  traverseChildren(node): void {
+  traverseChildren(node: HTMLElement): void {
     if (!node.childNodes) {
       return;
     }
@@ -207,12 +216,12 @@ export class Block<P = any> { // extends EventBus
     }
   }
 
-  traverseAttributes(node): void {
+  traverseAttributes(node: HTMLElement): void {
     for (let i = node.attributes.length - 1; i >= 0; --i) {
-      const attrName = node.attributes[i].nodeName;
-      const attrValue = node.attributes[i].nodeValue;
+      const attrName: string = node.attributes[i].nodeName;
+      const attrValue: string = node.attributes[i].nodeValue;
       if (attrName.slice(0, 2) === 'on') { // event attachment
-        const [asset] = this.templator.resolve(attrValue);
+        const [asset]: Array<Function> | null = this.templator.resolve(attrValue);
         if (typeof asset === 'function') {
           const eventType = attrName.slice(2);
           const callback = asset;
@@ -233,13 +242,13 @@ export class Block<P = any> { // extends EventBus
     EventBus.on('load', () => {
       this.traverseChildren(document.head);
       document.body.innerHTML = '';
-      const elem = this.build();
+      const elem = this.build() as HTMLElement | DocumentFragment;
       // traverse using global context of the app
       this.traverseChildren(elem);
       document.body.appendChild(elem);
 
       this.fire(Block.EVENTS.MOUNT);
-      this.listDescendants((block) => {
+      this.listDescendants((block: Block) => {
         block.fire(Block.EVENTS.MOUNT);
       });
     });

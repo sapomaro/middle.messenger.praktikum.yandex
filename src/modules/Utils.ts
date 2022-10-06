@@ -28,15 +28,16 @@ export const objIntersect = function objIntersect(
   ): boolean {
   const entries: [string, any][] = Object.entries(chunkObj);
   for (const [key, value] of entries) {
-    if (typeof baseObj[key] !== 'undefined') {
-      if (typeof baseObj[key] === 'object' && typeof value === 'object') {
-        if (objIntersect(baseObj[key], value)) {
+    if (typeof baseObj[key as keyof Object] !== 'undefined') {
+      if (typeof baseObj[key as keyof Object] === 'object' &&
+          typeof value === 'object') {
+        if (objIntersect(baseObj[key as keyof Object], value)) {
           continue;
         } else {
           return false;
         }
       }
-      if (baseObj[key] !== value) {
+      if (baseObj[key as keyof Object] !== value) {
         return false;
       }
     } else {

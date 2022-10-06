@@ -1,6 +1,6 @@
 import {JSONWrapper} from './Utils';
 
-type Context<T> = T | Window | undefined;
+type Context = Record<string, any>;
 
 type Assets = Array<any> | null;
 
@@ -10,7 +10,7 @@ export class Templator {
   private PP_PATTERN: RegExp;
   private PP_SUBPATTERN_JSONFUNC: RegExp;
 
-  constructor(context?: Context = window) {
+  constructor(context: Context | undefined = window) {
     this.context = context;
     this.PP_PATTERN =
       /%\{\s?([^]*?)\s?\}%/g;
@@ -19,7 +19,7 @@ export class Templator {
   }
 
   resolveVariable(pattern: string): unknown {
-    let context = this.context;
+    let context: any = this.context;
     const props = pattern.split('.');
     for (let i = 0; i < props.length; ++i) {
       if (typeof context[props[i]] !== 'undefined') {
@@ -32,8 +32,8 @@ export class Templator {
   }
 
   resolveSubPattern(pattern: string): unknown | null {
-    const context = this.context;
-    let matches;
+    const context: Context = this.context;
+    let matches: Array<string> | null;
 
     this.PP_SUBPATTERN_JSONFUNC.lastIndex = 0;
     if (matches = this.PP_SUBPATTERN_JSONFUNC.exec(pattern)) {
@@ -43,16 +43,17 @@ export class Templator {
           .replace(/([{,"])\s*(\\[\\tn]+)\s*([},"])/g, '$1 $3')
           .replace(/&quot;/ig, '"');
       const unwrapRule = matches[3];
-      let jsonObj = JSONWrapper.parse(jsonStr);
+      let jsonObj: Object | Array<Object> = JSONWrapper.parse(jsonStr);
 
       if (typeof context[blockName] === 'function') {
-        const Block = context[blockName];
-        const blocksList = [];
+         // TS didn't recognize constructor functions
+        const Block = context[blockName] as any;
+        const blocksList: Array<Object> = [];
         if (!(unwrapRule && jsonObj instanceof Array)) {
           jsonObj = [jsonObj];
         }
-        for (const item of jsonObj) {
-          let asset;
+        for (const item of jsonObj as Array<Object>) {
+          let asset: Object | string;
           if (Block.hasOwnProperty('prototype')) { // normal function or class
             asset = new Block(item);
           } else { // arrow function
@@ -79,9 +80,9 @@ export class Templator {
     if (!this.PP_PATTERN.test(str)) {
       return null;
     }
-    let matches;
-    let asset;
-    const old = str;
+    let matches: Array<string> | null;
+    let asset: unknown;
+    const old: string = str;
     this.PP_PATTERN.lastIndex = 0;
     while (matches = this.PP_PATTERN.exec(str)) {
       asset = this.resolveVariable(matches[1].trim());
@@ -146,8 +147,10 @@ export class Templator {
       for (let i = 0; i < assets.length; ++i) {
         if (typeof assets[i] === 'string') {
           asset = this.resolveAssetsRecursive(assets[i]);
-          assets.splice(i, 1, ...asset);
-          i += asset.length - 1;
+          if (asset !== null) {
+            assets.splice(i, 1, ...asset);
+            i += asset.length - 1;
+          }
         }
       }
       return assets;

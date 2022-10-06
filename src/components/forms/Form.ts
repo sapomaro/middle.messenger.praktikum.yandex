@@ -17,7 +17,7 @@ export class Form extends Block {
 
         const form: HTMLFormElement = document.forms[this.props.name];
         const formData: FormData = new FormData(form);
-        const data: Record<string, string> = {};
+        const data: Record<string, any> = {};
         for (const [key, value] of formData.entries()) {
           data[key] = value;
         }

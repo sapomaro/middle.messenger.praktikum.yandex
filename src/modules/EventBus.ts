@@ -12,13 +12,7 @@ const isDOMReady = (): boolean => {
   }
 };
 
-const EventBus = function(transmitter): void {
-  transmitter.on = EventBus.on;
-  transmitter.off = EventBus.off;
-  transmitter.fire = EventBus.fire;
-  transmitter.listEvents = EventBus.listEvents;
-  transmitter.listeners = {};
-};
+const EventBus = function(): void {};
 
 EventBus.listeners = {};
 
@@ -43,7 +37,7 @@ EventBus.on = function(events: string, callback: Function): void {
   });
 };
 
-EventBus.fire = function(events: string, ...args: unknown): void {
+EventBus.fire = function(events: string, ...args: any): void {
   this.listEvents(events, (eventType: string): void => {
     this.listeners[eventType].forEach((listener: Function): void => {
       listener(...args);
@@ -54,7 +48,7 @@ EventBus.fire = function(events: string, ...args: unknown): void {
 EventBus.off = function(events: string, callback: Function): void {
   this.listEvents(events, (eventType: string): void => {
     this.listeners[eventType] = this.listeners[eventType]
-        .filter((listener) => (listener !== callback));
+        .filter((listener: Function) => (listener !== callback));
   });
 };
 

@@ -58,11 +58,12 @@ export class Input extends Block {
 
   togglePlaceholder(event: Event) {
     if (this.props.placeholder && event.type && event.target) {
-      if (event.type === 'blur' && event.target.value === '') {
-        event.target.value = this.props.placeholder;
+      const target = event.target as HTMLInputElement | HTMLTextAreaElement;
+      if (event.type === 'blur' && target.value === '') {
+        target.value = this.props.placeholder;
       } else if (event.type === 'focus' &&
-                 event.target.value === this.props.placeholder) {
-        event.target.value = '';
+                 target.value === this.props.placeholder) {
+        target.value = '';
       }
     }
   }
@@ -96,7 +97,7 @@ export class Input extends Block {
     } else {
       actualValue = this.props.value;
     }
-    const msg: string = getValidationMessage({
+    const msg: string | null = getValidationMessage({
       ...this.props,
       value: actualValue,
     });
