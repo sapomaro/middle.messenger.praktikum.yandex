@@ -19,6 +19,15 @@ const generateUid = () => {
 
 const instancesOfBlock: Record<string, Block> = {};
 
+
+type BlockNodes = DocumentFragment | Node | HTMLElement | ChildNode;
+
+type EventAttachment = {
+  node: HTMLElement;
+  eventType: string; 
+  callback: () => void;
+};
+
 export class Block { // extends EventBus
 
   static EVENTS = {
@@ -30,13 +39,13 @@ export class Block { // extends EventBus
 
   private blockuid: string;
   private templator: Templator;
-  private listeners: Record<string, any>;
+  public listeners: Record<string, any>;
   private nativeEventsList: Array<Record<string, any>>;
-  private element: HTMLElement | DocumentFragment;
+  private element: BlockNodes;
+  public listEvents: Function;
   public on: Function;
   public off: Function;
   public fire: Function;
-  private listEvents: Function;
   public props: Record<string, any>;
 
   constructor(props: Record<string, any> = {}) {
@@ -59,8 +68,8 @@ export class Block { // extends EventBus
     this.on(Block.EVENTS.UPDATE, () => {
       this.replaceMultipleNodes(`[data-blockuid=${this.blockuid}]`, [this]);
     });
-    this.on('eventAttached', ({node, eventType, callback}) => {
-      this.nativeEventsList.push({node, eventType, callback});
+    this.on('eventAttached', (data: EventAttachment) => {
+      this.nativeEventsList.push(data);
     });
     this.on(Block.EVENTS.PREPARE, () => {
       for (const {node, eventType, callback} of this.nativeEventsList) {
@@ -90,7 +99,7 @@ export class Block { // extends EventBus
     return (document.querySelector(`[data-blockuid=${this.blockuid}]`) !== null);
   }
 
-  getContent(): HTMLElement | DocumentFragment {
+  getContent(): NodeList {
     return document.querySelectorAll(`[data-blockuid=${this.blockuid}]`) ||
       this.element;
   }
@@ -101,19 +110,24 @@ export class Block { // extends EventBus
       return;
     }
     for (const node of elementNodes) {
-      const nestedElementNodes = node.querySelectorAll('[data-blockuid]');
-      for (const nestedNode of nestedElementNodes) {
-        const block: Block = instancesOfBlock[nestedNode.dataset.blockuid];
-        if (block) {
-          callback(block);
+      if (node instanceof HTMLElement) {
+        const nestedElementNodes = node.querySelectorAll('[data-blockuid]');
+        for (const nestedNode of nestedElementNodes) {
+          if (nestedNode instanceof HTMLElement &&
+              nestedNode.dataset && nestedNode.dataset.blockuid) {
+            const block: Block = instancesOfBlock[nestedNode.dataset.blockuid];
+            if (block) {
+              callback(block);
+            }
+          }
         }
       }
     }
   }
 
-  build() {
+  build(): BlockNodes {
     this.fire(Block.EVENTS.PREPARE);
-    this.element = this.buildNode(this.render, this.props, (node) => {
+    this.element = this.buildNode(this.render, this.props, (node: HTMLElement) => {
       if (node.nodeType === 1) {
         node.setAttribute('data-blockuid', this.blockuid);
       }
@@ -125,17 +139,18 @@ export class Block { // extends EventBus
   }
 
   public render(props?: any): string {
-    return '';
+    return props;
   }
 
   buildNode(renderer: Function, 
-            props: Record<string, any> = {}, 
-            callback: Function) {
+            props: Record<string, any> | undefined = {}, 
+            callback: Function | null = null) {
     const elementHolder: HTMLElement = document.createElement('DIV');
     elementHolder.innerHTML = renderer(props).trim();
+
     const fragment: DocumentFragment = document.createDocumentFragment();
     while (elementHolder.childNodes.length !== 0) {
-      const node: HTMLElement = elementHolder.childNodes[0];
+      const node: BlockNodes = elementHolder.childNodes[0];
       if (callback) {
         callback(node);
       }
@@ -148,43 +163,42 @@ export class Block { // extends EventBus
     const nodeList: NodeList = document.querySelectorAll(selector)!;
     if (nodeList && nodeList.length) {
       for (let i = nodeList.length - 1; i > 0; --i) {
-        nodeList[i].parentNode.removeChild(nodeList[i]);
+        nodeList[i].parentNode?.removeChild(nodeList[i]);
       }
       this.replaceNode(nodeList[0], assets);
     }
   }
 
-  resolveNode(asset: unknown): unknown {
-    let elem: unknown = null;
+  resolveNode(asset: unknown): BlockNodes {
+    let elem: BlockNodes = document.createTextNode('');
     if (typeof asset === 'string') {
       elem = document.createTextNode(asset);
     } else if (typeof asset === 'function') {
       elem = this.buildNode(asset);
       this.traverseChildren(elem);
-    } else if (typeof asset === 'object' && asset.blockuid) {
+    } else if (typeof asset === 'object' && asset instanceof Block) {
       elem = asset.build();
       // traverse using context of the parent
       this.traverseChildren(elem);
-    } else if (asset.nodeType &&
-              (asset.nodeType === 1 || asset.nodeType === 11)) {
+    } else if (typeof asset === 'object' && asset instanceof HTMLElement) {
       elem = asset;
       this.traverseChildren(elem);
     }
     return elem;
   }
 
-  replaceNode(node, assets: Array<any>): void {
+  replaceNode(node: BlockNodes, assets: Array<any>): void {
     const fragment: DocumentFragment = document.createDocumentFragment();
-    const blocksList = [];
+    const blocksList: Array<Block> = [];
     for (const asset of assets) {
-      if (typeof asset === 'object' && asset.blockuid) {
+      if (typeof asset === 'object' && asset instanceof Block) {
         blocksList.push(asset);
       }
       const elem = this.resolveNode(asset);
       fragment.appendChild(elem);
     }
     fragment.normalize();
-    node.parentNode.replaceChild(fragment, node);
+    node.parentNode?.replaceChild(fragment, node);
     for (const block of blocksList) {
       if (block.isInDOM()) {
         block.fire(Block.EVENTS.MOUNT);
@@ -192,25 +206,25 @@ export class Block { // extends EventBus
     }
   }
 
-  traverseText(node: HTMLElement): void {
-    const assets = this.templator.resolve(node.textContent);
-    if (assets.length === 1 && assets[0] === node.textContent) {
-      return null;
-    } else {
+  traverseText(node: BlockNodes): void {
+    const assets: Array<any> = this.templator.resolve(node.textContent);
+    if (!(assets.length === 1 && assets[0] === node.textContent)) {
       this.replaceNode(node, assets);
     }
   }
 
-  traverseChildren(node: HTMLElement): void {
+  traverseChildren(node: BlockNodes): void {
     if (!node.childNodes) {
-      return;
+      return; // ChildNode дальше не идёт, но TS выдаёт ошибки (без @ts-ignore)
     }
     for (let i = node.childNodes.length - 1; i >= 0; --i) {
       if (node.childNodes[i].nodeType === 1) {
+// @ts-ignore: Argument of type 'ChildNode' is not assignable to parameter of type 'HTMLElement'.
         this.traverseAttributes(node.childNodes[i]);
         this.traverseChildren(node.childNodes[i]);
       } else if (node.childNodes[i].nodeType === 3 &&
-                 node.tagName !== 'SCRIPT') {
+// @ts-ignore: Property 'tagName' does not exist on type 'ChildNode'.
+                 node.tagName && node.tagName !== 'SCRIPT') {
         this.traverseText(node.childNodes[i]);
       }
     }
@@ -218,20 +232,20 @@ export class Block { // extends EventBus
 
   traverseAttributes(node: HTMLElement): void {
     for (let i = node.attributes.length - 1; i >= 0; --i) {
-      const attrName: string = node.attributes[i].nodeName;
-      const attrValue: string = node.attributes[i].nodeValue;
+      const attrName: string = node.attributes[i].nodeName ?? '';
+      const attrValue: string = node.attributes[i].nodeValue ?? '';
       if (attrName.slice(0, 2) === 'on') { // event attachment
-        const [asset]: Array<Function> | null = this.templator.resolve(attrValue);
+        const [asset]: Array<unknown> = this.templator.resolve(attrValue);
         if (typeof asset === 'function') {
-          const eventType = attrName.slice(2);
           const callback = asset;
-          node.addEventListener(eventType, callback);
+          const eventType: string = attrName.slice(2);
+          node.addEventListener(eventType, callback as EventListener);
           node.removeAttribute(attrName);
           this.fire('eventAttached', {node, eventType, callback});
         }
       } else {
-        const [asset] = this.templator.resolve(attrValue);
-        if (asset !== 'attrValue') {
+        const [asset]: Array<unknown> = this.templator.resolve(attrValue);
+        if (typeof asset === 'string' && asset !== attrValue) {
           node.setAttribute(attrName, asset);
         }
       }
@@ -242,7 +256,7 @@ export class Block { // extends EventBus
     EventBus.on('load', () => {
       this.traverseChildren(document.head);
       document.body.innerHTML = '';
-      const elem = this.build() as HTMLElement | DocumentFragment;
+      const elem = this.build()!;
       // traverse using global context of the app
       this.traverseChildren(elem);
       document.body.appendChild(elem);

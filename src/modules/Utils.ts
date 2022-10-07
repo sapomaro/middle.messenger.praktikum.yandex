@@ -1,5 +1,7 @@
+type AnyObj = Record<string, unknown>;
+
 export const JSONWrapper = {
-  parse: (data: string): Object => {
+  parse: (data: string): AnyObj => {
     try {
       return JSON.parse(data);
     } catch (error) {
@@ -8,7 +10,7 @@ export const JSONWrapper = {
       return {};
     }
   },
-  stringify: (data: Object): string => {
+  stringify: (data: AnyObj): string => {
     try {
       return JSON.stringify(data);
     } catch (error) {
@@ -23,21 +25,22 @@ export const rand = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+
 export const objIntersect = function objIntersect(
-    baseObj: Object, chunkObj: Object
-  ): boolean {
-  const entries: [string, any][] = Object.entries(chunkObj);
+    baseObj: AnyObj, chunkObj: AnyObj,
+): boolean {
+  const entries: [string, unknown][] = Object.entries(chunkObj);
   for (const [key, value] of entries) {
-    if (typeof baseObj[key as keyof Object] !== 'undefined') {
-      if (typeof baseObj[key as keyof Object] === 'object' &&
+    if (typeof baseObj[key] !== 'undefined') {
+      if (typeof baseObj[key] === 'object' &&
           typeof value === 'object') {
-        if (objIntersect(baseObj[key as keyof Object], value)) {
+        if (objIntersect(baseObj[key] as AnyObj, value as AnyObj)) {
           continue;
         } else {
           return false;
         }
       }
-      if (baseObj[key as keyof Object] !== value) {
+      if (baseObj[key] !== value) {
         return false;
       }
     } else {

@@ -1,16 +1,15 @@
 import {JSONWrapper} from './Utils';
 
-type Context = Record<string, any>;
-
-type Assets = Array<any> | null;
+type AnyObj = Record<string, unknown>;
+type AnyContext = AnyObj | Window;
+type Assets = Array<unknown>;
 
 export class Templator {
-
-  public context: Context;
+  public context: AnyObj | Window;
   private PP_PATTERN: RegExp;
   private PP_SUBPATTERN_JSONFUNC: RegExp;
 
-  constructor(context: Context | undefined = window) {
+  constructor(context: AnyContext | undefined = window) {
     this.context = context;
     this.PP_PATTERN =
       /%\{\s?([^]*?)\s?\}%/g;
@@ -19,11 +18,13 @@ export class Templator {
   }
 
   resolveVariable(pattern: string): unknown {
-    let context: any = this.context;
+    let context: unknown = this.context;
     const props = pattern.split('.');
     for (let i = 0; i < props.length; ++i) {
-      if (typeof context[props[i]] !== 'undefined') {
-        context = context[props[i]];
+      if (context !== null &&
+          (typeof context === 'object' || typeof context === 'function') &&
+          props[i] in context) {
+        context = context[props[i] as keyof typeof context];
       } else {
         return null;
       }
@@ -32,7 +33,7 @@ export class Templator {
   }
 
   resolveSubPattern(pattern: string): unknown | null {
-    const context: Context = this.context;
+    const context: AnyContext = this.context;
     let matches: Array<string> | null;
 
     this.PP_SUBPATTERN_JSONFUNC.lastIndex = 0;
@@ -43,21 +44,20 @@ export class Templator {
           .replace(/([{,"])\s*(\\[\\tn]+)\s*([},"])/g, '$1 $3')
           .replace(/&quot;/ig, '"');
       const unwrapRule = matches[3];
-      let jsonObj: Object | Array<Object> = JSONWrapper.parse(jsonStr);
+      let jsonObj: AnyObj | Array<AnyObj> = JSONWrapper.parse(jsonStr);
 
-      if (typeof context[blockName] === 'function') {
-         // TS didn't recognize constructor functions
-        const Block = context[blockName] as any;
-        const blocksList: Array<Object> = [];
+      if (typeof context[blockName as keyof AnyContext] === 'function') {
+        const Block = context[blockName as keyof AnyContext];
+        const blocksList: Array<unknown> = [];
         if (!(unwrapRule && jsonObj instanceof Array)) {
           jsonObj = [jsonObj];
         }
-        for (const item of jsonObj as Array<Object>) {
-          let asset: Object | string;
+        for (const item of jsonObj as Array<AnyObj>) {
+          let asset: AnyObj | string;
           if (Block.hasOwnProperty('prototype')) { // normal function or class
             asset = new Block(item);
           } else { // arrow function
-            asset = context[blockName](item);
+            asset = context[blockName as keyof AnyContext](item);
           }
           if (typeof asset === 'object') {
             blocksList.push(asset);
@@ -102,13 +102,13 @@ export class Templator {
   resolveAssets(str: string): Assets {
     this.PP_PATTERN.lastIndex = 0;
     if (!this.PP_PATTERN.test(str)) {
-      return null;
+      return [];
     }
     const assets = [];
     let patternAsset: unknown;
-    let textAsset: string = '';
-    let textIndex: number = 0;
-    let patternIndex: number = 0;
+    let textAsset = '';
+    let textIndex = 0;
+    let patternIndex = 0;
     let matches: Array<string> | null;
     this.PP_PATTERN.lastIndex = 0;
     while (matches = this.PP_PATTERN.exec(str)) {
@@ -134,19 +134,16 @@ export class Templator {
       textAsset = str.slice(textIndex, str.length);
       assets.push(textAsset);
     }
-    if (assets.length > 0) {
-      return assets;
-    }
-    return null;
+    return assets;
   }
 
   resolveAssetsRecursive(str: string): Assets {
     const assets: Assets = this.resolveAssets(str);
-    if (assets && !(assets.length === 1 && assets[0] === str)) {
+    if (assets.length > 0 && !(assets.length === 1 && assets[0] === str)) {
       let asset: Assets;
       for (let i = 0; i < assets.length; ++i) {
         if (typeof assets[i] === 'string') {
-          asset = this.resolveAssetsRecursive(assets[i]);
+          asset = this.resolveAssetsRecursive(assets[i] as string);
           if (asset !== null) {
             assets.splice(i, 1, ...asset);
             i += asset.length - 1;
@@ -158,8 +155,12 @@ export class Templator {
     return [str];
   }
 
-  resolve(str: string): Assets {
-    return this.resolveAssetsRecursive(str);
+  resolve(str: string | null): Assets {
+    if (str !== null) {
+      return this.resolveAssetsRecursive(str);
+    } else {
+      return [];
+    }
   }
 }
 

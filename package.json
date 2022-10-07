@@ -6,10 +6,10 @@
     "dev": "parcel ./src/pages/*.html --no-cache",
     "build": "parcel build ./src/pages/*.html --no-optimize --dist-dir ./dist/",
     "start": "npm run build && node ./server.js",
-    "jslint": "./node_modules/.bin/eslint ./src/",
-    "csslint": "npx stylelint \"**/*.scss\"",
     "tscheck": "npx tsc --noEmit",
-    "lint": "npm run jslint && npm run tscheck && npm run csslint"
+    "tslint": "npx eslint \"./src/**/*.ts\" --ext .ts",
+    "csslint": "npx stylelint \"./src/**/*.scss\"",
+    "lint": "npm run tscheck && npm run tslint && npm run csslint"
   },
   "targets": {
     "default": {

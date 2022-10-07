@@ -69,7 +69,7 @@ const ajaxRequest = function ajaxRequest(url: string,
   return xhr;
 };
 
-type Callbacks = {
+type Handler = {
   (callback: Function): Request;
   trigger: Function;
   callbacks: Array<Function>;
@@ -78,51 +78,60 @@ type Callbacks = {
 type Request = {
   url: string;
   xhr: XMLHttpRequest;
-  then: Callbacks;
-  catch: Callbacks;
-  finally: Callbacks;
+  then: Handler;
+  catch: Handler;
+  finally: Handler;
   response: string;
   error: Error;
   options: Record<string, any>;
 };
 
-export const AjaxRequest = function(request: Request): Request {
-  request.then = function(callback: Function): Request {
-    request.then.callbacks = request.then.callbacks || [];
-    request.then.callbacks.push(callback);
-    return request;
-  };
-  request.then.trigger = function(): void {
-    for (const callback of request.then.callbacks) {
-      try {
-        callback(request);
-      } catch (error) {
-        request.error = error;
-        request.catch.trigger();
-        break;
+export const AjaxRequest = (request: Request): Request => {
+  request.then = (() => {
+    const handler: Handler = (callback: Function): Request => {
+      handler.callbacks.push(callback);
+      return request;
+    };
+    handler.callbacks = [];
+    handler.trigger = (): void => {
+      for (const callback of handler.callbacks) {
+        try {
+          callback(request);
+        } catch (error) {
+          request.error = error;
+          request.catch.trigger();
+          break;
+        }
       }
-    }
-    request.finally.trigger();
-  };
+      request.finally.trigger();
+    };
+    return handler;
+  })();
 
-  request.catch = function(callback: Function): Request {
-    request.catch.callbacks = [callback];
-    return request;
-  };
-  request.catch.trigger = function(): void {
-    request.catch.callbacks[0](request);
-    request.finally.trigger();
-  };
-  request.catch(function() {});
+  request.catch = (() => {
+    const handler: Handler = (callback: Function): Request => {
+      handler.callbacks = [callback];
+      return request;
+    };
+    handler.callbacks = [() => {}];
+    handler.trigger = (): void => {
+      handler.callbacks[0](request);
+      request.finally.trigger();
+    };
+    return handler;
+  })();
 
-  request.finally = function(callback: Function): Request {
-    request.finally.callbacks = [callback];
-    return request;
-  };
-  request.finally.trigger = function(): void {
-    request.finally.callbacks[0](request);
-  };
-  request.finally(function() {});
+  request.finally = (() => {
+    const handler: Handler = (callback: Function): Request => {
+      handler.callbacks = [callback];
+      return request;
+    };
+    handler.callbacks = [() => {}];
+    handler.trigger = (): void => {
+      handler.callbacks[0](request);
+    };
+    return handler;
+  })();
 
   try {
     request.xhr = ajaxRequest(request.url, {
