@@ -69,12 +69,21 @@ const ajaxRequest = function ajaxRequest(url: string,
   return xhr;
 };
 
+type Callbacks = {
+  (callback: Function): Request;
+  trigger: Function;
+  callbacks: Array<Function>;
+}
+
 type Request = {
   url: string;
   xhr: XMLHttpRequest;
-  then: (callback: Function) => Request;
-  catch: (callback: Function) => Request;
-  finally: (callback: Function) => Request;
+  then: Callbacks;
+  catch: Callbacks;
+  finally: Callbacks;
+  response: string;
+  error: Error;
+  options: Record<string, any>;
 };
 
 export const AjaxRequest = function(request: Request): Request {
@@ -97,21 +106,21 @@ export const AjaxRequest = function(request: Request): Request {
   };
 
   request.catch = function(callback: Function): Request {
-    request.catch.callback = callback;
+    request.catch.callbacks = [callback];
     return request;
   };
   request.catch.trigger = function(): void {
-    request.catch.callback(request);
+    request.catch.callbacks[0](request);
     request.finally.trigger();
   };
   request.catch(function() {});
 
   request.finally = function(callback: Function): Request {
-    request.finally.callback = callback;
+    request.finally.callbacks = [callback];
     return request;
   };
   request.finally.trigger = function(): void {
-    request.finally.callback(request);
+    request.finally.callbacks[0](request);
   };
   request.finally(function() {});
 
@@ -122,7 +131,7 @@ export const AjaxRequest = function(request: Request): Request {
         request.response = response;
         request.then.trigger();
       },
-      errorHandler: (error: unknown): void => {
+      errorHandler: (error: Error): void => {
         request.error = error;
         request.catch.trigger();
       },
