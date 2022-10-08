@@ -12,7 +12,7 @@ export class Link extends Block {
     this.setProps({
       onClick: function(): void {
         Router.renderView(props.url);
-      }
+      },
     });
   }
   render(props: IncomingProps): string {

@@ -7,10 +7,11 @@ import {AvatarPic} from '../components/forms/Avatar';
 
 const view = new WideLayoutWithSidebar({
   title: 'Изменить пароль',
-  Form, Button, Input, AvatarPic
+  Form, Button, Input, AvatarPic,
 });
 
-view.props.contents = `%{ Form({ "name": "changepassword", "action": "profile.html" }) }%`;
+view.props.contents = `%{ Form({ "name": "changepassword",
+                                 "action": "profile.html" }) }%`;
 
 view.props.BackButtonLink = new RoundButtonLink({url: 'profile.html'});
 
@@ -25,7 +26,8 @@ view.props.fieldset = () => `
     "placeholder": "********"
   }) }%
   %{ Input({
-    "label": "Повторите новый пароль", "name": "newPassword2", "type": "password",
+    "label": "Повторите новый пароль", "name": "newPassword2",
+    "type": "password",
     "placeholder": "********"
   }) }%
   <br><br><br>

@@ -5,7 +5,7 @@ type AnyContext = Record<string, unknown> | Window;
 type Assets = Array<unknown>;
 
 export class Templator {
-  public context: AnyObj | Window;
+  public context: AnyContext;
   private PP_PATTERN: RegExp;
   private PP_SUBPATTERN_JSONFUNC: RegExp;
 
@@ -52,7 +52,7 @@ export class Templator {
         if (!(unwrapRule && jsonObj instanceof Array)) {
           jsonObj = [jsonObj];
         }
-        for (const item of jsonObj as Array<unknown>) {
+        for (const item of jsonObj) {
           let asset: AnyObj | string;
           if (Block.hasOwnProperty('prototype')) { // normal function or class
             asset = new Block(item);

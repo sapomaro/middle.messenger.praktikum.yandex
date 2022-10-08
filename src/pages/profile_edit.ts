@@ -9,7 +9,7 @@ import {JSONWrapper} from '../modules/Utils';
 
 const view = new WideLayoutWithSidebar({
   title: 'Изменить данные',
-  Form, Button, Input, Link, AvatarPic
+  Form, Button, Input, Link, AvatarPic,
 });
 
 view.props.contents = `%{ Form({ "name": "profile", "action": "" }) }%`;
@@ -22,16 +22,16 @@ const userData: Record<string, string> = {
   first_name: 'Иван',
   second_name: 'Иванов',
   display_name: 'Ivan Ivanov',
-  phone: '+7-777-777-7777'
+  phone: '+7-777-777-7777',
 };
 
-let inputsData: Array<Record<string, string>> = [
-  { name: 'email', type: 'email', label: 'Почта' },
-  { name: 'login', type: 'text', label: 'Логин' },
-  { name: 'first_name', type: 'text', label: 'Имя' },
-  { name: 'second_name', type: 'text', label: 'Фамилия' },
-  { name: 'display_name', type: 'text', label: 'Имя в чате' },
-  { name: 'phone', type: 'tel', label: 'Телефон' }
+const inputsData: Array<Record<string, string>> = [
+  {name: 'email', type: 'email', label: 'Почта'},
+  {name: 'login', type: 'text', label: 'Логин'},
+  {name: 'first_name', type: 'text', label: 'Имя'},
+  {name: 'second_name', type: 'text', label: 'Фамилия'},
+  {name: 'display_name', type: 'text', label: 'Имя в чате'},
+  {name: 'phone', type: 'tel', label: 'Телефон'},
 ];
 
 for (const input of inputsData) {

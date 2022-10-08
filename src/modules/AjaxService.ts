@@ -35,27 +35,27 @@ type Handler = {
 }
 
 type InitOptions = {
-  url: string;
+  url?: string;
   method?: METHOD;
   tries?: number;
   timeout?: number;
 }
 
 type Options = InitOptions & {
-  xhr?: XMLHttpRequest;
   data?: unknown;
   body?: unknown;
-  response?: string;
-  error?: Error;
-  options?: Record<string, unknown>;
   successCallback: Fn;
   errorHandler: Fn;
 };
 
-type Request = Options & {
+type Request = InitOptions & {
   then: Handler;
   catch: Handler;
   finally: Handler;
+  xhr?: XMLHttpRequest;
+  options?: Record<string, unknown>;
+  response?: string;
+  error?: Error;
 };
 
 const ajaxRequest = function ajaxRequest(url: string,
@@ -112,8 +112,8 @@ const ajaxRequest = function ajaxRequest(url: string,
   return xhr;
 };
 
-export const Ajax = (options: InitOptions): Request => {
-  const request = {
+export const ajax = (options: InitOptions): Request => {
+  const request: Request = {
     ...options,
     then: (() => {
       const handler: Handler = (callback: Fn): Request => {
@@ -163,7 +163,7 @@ export const Ajax = (options: InitOptions): Request => {
   };
 
   try {
-    request.xhr = ajaxRequest(request.url, {
+    request.xhr = ajaxRequest(request.url ?? '', {
       ...(request.options || {}),
       successCallback: (response: string): void => {
         request.response = response;

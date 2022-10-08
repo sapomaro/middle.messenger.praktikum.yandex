@@ -33,7 +33,9 @@ export const objIntersect = function objIntersect(
     if (typeof baseObj[key as keyof typeof baseObj] !== 'undefined') {
       if (typeof baseObj[key as keyof typeof baseObj] === 'object' &&
           typeof value === 'object') {
-        if (objIntersect(baseObj[key as keyof typeof baseObj] as AnyObj, value as AnyObj)) {
+        if (objIntersect(
+            baseObj[key as keyof typeof baseObj] as AnyObj, value as AnyObj,
+        )) {
           continue;
         } else {
           return false;

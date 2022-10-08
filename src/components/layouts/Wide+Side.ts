@@ -35,10 +35,3 @@ export class WideLayoutWithSidebar extends Block {
     `;
   }
 }
-
-/*          <form action="%{backButtonLink}%" class="sidebar__control">
-            <button 
-              class="form__button form__button_standard form__button_round">
-                ⬅
-            </button>
-          </form>*/

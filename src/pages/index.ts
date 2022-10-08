@@ -8,15 +8,15 @@ const view = new NarrowLayout({
 });
 
 const links = JSONWrapper.stringify([
-  { url: 'auth.html', label: 'Вход' },
-  { url: 'register.html', label: 'Регистрация' },
-  { url: 'profile.html', label: 'Профиль' },
-  { url: 'profile_edit.html', label: 'Редактирование профиля' },
-  { url: 'profile_newpass.html', label: 'Смена пароля' },
-  { url: 'chats.html', label: 'Чаты' },
-  { url: '404.html', label: 'Страница 404' },
-  { url: '500.html', label: 'Страница 500' },
-  { url: 'test.html', label: 'Тест XHR' },
+  {url: 'auth.html', label: 'Вход'},
+  {url: 'register.html', label: 'Регистрация'},
+  {url: 'profile.html', label: 'Профиль'},
+  {url: 'profile_edit.html', label: 'Редактирование профиля'},
+  {url: 'profile_newpass.html', label: 'Смена пароля'},
+  {url: 'chats.html', label: 'Чаты'},
+  {url: '404.html', label: 'Страница 404'},
+  {url: '500.html', label: 'Страница 500'},
+  {url: 'test.html', label: 'Тест XHR'},
 ]);
 
 view.props.contents = () => `

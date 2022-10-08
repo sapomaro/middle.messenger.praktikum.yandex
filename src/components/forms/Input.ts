@@ -105,16 +105,15 @@ export class Input extends Block {
       ...this.props,
       value: actualValue,
     });
-    //const norefresh: boolean = (this.props.name === 'message');
     if (msg && typeof this.props.name === 'string') {
-      this.setProps({error: msg}); // , norefresh
+      this.setProps({error: msg});
       if (state && typeof state.errorMsgs === 'object' &&
           state.errorMsgs !== null) {
         state.errorMsgs[this.props.name] = msg;
       }
       event.preventDefault();
     } else if (this.props.error) {
-      this.setProps({error: null}); // , norefresh
+      this.setProps({error: null});
     }
   }
 }

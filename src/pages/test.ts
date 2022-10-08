@@ -1,8 +1,8 @@
 import {WideLayout} from '../components/layouts/Wide';
-import {Ajax} from '../modules/AjaxService';
+import {ajax} from '../modules/AjaxService';
 
 const view = new WideLayout({
-  title: 'Тест XHR'
+  title: 'Тест XHR',
 });
 
 view.props.contents = () => `
@@ -15,36 +15,30 @@ view.props.contents = () => `
 `;
 
 view.on('mounted', () => {
-  Ajax({
-    url: 'http://localhost:1234/'
-  })
-  .then(({response}) => {
+  ajax({
+    url: 'http://localhost:1234/',
+  }).then(({response}) => {
     console.log(response);
     view.props.result1 = 'success';
-  })
-  .catch(({error}) => {
+  }).catch(({error}) => {
     console.warn(error);
     view.props.result1 = 'error';
-  })
-  .finally(() => {
+  }).finally(() => {
     console.log('finally');
     view.props.result1 += ' finally';
     view.refresh();
   });
 
-  Ajax({
+  ajax({
     url: 'http://localhost:1235/',
-    tries: 2
-  })
-  .then(({response}) => {
+    tries: 2,
+  }).then(({response}) => {
     console.log(response);
     view.props.result2 = 'success';
-  })
-  .catch(({error}) => {
+  }).catch(({error}) => {
     console.warn(error);
     view.props.result2 = 'error';
-  })
-  .finally(() => {
+  }).finally(() => {
     console.log('finally');
     view.props.result2 += ' finally';
     view.refresh();

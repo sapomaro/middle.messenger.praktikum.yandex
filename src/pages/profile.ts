@@ -9,7 +9,7 @@ import {JSONWrapper} from '../modules/Utils';
 
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
-  Form, Button, Input, RowLink, AvatarControl, AvatarPopup
+  Form, Button, Input, RowLink, AvatarControl, AvatarPopup,
 });
 
 view.props.popup = AvatarPopup;
@@ -23,22 +23,22 @@ const userData = {
   first_name: 'Иван',
   second_name: 'Иванов',
   display_name: 'Ivan Ivanov',
-  phone: '+77777777777'
+  phone: '+77777777777',
 };
 
-let inputsData: Array<{
+const inputsData: Array<{
   name: string;
   type?: string;
   label: string;
   value?: string;
   readonly?: boolean;
 }> = [
-  { name: 'email', type: 'email', label: 'Почта' },
-  { name: 'login', type: 'text', label: 'Логин' },
-  { name: 'first_name', type: 'text', label: 'Имя' },
-  { name: 'second_name', type: 'text', label: 'Фамилия' },
-  { name: 'display_name', type: 'text', label: 'Имя в чате' },
-  { name: 'phone', type: 'tel', label: 'Телефон' }
+  {name: 'email', type: 'email', label: 'Почта'},
+  {name: 'login', type: 'text', label: 'Логин'},
+  {name: 'first_name', type: 'text', label: 'Имя'},
+  {name: 'second_name', type: 'text', label: 'Фамилия'},
+  {name: 'display_name', type: 'text', label: 'Имя в чате'},
+  {name: 'phone', type: 'tel', label: 'Телефон'},
 ];
 
 for (const input of inputsData) {
@@ -53,9 +53,10 @@ view.props.fieldset = () => `
   <h1 class="container__header">${userData.first_name}</h1>
   %{ Input(${inputs}...) }%
   <br><br><br>
-  %{ RowLink({ "url": "profile_edit.html", "label": "Изменить данные" }) }%
-  %{ RowLink({ "url": "profile_newpass.html", "label": "Изменить пароль" }) }%
-  %{ RowLink({ "url": "auth.html", "label": "Выйти", "style": "container__link_red" }) }%
+  %{ RowLink({"url": "profile_edit.html", "label": "Изменить данные"}) }%
+  %{ RowLink({"url": "profile_newpass.html", "label": "Изменить пароль"}) }%
+  %{ RowLink({"url": "auth.html", "label": "Выйти",
+              "style": "container__link_red"}) }%
   <br><br>
 `;
 
