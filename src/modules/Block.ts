@@ -22,12 +22,16 @@ const instancesOfBlock: Record<string, Block> = {};
 type BlockNodes = DocumentFragment | HTMLElement | ChildNode;
 
 type Fn = (...args: Array<unknown>) => void;
+
 type RenderFn = (props?: Record<string, unknown>) => string;
+
 type EventAttachment = {
   node: HTMLElement;
   eventType: string;
   callback: Fn;
 };
+
+type Props = Record<string, unknown>;
 
 export class Block {
   static EVENTS = {
@@ -48,10 +52,10 @@ export class Block {
   public on: Fn;
   public off: Fn;
   public fire: Fn;
-  public props: Record<string, unknown>;
+  public props: Props;
 
-  constructor(props: Record<string, unknown> = {}) {
-    this.props = props;
+  constructor(props: Props = {}) {
+    this.props = this.makePropsProxy(props);
     this.blockuid = generateUid();
     instancesOfBlock[this.blockuid] = this;
     this.templator = new Templator(this.props);
@@ -84,6 +88,36 @@ export class Block {
       this.listDescendants((block: Block) => {
         block.fire(Block.EVENTS.PREPARE);
       });
+    });
+  }
+
+  makePropsProxy(props: Props): Props {
+    // self = this;
+    const forbiddenCheck = (prop: string): void => {
+      if (prop.indexOf('_') === 0) {
+        throw new Error('Нет прав');
+      }
+    };
+    return new Proxy(props as Props, {
+      get(target: Props, prop: string) {
+        forbiddenCheck(prop);
+        return target[prop];
+      },
+      set(target: Props, prop: string, value: unknown) {
+        forbiddenCheck(prop);
+        if (target[prop] !== value) {
+          target[prop] = value;
+          // Для реактивности используется метод setProps(),
+          // чтобы избежать слишком частых перерисовок
+          // self.fire(Block.EVENTS.UPDATE);
+        }
+        return true;
+      },
+      deleteProperty(target: Props, prop: string) {
+        forbiddenCheck(prop);
+        delete target[prop];
+        return true;
+      },
     });
   }
 
