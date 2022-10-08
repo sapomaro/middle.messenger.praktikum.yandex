@@ -1,7 +1,7 @@
 /*
   SYNTAX:
 
-  Ajax({
+  ajax({
     url: 'http://localhost:1234/'
   })
   .then(({response}) => {
@@ -28,12 +28,6 @@ enum METHOD {
 
 type Fn = (...args: Array<unknown>) => void;
 
-type Handler = {
-  (callback: Fn): Request;
-  trigger: () => void;
-  callbacks: Array<Fn>;
-}
-
 type InitOptions = {
   url?: string;
   method?: METHOD;
@@ -48,7 +42,13 @@ type Options = InitOptions & {
   errorHandler: Fn;
 };
 
-type Request = InitOptions & {
+type Handler = {
+  (callback: Fn): State;
+  trigger: () => void;
+  callbacks: Array<Fn>;
+}
+
+type State = InitOptions & {
   then: Handler;
   catch: Handler;
   finally: Handler;
@@ -112,11 +112,11 @@ const ajaxRequest = function ajaxRequest(url: string,
   return xhr;
 };
 
-export const ajax = (options: InitOptions): Request => {
-  const request: Request = {
+export const ajax = (options: InitOptions): State => {
+  const request: State = {
     ...options,
     then: (() => {
-      const handler: Handler = (callback: Fn): Request => {
+      const handler: Handler = (callback: Fn): State => {
         handler.callbacks.push(callback);
         return request;
       };
@@ -137,7 +137,7 @@ export const ajax = (options: InitOptions): Request => {
     })(),
 
     catch: (() => {
-      const handler: Handler = (callback: Fn): Request => {
+      const handler: Handler = (callback: Fn): State => {
         handler.callbacks = [callback];
         return request;
       };
@@ -150,7 +150,7 @@ export const ajax = (options: InitOptions): Request => {
     })(),
 
     finally: (() => {
-      const handler: Handler = (callback: Fn): Request => {
+      const handler: Handler = (callback: Fn): State => {
         handler.callbacks = [callback];
         return request;
       };

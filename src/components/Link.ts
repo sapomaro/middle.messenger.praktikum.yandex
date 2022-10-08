@@ -17,9 +17,7 @@ export class Link extends Block {
   }
   render(props: IncomingProps): string {
     return `
-      <li class="container__row container__element_centered">
-        <a onclick="%{onClick}%" class="container__link">${props.label}</a>
-      </li>
+      <a onclick="%{onClick}%">${props.label}</a>
     `;
   }
 }

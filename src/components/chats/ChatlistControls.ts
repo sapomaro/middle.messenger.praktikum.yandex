@@ -3,9 +3,9 @@ import './ChatlistControls.scss';
 export const ChatlistControls = (): string => `
   <nav class="chatlist__controls">
     <div class="container__element container__element_right">
-      <a href="profile.html" class="container__link container__link_grey">
-        Профиль&ensp;<small>❯</small>
-      </a>
+      <span class="container__link container__link_grey">
+        %{ProfileLink}%
+      </span>
     </div>
     <div class="container__element">
       <div class="chatlist__search__field__wrapper">

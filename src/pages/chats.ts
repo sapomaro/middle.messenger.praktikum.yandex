@@ -1,4 +1,5 @@
 import {ChatsLayout} from '../components/layouts/Chats';
+import {Link} from '../components/Link';
 import {Form} from '../components/forms/Form';
 import {StandardInput as Input} from '../components/forms/StandardInput';
 import {StandardButton as Button} from '../components/forms/StandardButton';
@@ -13,7 +14,7 @@ import {JSONWrapper} from '../modules/Utils';
 const view = new ChatsLayout({
   title: 'Чаты',
   user: 'Собеседник',
-  Form, Input, Button,
+  Link, Form, Input, Button,
   ChatlistItem, ChatlistControls,
   ChatboxMessage, ChatboxHeader, ChatboxFooter, ChatboxTextarea,
 });
@@ -61,6 +62,11 @@ view.props.Chatlist = () => `
     %{ ChatlistItem(${chats}...) }%
   </ul>
 `;
+
+view.props.ProfileLink = new Link({
+  url: 'profile.html',
+  label: 'Профиль&ensp;<small>❯</small>',
+});
 
 view.props.ChatboxBody = () => `
   <div class="chatbox__date">19 июня (вс)</div>
