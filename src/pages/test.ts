@@ -1,5 +1,5 @@
 import {WideLayout} from '../components/layouts/Wide';
-import {ajax} from '../modules/AjaxService';
+import {ajax} from '../modules/Ajax';
 
 const view = new WideLayout({
   title: 'Тест XHR',
