@@ -6,7 +6,7 @@ import '../Head';
 import {Block} from '../../modules/Block';
 
 export class WideLayoutWithSidebar extends Block {
-  constructor(props: Record<string, any>) {
+  constructor(props: Record<string, unknown>) {
     super(props);
     this.on('mounted', () => {
       const popup = document.querySelector('.popup') as HTMLElement;

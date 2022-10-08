@@ -8,21 +8,28 @@ type IncomingProps = {
   fieldset?: () => string;
 }
 
+type EventState = Record<string, Record<string, string>>;
+
 export class Form extends Block {
   constructor(props: IncomingProps) {
     super(props);
     this.setProps({
       onSubmit: (event: Event) => {
         event.preventDefault();
-
-        const form: HTMLFormElement = document.forms[this.props.name];
+        // @ts-ignore: TS7015: Element implicitly has an 'any' type
+        // because index expression is not of type 'number'.
+        // Что ему не нравится? document.forms работает не только по number,
+        // но и по string, плюс сделаны все необходимые проверки
+        const form: unknown = document.forms[props.name];
+        if (typeof form !== 'object' || !(form instanceof HTMLFormElement)) {
+          return false;
+        }
         const formData: FormData = new FormData(form);
-        const data: Record<string, any> = {};
+        const data: Record<string, unknown> = {};
         for (const [key, value] of formData.entries()) {
           data[key] = value;
         }
-
-        const state: Record<string, any> = {errorMsgs: {}};
+        const state: EventState = {errorMsgs: {}};
         this.listDescendants((block: Block) => {
           block.fire('submit', event, state);
         });

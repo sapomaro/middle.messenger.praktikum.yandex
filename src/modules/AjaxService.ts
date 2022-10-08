@@ -18,25 +18,65 @@
 
 import {JSONWrapper} from './Utils';
 
-const METHODS = {
-  GET: 'GET',
-  POST: 'POST',
-  PUT: 'PUT',
-  DELETE: 'DELETE',
+enum METHOD {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  PATCH = 'PATCH',
+  DELETE = 'DELETE'
+}
+
+type Fn = (...args: Array<unknown>) => void;
+
+type Handler = {
+  (callback: Fn): Request;
+  trigger: () => void;
+  callbacks: Array<Fn>;
+}
+
+type Options = {
+  method?: METHOD;
+  tries?: number;
+  timeout?: number;
+  data?: unknown;
+  body?: unknown;
+  successCallback?: Fn;
+  errorHandler?: Fn;
+};
+
+type Request = {
+  url: string;
+  xhr: XMLHttpRequest;
+  then: Handler;
+  catch: Handler;
+  finally: Handler;
+  response: string;
+  error: Error;
+  options: Record<string, unknown>;
 };
 
 const ajaxRequest = function ajaxRequest(url: string,
-                                         options: Record<string, any> = {}) {
+    options: Options = {}) {
   const xhr = new XMLHttpRequest();
-  const method: string = options.method || METHODS.GET;
-  if (typeof options.tries === 'undefined') {
-    options.tries = 0;
-  } else {
+  const method: string = (typeof options.method === 'string') ?
+    options.method : METHOD.GET;
+  if (typeof options.tries === 'number') {
     --options.tries;
+  } else {
+    options.tries = 0;
   }
   xhr.open(method, url, true);
-  xhr.timeout = options.timeout || 3000;
-  const data: Record<string, any> = options.body || options.data;
+  xhr.timeout = (typeof options.timeout === 'number') ?
+    options.timeout : 3000;
+
+  let data: Record<string, unknown> = {};
+  if (typeof options.body === 'object' && options.body !== null) {
+    data = options.body as Record<string, unknown>;
+  }
+  if (typeof options.data === 'object' && options.data !== null) {
+    data = options.data as Record<string, unknown>;
+  }
+
   if (options.method === 'GET' || !data) {
     xhr.send();
   } else {
@@ -47,7 +87,7 @@ const ajaxRequest = function ajaxRequest(url: string,
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
         const response = xhr.responseText.replace(/^\"|\"$/g, '');
-        if (options.successCallback) {
+        if (typeof options.successCallback === 'function') {
           options.successCallback(response);
         }
       }
@@ -58,7 +98,7 @@ const ajaxRequest = function ajaxRequest(url: string,
     if (options.tries) {
       ajaxRequest(url, options);
     } else {
-      if (options.errorHandler) {
+      if (typeof options.errorHandler === 'function') {
         options.errorHandler(error);
       }
     }
@@ -69,26 +109,9 @@ const ajaxRequest = function ajaxRequest(url: string,
   return xhr;
 };
 
-type Handler = {
-  (callback: Function): Request;
-  trigger: Function;
-  callbacks: Array<Function>;
-}
-
-type Request = {
-  url: string;
-  xhr: XMLHttpRequest;
-  then: Handler;
-  catch: Handler;
-  finally: Handler;
-  response: string;
-  error: Error;
-  options: Record<string, any>;
-};
-
 export const AjaxRequest = (request: Request): Request => {
   request.then = (() => {
-    const handler: Handler = (callback: Function): Request => {
+    const handler: Handler = (callback: Fn): Request => {
       handler.callbacks.push(callback);
       return request;
     };
@@ -109,11 +132,11 @@ export const AjaxRequest = (request: Request): Request => {
   })();
 
   request.catch = (() => {
-    const handler: Handler = (callback: Function): Request => {
+    const handler: Handler = (callback: Fn): Request => {
       handler.callbacks = [callback];
       return request;
     };
-    handler.callbacks = [() => {}];
+    handler.callbacks = [() => undefined];
     handler.trigger = (): void => {
       handler.callbacks[0](request);
       request.finally.trigger();
@@ -122,11 +145,11 @@ export const AjaxRequest = (request: Request): Request => {
   })();
 
   request.finally = (() => {
-    const handler: Handler = (callback: Function): Request => {
+    const handler: Handler = (callback: Fn): Request => {
       handler.callbacks = [callback];
       return request;
     };
-    handler.callbacks = [() => {}];
+    handler.callbacks = [() => undefined];
     handler.trigger = (): void => {
       handler.callbacks[0](request);
     };

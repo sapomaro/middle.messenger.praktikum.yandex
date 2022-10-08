@@ -5,7 +5,7 @@ import '../Head';
 import {Block} from '../../modules/Block';
 
 export class NarrowLayout extends Block {
-  constructor(props: Record<string, any>) {
+  constructor(props: Record<string, unknown>) {
     super(props);
   }
   render(): string {

@@ -1,6 +1,6 @@
 import './ChatlistItem.scss';
 
-export const ChatlistItem = (props: Record<string, any>): string => `
+export const ChatlistItem = (props: Record<string, unknown>): string => `
   <li class="chatlist__item ${props.active ? 'chatlist__item_active' : ''}">
     <div class="chatlist__item__wrapper">
       <div class="chatlist__item__avatar"></div>

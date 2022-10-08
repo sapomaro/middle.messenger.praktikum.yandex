@@ -15,6 +15,8 @@ type IncomingProps = {
   readonly?: boolean;
 }
 
+type EventState = Record<string, Record<string, string>>;
+
 export class Input extends Block {
   constructor(props: IncomingProps) {
     super(props);
@@ -40,7 +42,7 @@ export class Input extends Block {
       },
     });
 
-    this.on('submit', (event: Event, state: Record<string, any>): void => {
+    this.on('submit', (event: Event, state: EventState): void => {
       this.validate.call(this, event, state);
       setTimeout((): void => {
         self.togglePlaceholder.call(self, event);
@@ -48,8 +50,8 @@ export class Input extends Block {
     });
 
 
-    if (this.props.type === 'password' &&
-        this.props.name.slice(-1) === repeatFieldNameSuffix) {
+    if (props.type === 'password' &&
+        props.name.slice(-1) === repeatFieldNameSuffix) {
       EventBus.on('passwordFieldChange', (password: string) => {
         this.props.value2 = password;
       });
@@ -57,7 +59,8 @@ export class Input extends Block {
   }
 
   togglePlaceholder(event: Event) {
-    if (this.props.placeholder && event.type && event.target) {
+    if (typeof this.props.placeholder === 'string' &&
+        event.type && event.target) {
       const target = event.target as HTMLInputElement | HTMLTextAreaElement;
       if (event.type === 'blur' && target.value === '') {
         target.value = this.props.placeholder;
@@ -81,35 +84,37 @@ export class Input extends Block {
     messageField.style.overflowY = 'hidden';
     messageField.style.height = 'auto';
     messageField.style.height = (messageField.scrollHeight + boxSizing) + 'px';
-  };
+  }
 
-  validate(event: Event, state: Record<string, any>) {
+  validate(event: Event, state: EventState) {
     if (this.props.type === 'password' &&
+        typeof this.props.name === 'string' &&
         this.props.name.slice(-1) !== repeatFieldNameSuffix) {
       EventBus.fire('passwordFieldChange', this.props.value);
     }
-
     let actualValue = '';
-    if (typeof this.props.placeholder !== 'undefined' &&
-        typeof this.props.value !== 'undefined' &&
-        this.props.placeholder === this.props.value) {
-      actualValue = '';
-    } else {
-      actualValue = this.props.value;
+    if (typeof this.props.value === 'string') {
+      if (typeof this.props.placeholder !== 'undefined' &&
+          this.props.placeholder === this.props.value) {
+        actualValue = '';
+      } else {
+        actualValue = this.props.value;
+      }
     }
     const msg: string | null = getValidationMessage({
       ...this.props,
       value: actualValue,
     });
-    const norefresh: boolean = (this.props.name === 'message');
-    if (msg) {
-      this.setProps({error: msg}, norefresh);
-      if (state) {
+    //const norefresh: boolean = (this.props.name === 'message');
+    if (msg && typeof this.props.name === 'string') {
+      this.setProps({error: msg}); // , norefresh
+      if (state && typeof state.errorMsgs === 'object' &&
+          state.errorMsgs !== null) {
         state.errorMsgs[this.props.name] = msg;
       }
       event.preventDefault();
     } else if (this.props.error) {
-      this.setProps({error: null}, norefresh);
+      this.setProps({error: null}); // , norefresh
     }
   }
 }

@@ -1,6 +1,6 @@
 export const getValidationMessage = ({
-    name, value, value2, label
-  }: Record<string, string>): string | null => {
+  name, value, value2, label,
+}: Record<string, string>): string | null => {
   switch (name) {
     case 'login':
     case 'user':
