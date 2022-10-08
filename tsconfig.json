@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
-    "skipLibCheck": true,
-    "downlevelIteration": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "sourceMap": true,
     "strictNullChecks": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "downlevelIteration": true,
     "lib": [
       "dom",
       "dom.iterable",
