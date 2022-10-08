@@ -3,6 +3,6 @@ export const ErrorStatusMsg = (): string => `
   <h2 class="container__header">%{comment}%</h2>
   <br>
   <div class="container__element container__element_centered">
-    <a href="chats.html" class="container__link">Назад к чатам</a>
+    <span class="container__link">%{navLink}%</span>
   </div>
 `;

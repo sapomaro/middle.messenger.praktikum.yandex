@@ -1,20 +1,10 @@
-import './common.scss';
 import './Chats.scss';
 
-import '../Head';
-import {Block} from '../../modules/Block';
+import {Layout} from './Layout';
 
-export class ChatsLayout extends Block {
+export class ChatsLayout extends Layout {
   constructor(props: Record<string, unknown>) {
     super(props);
-    this.on('mounted', () => {
-      const popup = document.querySelector('.popup') as HTMLElement;
-      popup.addEventListener('click', (event: Event) => {
-        if (event.target === popup) {
-          popup.style.display = 'none';
-        }
-      });
-    });
   }
   render(): string {
     return `

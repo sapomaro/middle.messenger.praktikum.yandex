@@ -16,7 +16,7 @@ view.props.contents = () => `
 
 view.on('mounted', () => {
   ajax({
-    url: 'http://localhost:1234/',
+    url: '',
   }).then(({response}) => {
     console.log(response);
     view.props.result1 = 'success';

@@ -1,10 +1,8 @@
-import './common.scss';
 import './Wide.scss';
 
-import '../Head';
-import {Block} from '../../modules/Block';
+import {Layout} from './Layout';
 
-export class WideLayout extends Block {
+export class WideLayout extends Layout {
   constructor(props: Record<string, unknown>) {
     super(props);
   }

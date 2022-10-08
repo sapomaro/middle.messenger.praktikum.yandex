@@ -291,7 +291,6 @@ export class Block {
 
   renderToBody(): void {
     EventBus.on('load', () => {
-      this.traverseChildren(document.head);
       document.body.innerHTML = '';
       const elem = this.build();
       // traverse using global context of the app

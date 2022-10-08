@@ -1,10 +1,8 @@
-import './common.scss';
 import './Narrow.scss';
 
-import '../Head';
-import {Block} from '../../modules/Block';
+import {Layout} from './Layout';
 
-export class NarrowLayout extends Block {
+export class NarrowLayout extends Layout {
   constructor(props: Record<string, unknown>) {
     super(props);
   }
