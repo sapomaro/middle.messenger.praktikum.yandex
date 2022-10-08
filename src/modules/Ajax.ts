@@ -16,8 +16,6 @@
 
 */
 
-import {JSONWrapper} from './Utils';
-
 enum METHOD {
   GET = 'GET',
   POST = 'POST',
@@ -33,6 +31,7 @@ type InitOptions = {
   method?: METHOD;
   tries?: number;
   timeout?: number;
+  data?: Record<string, unknown>;
 }
 
 type Options = InitOptions & {
@@ -68,10 +67,6 @@ const ajaxRequest = function ajaxRequest(url: string,
   } else {
     options.tries = 0;
   }
-  xhr.open(method, url, true);
-  xhr.timeout = (typeof options.timeout === 'number') ?
-    options.timeout : 3000;
-
   let data: Record<string, unknown> = {};
   if (typeof options.body === 'object' && options.body !== null) {
     data = options.body as Record<string, unknown>;
@@ -79,19 +74,50 @@ const ajaxRequest = function ajaxRequest(url: string,
   if (typeof options.data === 'object' && options.data !== null) {
     data = options.data as Record<string, unknown>;
   }
+  let urlParams = '';
+  if (method === METHOD.GET) {
+    try {
+      urlParams = '?' +
+        (new URLSearchParams(data as Record<string, string>)).toString();
+    } catch (error) {
+      if (typeof options.errorHandler === 'function') {
+        options.errorHandler(error);
+      }
+    }
+    if (urlParams === '?') {
+      urlParams = '';
+    }
+  }
+
+  xhr.open(method, url + urlParams, true);
+
+  xhr.timeout = (typeof options.timeout === 'number') ?
+    options.timeout : 3000;
 
   if (options.method === 'GET' || !data) {
     xhr.send();
   } else {
-    xhr.send(JSONWrapper.stringify(data));
+    try {
+      xhr.send(JSON.stringify(data));
+    } catch (error) {
+      if (typeof options.errorHandler === 'function') {
+        options.errorHandler(error);
+      }
+    }
   }
+
+  console.log(`${method} ${url + urlParams}`);
 
   xhr.onreadystatechange = (): void => {
     if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
+      if (xhr.status >= 200 && xhr.status <= 299) {
         const response = xhr.responseText.replace(/^\"|\"$/g, '');
         if (typeof options.successCallback === 'function') {
           options.successCallback(response);
+        }
+      } else if (xhr.status >= 400) {
+        if (typeof options.errorHandler === 'function') {
+          options.errorHandler({status: xhr.status});
         }
       }
     }
@@ -112,9 +138,10 @@ const ajaxRequest = function ajaxRequest(url: string,
   return xhr;
 };
 
-export const ajax = (options: InitOptions): State => {
+const ajax = function(options: InitOptions): State {
   const request: State = {
-    ...options,
+    url: options.url,
+    options,
     then: (() => {
       const handler: Handler = (callback: Fn): State => {
         handler.callbacks.push(callback);
@@ -181,3 +208,18 @@ export const ajax = (options: InitOptions): State => {
 
   return request;
 };
+
+ajax.get = (url: string, data?: Record<string, string>): State => {
+  return ajax({url, method: METHOD.GET, data});
+};
+ajax.post = (url: string, data?: Record<string, unknown>): State => {
+  return ajax({url, method: METHOD.POST, data});
+};
+ajax.put = (url: string, data?: Record<string, unknown>): State => {
+  return ajax({url, method: METHOD.PUT, data});
+};
+ajax.delete = (url: string, data?: Record<string, unknown>): State => {
+  return ajax({url, method: METHOD.DELETE, data});
+};
+
+export {ajax};

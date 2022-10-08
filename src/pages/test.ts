@@ -11,13 +11,11 @@ view.props.contents = () => `
   <textarea>%{result1}%</textarea>
   <h2>Неверный запрос (к несуществующей странице):</h2>
   <textarea>%{result2}%</textarea>
-  <p>(выдаст ошибку по таймауту после 2 попыток по 3 секунды)</p>
+  <p>(выдаст ошибку по таймауту после двух попыток по 1 секунде)</p>
 `;
 
 view.on('mounted', () => {
-  ajax({
-    url: '',
-  }).then(({response}) => {
+  ajax.get('').then(({response}) => {
     console.log(response);
     view.props.result1 = 'success';
   }).catch(({error}) => {
@@ -32,6 +30,8 @@ view.on('mounted', () => {
   ajax({
     url: 'http://localhost:1235/',
     tries: 2,
+    timeout: 1000,
+    data: {test: 123},
   }).then(({response}) => {
     console.log(response);
     view.props.result2 = 'success';
