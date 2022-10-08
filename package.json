@@ -4,7 +4,7 @@
   "description": "sprint_2",
   "scripts": {
     "dev": "parcel ./src/pages/*.html --no-cache",
-    "build": "parcel build ./src/pages/*.html --no-optimize --dist-dir ./dist/",
+    "build": "parcel build ./src/pages/*.html --dist-dir ./dist/",
     "start": "npm run build && node ./server.js",
     "tscheck": "npx tsc --noEmit",
     "tslint": "npx eslint \"./src/**/*.ts\" --ext .ts",
