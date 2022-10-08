@@ -1,7 +1,7 @@
 import {JSONWrapper} from './Utils';
 
-type AnyObj = Record<string, unknown>;
-type AnyContext = AnyObj | Window;
+type AnyObj = Array<unknown> | Record<string, unknown>;
+type AnyContext = Record<string, unknown> | Window;
 type Assets = Array<unknown>;
 
 export class Templator {
@@ -44,7 +44,7 @@ export class Templator {
           .replace(/([{,"])\s*(\\[\\tn]+)\s*([},"])/g, '$1 $3')
           .replace(/&quot;/ig, '"');
       const unwrapRule = matches[3];
-      let jsonObj: AnyObj | Array<AnyObj> = JSONWrapper.parse(jsonStr);
+      let jsonObj: AnyObj = JSONWrapper.parse(jsonStr);
 
       if (typeof context[blockName as keyof AnyContext] === 'function') {
         const Block = context[blockName as keyof AnyContext];
@@ -52,7 +52,7 @@ export class Templator {
         if (!(unwrapRule && jsonObj instanceof Array)) {
           jsonObj = [jsonObj];
         }
-        for (const item of jsonObj as Array<AnyObj>) {
+        for (const item of jsonObj as Array<unknown>) {
           let asset: AnyObj | string;
           if (Block.hasOwnProperty('prototype')) { // normal function or class
             asset = new Block(item);

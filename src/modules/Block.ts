@@ -31,9 +31,11 @@ type EventAttachment = {
 
 export class Block {
   static EVENTS = {
+    INIT: 'INIT',
     PREPARE: 'preparing',
     RENDER: 'rendered',
     MOUNT: 'mounted',
+    REMOUNT: 'remounted',
     UPDATE: 'updated',
   };
 
@@ -54,6 +56,7 @@ export class Block {
     instancesOfBlock[this.blockuid] = this;
     this.templator = new Templator(this.props);
     this.registerEvents();
+    this.fire(Block.EVENTS.INIT);
   }
 
   registerEvents(): void {
@@ -202,7 +205,7 @@ export class Block {
     node.parentNode?.replaceChild(fragment, node);
     for (const block of blocksList) {
       if (block.isInDOM()) {
-        block.fire(Block.EVENTS.MOUNT);
+        block.fire(Block.EVENTS.REMOUNT);
       }
     }
   }
@@ -260,7 +263,6 @@ export class Block {
       // traverse using global context of the app
       this.traverseChildren(elem);
       document.body.appendChild(elem);
-
       this.fire(Block.EVENTS.MOUNT);
       this.listDescendants((block: Block) => {
         block.fire(Block.EVENTS.MOUNT);

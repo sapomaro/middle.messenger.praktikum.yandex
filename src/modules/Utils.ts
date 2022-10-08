@@ -1,4 +1,4 @@
-type AnyObj = Record<string, unknown>;
+type AnyObj = Array<unknown> | Record<string, unknown>;
 
 export const JSONWrapper = {
   parse: (data: string): AnyObj => {
@@ -30,16 +30,16 @@ export const objIntersect = function objIntersect(
 ): boolean {
   const entries: [string, unknown][] = Object.entries(chunkObj);
   for (const [key, value] of entries) {
-    if (typeof baseObj[key] !== 'undefined') {
-      if (typeof baseObj[key] === 'object' &&
+    if (typeof baseObj[key as keyof typeof baseObj] !== 'undefined') {
+      if (typeof baseObj[key as keyof typeof baseObj] === 'object' &&
           typeof value === 'object') {
-        if (objIntersect(baseObj[key] as AnyObj, value as AnyObj)) {
+        if (objIntersect(baseObj[key as keyof typeof baseObj] as AnyObj, value as AnyObj)) {
           continue;
         } else {
           return false;
         }
       }
-      if (baseObj[key] !== value) {
+      if (baseObj[key as keyof typeof baseObj] !== value) {
         return false;
       }
     } else {

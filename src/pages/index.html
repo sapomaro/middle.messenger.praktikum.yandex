@@ -1,37 +1,30 @@
 <!DOCTYPE html>
 <script type="module">
-  import {NarrowLayout} from '../components/layouts/Narrow';
-  import {JSONWrapper} from '../modules/Utils';
+  import {Router} from '../modules/Router';
+  import {view as IndexPage} from './index.ts';
+  import {view as AuthPage} from './auth';
+  import {view as RegisterPage} from './register';
+  import {view as ProfilePage} from './profile';
+  import {view as ProfileEditPage} from './profile_edit';
+  import {view as ProfilePassPage} from './profile_newpass';
+  import {view as ChatsPage} from './chats';
+  import {view as NotFoundPage} from './404';
+  import {view as ServerErrorPage} from './500';
+  import {view as TestPage} from './test';
 
-  const view = new NarrowLayout({
-    title: 'Карта экранов приложения'
+  Router.registerViews({
+    'index.html': IndexPage,
+    'auth.html': AuthPage,
+    'register.html': RegisterPage,
+    'profile.html': ProfilePage,
+    'profile_edit.html': ProfileEditPage,
+    'profile_newpass.html': ProfilePassPage,
+    'chats.html': ChatsPage,
+    '404.html': NotFoundPage,
+    '500.html': ServerErrorPage,
+    'test.html': TestPage,
   });
 
-  const links = JSONWrapper.stringify([
-    { url: 'auth.html', label: 'Вход' },
-    { url: 'register.html', label: 'Регистрация' },
-    { url: 'profile.html', label: 'Профиль' },
-    { url: 'profile_edit.html', label: 'Редактирование профиля' },
-    { url: 'profile_newpass.html', label: 'Смена пароля' },
-    { url: 'chats.html', label: 'Чаты' },
-    { url: '404.html', label: 'Страница 404' },
-    { url: '500.html', label: 'Страница 500' },
-    { url: 'test.html', label: 'Тест XHR' },
-  ]);
-
-  view.props.Link = (props) => `
-    <li class="container__row container__element_centered">
-      <a href="${props.url}" class="container__link">${props.label}</a>
-    </li>  
-  `;
-
-  view.props.contents = () => `
-    <h1 class="container__header">%{title}%</h1>
-    <nav><ul>
-      %{ Link(${links}...) }%
-    </ul></nav>
-  `;
-
-  view.renderToBody();
+  Router.renderView('index.html');
 
 </script>
