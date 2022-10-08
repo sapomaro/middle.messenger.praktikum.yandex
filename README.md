@@ -2,22 +2,30 @@
 
 Это веб-мессенджер: учебный проект «Яндекс.Практикума» (курс «Мидл фронтенд-разработчик»). 
 
-Сейчас проект находится в стадии разработки интерфейса.
+Сейчас проект находится в стадии разработки интерфейса (2-й спринт).
 
-## Команды для запуска 
+Ссылка на текущую собранную версию на Netlify: https://cheery-pothos-620783.netlify.app/
+
+Ссылка на пулл-реквест в главную ветку: _____________
+
+## Команды
 
 Запуск dev-сервера Parcel (http://localhost:1234/): 
 
-	npm run dev
+    npm run dev
 
 Запуск сборки и сервера для раздачи статики (http://localhost:3000/):
 
-	npm run start
+    npm run start
 
-## Шаблонизатор ProtoPages.js
+Проверка кода компилятором tsc, линтерами ESLint и Stylelint:
 
-В проекте используется самописный шаблонизатор ProtoPagesJS: https://github.com/sapomaro/ProtoPagesJS
+    npm run lint
+
+## Шаблонизатор
+
+В проекте используется самописный шаблонизатор.
 
 ## Прочее
 
-Ссылка на макет: https://www.figma.com/file/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=0%3A1
+Ссылка на макет в Figma: https://www.figma.com/file/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=0%3A1 (в интерфейсе ещё предполагается доработка некоторых мелких деталей по макету)

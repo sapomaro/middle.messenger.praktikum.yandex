@@ -1,11 +1,15 @@
 {
   "name": "middle.messenger.praktikum.yandex",
   "version": "1.0.0",
-  "description": "sprint_1",
+  "description": "sprint_2",
   "scripts": {
     "dev": "parcel ./src/pages/*.html --no-cache",
-	"build": "parcel build ./src/pages/*.html --dist-dir ./dist/",
-    "start": "npm run build && node ./server.js"
+    "build": "parcel build ./src/pages/*.html --dist-dir ./dist/",
+    "start": "npm run build && node ./server.js",
+    "tscheck": "npx tsc --noEmit",
+    "tslint": "npx eslint \"./src/**/*.ts\" --ext .ts",
+    "csslint": "npx stylelint \"./src/**/*.scss\"",
+    "lint": "npm run tscheck && npm run tslint && npm run csslint"
   },
   "targets": {
     "default": {
@@ -18,11 +22,18 @@
   "author": "Optimizitor",
   "license": "ISC",
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.7.0",
-    "parcel": "^2.7.0",
-    "sass": "^1.54.9"
+    "@parcel/transformer-sass": "2.0.0-nightly.1172",
+    "@typescript-eslint/eslint-plugin": "5.38.0",
+    "@typescript-eslint/parser": "5.38.0",
+    "eslint": "8.23.1",
+    "eslint-config-google": "0.14.0",
+    "parcel": "2.0.0-nightly.1170",
+    "sass": "1.54.9",
+    "stylelint": "14.12.1",
+    "stylelint-config-standard": "28.0.0",
+    "stylelint-config-standard-scss": "5.0.0"
   },
   "dependencies": {
-    "express": "^4.18.1"
+    "express": "4.18.1"
   }
 }

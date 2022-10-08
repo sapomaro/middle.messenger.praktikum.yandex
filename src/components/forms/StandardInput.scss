@@ -1,23 +1,29 @@
+@import "../layouts/colors.scss";
+
 .form__input__field_standard {
-	padding: 1rem 0 0.7rem 0;
-	margin-bottom: 0.25rem;
-	border-bottom: 1px solid #3369F3;
+  padding: 1rem 0 0.7rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid $main-color;
+}
+
+.form__input__field_error {
+  border-bottom: 1px solid $error-color;
 }
 
 .form__input__label {
-	position: absolute;
-	z-index: 1;
-	padding: 0.5rem 0;
-	color: #999;
+  position: absolute;
+  z-index: 1;
+  padding: 0.5rem 0;
+  color: #999;
 }
 
-.form__input__field_standard[value=""]+.form__input__label {
-	margin-top: -2.75rem;
-	font-size: 1rem;
-}
-.form__input__label, .form__input__field_standard:focus+.form__input__label {
-	margin-top: -4.15rem;
-	font-size: 0.75rem;
+.form__input__field_standard + .form__input__label,
+.form__input__field_standard:focus + .form__input__label {
+  margin-top: -4.15rem;
+  font-size: 0.75rem;
 }
 
-
+.form__input__field_standard[value=""]:not(:focus) + .form__input__label {
+  margin-top: -2.75rem;
+  font-size: 1rem;
+}
