@@ -1,21 +1,3 @@
-/*
-  SYNTAX:
-
-  ajax({
-    url: 'http://localhost:1234/'
-  })
-  .then(({response}) => {
-    console.log(response);
-  })
-  .catch(({error}) => {
-    console.warn(error);
-  })
-  .finally(() => {
-    console.log('job done');
-  });
-
-*/
-
 enum METHOD {
   GET = 'GET',
   POST = 'POST',
@@ -31,12 +13,12 @@ type InitOptions = {
   method?: METHOD;
   tries?: number;
   timeout?: number;
+  headers?: Record<string, string>;
   data?: Record<string, unknown>;
 }
 
 type Options = InitOptions & {
-  data?: unknown;
-  body?: unknown;
+  data?: Record<string, unknown>;
   successCallback: Fn;
   errorHandler: Fn;
 };
@@ -60,20 +42,10 @@ type State = InitOptions & {
 const ajaxRequest = function ajaxRequest(url: string,
     options: Options) {
   const xhr = new XMLHttpRequest();
-  const method: string = (typeof options.method === 'string') ?
-    options.method : METHOD.GET;
-  if (typeof options.tries === 'number') {
-    --options.tries;
-  } else {
-    options.tries = 0;
-  }
-  let data: Record<string, unknown> = {};
-  if (typeof options.body === 'object' && options.body !== null) {
-    data = options.body as Record<string, unknown>;
-  }
-  if (typeof options.data === 'object' && options.data !== null) {
-    data = options.data as Record<string, unknown>;
-  }
+  const method = (options.method ? options.method : METHOD.GET);
+  const tries = (options.tries ? --options.tries : 0);
+  const data = (options.data ? options.data : {});
+
   let urlParams = '';
   if (method === METHOD.GET) {
     try {
@@ -90,9 +62,15 @@ const ajaxRequest = function ajaxRequest(url: string,
   }
 
   xhr.open(method, url + urlParams, true);
+  xhr.timeout = (options.timeout ? options.timeout : 3000);
 
-  xhr.timeout = (typeof options.timeout === 'number') ?
-    options.timeout : 3000;
+  const headers = options.headers || {};
+  if (typeof data === 'object' && !headers['Content-Type']) {
+    headers['Content-Type'] = 'application/json; charset = UTF-8';
+  }
+  for (const [key, value] of Object.entries(headers)) {
+    xhr.setRequestHeader(key, value);
+  }
 
   if (options.method === 'GET' || !data) {
     xhr.send();
@@ -105,8 +83,6 @@ const ajaxRequest = function ajaxRequest(url: string,
       }
     }
   }
-
-  console.log(`${method} ${url + urlParams}`);
 
   xhr.onreadystatechange = (): void => {
     if (xhr.readyState === 4) {
@@ -124,7 +100,7 @@ const ajaxRequest = function ajaxRequest(url: string,
   };
 
   const handleError = (error: unknown): void => {
-    if (options.tries) {
+    if (tries) {
       ajaxRequest(url, options);
     } else {
       if (typeof options.errorHandler === 'function') {
@@ -135,6 +111,27 @@ const ajaxRequest = function ajaxRequest(url: string,
   xhr.onabort = handleError;
   xhr.onerror = handleError;
   xhr.ontimeout = handleError;
+/*
+  const parseResponseHeaders = (xhr) => {
+    const headers = {};
+
+    const headersString = xhr.getAllResponseHeaders();
+    
+    const headersArray = headersString.split('');
+    
+    let smcn = 0;
+    let crlf = 0;
+    let hdln = 0;
+    while(true) {
+      hdln = headersString.indexOf('\r\n', crlf);
+      smcn = headersString.indexOf(': ', crlf);
+      if (hdln === -1 || smcn === -1) { break; }
+      request.responseHeaders[headersString.slice(crlf, smcn)] = headersString.slice(smcn + 2, hdln);
+      crlf = hdln + 2;
+    }
+  };
+*/
+
   return xhr;
 };
 

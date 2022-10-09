@@ -3,7 +3,7 @@ import './ChatlistControls.scss';
 export const ChatlistControls = (): string => `
   <nav class="chatlist__controls">
     <div class="container__element container__element_right">
-      <span class="container__link container__link_grey">
+      <span class="container__link container__link_secondary">
         %{ProfileLink}%
       </span>
     </div>

@@ -3,13 +3,14 @@ import {Form} from '../components/forms/Form';
 import {StandardButton as Button} from '../components/forms/StandardButton';
 import {RowInput as Input} from '../components/forms/RowInput';
 import {RowLink as Link} from '../components/forms/RowLink';
-import {RoundButtonLink} from '../components/forms/RoundButtonLink';
-import {AvatarPic} from '../components/forms/Avatar';
+import {AvatarControl} from '../components/forms/AvatarControl';
+import {Popup} from '../components/Popup';
+import {RoundButtonLink} from '../components/RoundButtonLink';
 import {JSONWrapper} from '../modules/Utils';
 
 const view = new WideLayoutWithSidebar({
   title: 'Изменить данные',
-  Form, Button, Input, Link, AvatarPic,
+  Form, Button, Input, Link, AvatarControl, Popup,
 });
 
 view.props.contents = `%{ Form({ "name": "profile", "action": "" }) }%`;
@@ -41,7 +42,7 @@ for (const input of inputsData) {
 const inputs = JSONWrapper.stringify(inputsData);
 
 view.props.fieldset = () => `
-  %{ AvatarPic }%
+  %{ AvatarControl({"unclickable": true}) }%
   %{ Input(${inputs}...) }%
   <br><br><br>
   %{ Button({ "name": "submit", "type": "submit", "label": "Сохранить" }) }%

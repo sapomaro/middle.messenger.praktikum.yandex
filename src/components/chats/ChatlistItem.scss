@@ -1,4 +1,4 @@
-@import "../layouts/colors.scss";
+@import "../../constants/colors.scss";
 
 .chatlist__item {
   cursor: pointer;
@@ -13,7 +13,7 @@
   display: flex;
   padding: 1rem 0;
   margin: -2px 1.5rem 0;
-  border-top: 2px solid #eaeaea;
+  border-top: 2px solid $border-color;
 }
 
 .chatlist__item__avatar {
@@ -21,7 +21,7 @@
   height: 4rem;
   width: 4rem;
   border-radius: 50%;
-  background: #efefef;
+  background: $elem-bg;
 }
 
 .chatlist__item__text {
@@ -43,12 +43,12 @@
 }
 
 .chatlist__item__message__quote {
-  color: #999;
+  color: $note-color;
 }
 
 .chatlist__item__time {
   font-size: 0.75rem;
-  color: #999;
+  color: $note-color;
 }
 
 .chatlist__item__unreads {
@@ -56,7 +56,7 @@
   line-height: 2rem;
   border-radius: 50%;
   background: $main-color;
-  color: #fff;
+  color: $plain-color;
   text-align: center;
   display: flex;
   justify-content: center;

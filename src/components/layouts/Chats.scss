@@ -1,6 +1,8 @@
+@import "../../constants/colors.scss";
+
 .scrollable {
   scrollbar-width: thin;
-  scrollbar-color: #ccc #efefef;
+  scrollbar-color: $scrollbar-bg $border-color;
   height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
@@ -9,11 +11,11 @@
 .scrollable::-webkit-scrollbar {
   width: 5px;
   height: 5px;
-  background-color: #efefef;
+  background-color: $border-color;
 }
 
 .scrollable::-webkit-scrollbar-thumb {
-  background: #ccc;
+  background: $scrollbar-bg;
   border-radius: 5px;
 }
 
@@ -40,8 +42,8 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 1rem 0;
-  border-bottom: 2px solid #eaeaea;
-  background: #fff;
+  border-bottom: 2px solid $border-color;
+  background: $plain-color;
 }
 
 .chatbox__body {
@@ -63,6 +65,6 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 1rem 0;
-  border-top: 2px solid #eaeaea;
-  background: #fff;
+  border-top: 2px solid $border-color;
+  background: $plain-color;
 }

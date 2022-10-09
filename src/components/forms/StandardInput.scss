@@ -1,4 +1,4 @@
-@import "../layouts/colors.scss";
+@import "../../constants/colors.scss";
 
 .form__input__field_standard {
   padding: 1rem 0 0.7rem;
@@ -7,14 +7,14 @@
 }
 
 .form__input__field_error {
-  border-bottom: 1px solid $error-color;
+  border-bottom: 1px solid $danger-color;
 }
 
 .form__input__label {
   position: absolute;
   z-index: 1;
   padding: 0.5rem 0;
-  color: #999;
+  color: $note-color;
 }
 
 .form__input__field_standard + .form__input__label,

@@ -1,21 +1,19 @@
 import {ChatsLayout} from '../components/layouts/Chats';
 import {Link} from '../components/Link';
-import {Form} from '../components/forms/Form';
-import {StandardInput as Input} from '../components/forms/StandardInput';
-import {StandardButton as Button} from '../components/forms/StandardButton';
 import {ChatlistItem} from '../components/chats/ChatlistItem';
 import {ChatlistControls} from '../components/chats/ChatlistControls';
 import {ChatboxMessage} from '../components/chats/ChatboxMessage';
 import {ChatboxHeader} from '../components/chats/ChatboxHeader';
 import {ChatboxFooter} from '../components/chats/ChatboxFooter';
 import {ChatboxTextarea} from '../components/chats/ChatboxTextarea';
+import {AddUserPopup as Popup} from '../components/chats/AddUserPopup';
 import {JSONWrapper} from '../modules/Utils';
 
 const view = new ChatsLayout({
   title: 'Чаты',
   user: 'Собеседник',
-  Link, Form, Input, Button,
-  ChatlistItem, ChatlistControls,
+  Popup,
+  Link, ChatlistItem, ChatlistControls,
   ChatboxMessage, ChatboxHeader, ChatboxFooter, ChatboxTextarea,
 });
 
@@ -73,16 +71,5 @@ view.props.ChatboxBody = () => `
 
   %{ ChatboxMessage(${messages}...) }%
 `;
-
-view.props.popup = new Form({
-  name: 'addUser',
-  fieldset: () => `
-    <h1 class="container__header">Добавить пользователя</h1>
-    <br>
-    %{ Input({"name": "user", "label": "Логин"}) }%
-    <br>
-    %{ Button({"name": "add", "type": "submit", "label": "Добавить"}) }%
-  `,
-});
 
 export {view};

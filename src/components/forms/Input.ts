@@ -5,11 +5,11 @@ import {getValidationMessage} from './ValidationMessage';
 // имя поля для повторного ввода оканчивается на 2
 const repeatFieldNameSuffix = '2';
 
-type IncomingProps = {
+export type InputPropsType = {
   name: string;
   label?: string;
   value?: string;
-  type?: string;
+  type?: 'text' | 'password' | 'email' | 'tel' | 'number';
   placeholder?: string;
   error?: string;
   readonly?: boolean;
@@ -18,15 +18,17 @@ type IncomingProps = {
 type EventState = Record<string, Record<string, string>>;
 
 export class Input extends Block {
-  constructor(props: IncomingProps) {
+  constructor(props: InputPropsType) {
     super(props);
-    const self = this;
+    const self = this; // в событийных коллбэках ниже this = элементу, 
+                       // на который они вешаются
     this.setProps({
       value: props.value || props.placeholder || '',
       onFocus: function(event: Event): void {
-        if (self.props.value !== '' &&
-             (!self.props.placeholder ||
-              self.props.placeholder !== self.props.value)) {
+        const {value, placeholder} = self.props;
+        const valueNotEmpty = (value !== '');
+        const valueNotPlaceholder = (!placeholder || placeholder !== value);
+        if (valueNotEmpty && valueNotPlaceholder) {
           self.validate.call(self, event);
         }
         self.togglePlaceholder.call(self, event);
@@ -49,9 +51,9 @@ export class Input extends Block {
       }, 10);
     });
 
-
-    if (props.type === 'password' &&
-        props.name.slice(-1) === repeatFieldNameSuffix) {
+    const isPswdInput = (props.type === 'password');
+    const isRepeatPswdInput = (props.name.slice(-1) === repeatFieldNameSuffix);
+    if (isPswdInput && isRepeatPswdInput) {
       EventBus.on('passwordFieldChange', (password: string) => {
         this.props.value2 = password;
       });
@@ -75,7 +77,6 @@ export class Input extends Block {
     if (!messageField.nodeName || messageField.nodeName !== 'TEXTAREA') {
       return;
     }
-    // type of style??
     const style = window.getComputedStyle(messageField);
     const boxSizing: number = (style.boxSizing === 'border-box') ?
       parseInt(style.borderBottomWidth, 10) +

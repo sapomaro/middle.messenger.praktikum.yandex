@@ -212,7 +212,15 @@ export class Block {
     if (typeof asset === 'string') {
       elem = document.createTextNode(asset);
     } else if (typeof asset === 'function') {
-      elem = this.buildNode(asset as RenderFn);
+      const BlockConstructor = asset;
+      if (BlockConstructor.hasOwnProperty('prototype')) {
+//TS2351: This expression is not constructable.
+//Type 'Function' has no construct signatures.
+        const block = new BlockConstructor();
+        elem = block.build();
+      } else {
+        elem = this.buildNode(asset as RenderFn);
+      }
       this.traverseChildren(elem);
     } else if (typeof asset === 'object' && asset instanceof Block) {
       elem = asset.build();
@@ -259,9 +267,11 @@ export class Block {
       if (node.childNodes[i].nodeType === 1) {
         this.traverseAttributes(node.childNodes[i] as HTMLElement);
         this.traverseChildren(node.childNodes[i]);
-      } else if (node.childNodes[i].nodeType === 3 &&
-                 node instanceof HTMLElement &&
-                 node.tagName && node.tagName !== 'SCRIPT') {
+      } else if (node.childNodes[i].nodeType === 3) {
+        if (node instanceof HTMLElement &&
+            node.tagName && node.tagName === 'SCRIPT') {
+          continue;
+        }
         this.traverseText(node.childNodes[i]);
       }
     }

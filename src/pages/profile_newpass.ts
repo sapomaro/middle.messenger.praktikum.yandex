@@ -1,13 +1,14 @@
 import {WideLayoutWithSidebar} from '../components/layouts/Wide+Side';
 import {Form} from '../components/forms/Form';
 import {StandardButton as Button} from '../components/forms/StandardButton';
-import {RoundButtonLink} from '../components/forms/RoundButtonLink';
 import {RowInput as Input} from '../components/forms/RowInput';
-import {AvatarPic} from '../components/forms/Avatar';
+import {AvatarControl} from '../components/forms/AvatarControl';
+import {Popup} from '../components/Popup';
+import {RoundButtonLink} from '../components/RoundButtonLink';
 
 const view = new WideLayoutWithSidebar({
   title: 'Изменить пароль',
-  Form, Button, Input, AvatarPic,
+  Form, Button, Input, AvatarControl, Popup,
 });
 
 view.props.contents = `%{ Form({ "name": "changepassword",
@@ -16,7 +17,7 @@ view.props.contents = `%{ Form({ "name": "changepassword",
 view.props.BackButtonLink = new RoundButtonLink({url: 'profile.html'});
 
 view.props.fieldset = () => `
-  %{ AvatarPic }%
+  %{ AvatarControl({"unclickable": true}) }%
   %{ Input({
     "label": "Старый пароль", "name": "oldPassword", "type": "password",
     "placeholder": "********"

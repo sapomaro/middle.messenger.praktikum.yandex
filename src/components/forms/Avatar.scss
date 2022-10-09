@@ -1,9 +1,11 @@
+@import "../../constants/colors.scss";
+
 .form__avatar {
   width: 10rem;
   height: 10rem;
   display: flex;
   margin: 2rem auto;
-  background: #efefef url("/public/noavatar.png");
+  background: $elem-bg url("/public/noavatar.png");
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 50%;
@@ -17,7 +19,7 @@
   align-items: center;
   border-radius: 50%;
   background: rgba(0 0 0 / 50%);
-  color: #fff;
+  color: $plain-color;
   padding: 1rem;
   font-size: 1.1rem;
   text-align: center;

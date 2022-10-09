@@ -8,24 +8,20 @@ export class ChatsLayout extends Layout {
   }
   render(): string {
     return `
-      <div class="popup">
-        <div class="container container_narrow">
-          %{popup}%
-        </div>
-      </div>
+      %{Popup}% 
       <div class="root">
         <aside class="sidebar sidebar_chatlist scrollable">
-          %{ Chatlist }%
+          %{Chatlist}%
         </aside>
         <main class="container container_chatbox scrollable">
           <div class="chatbox__header">
-            %{ ChatboxHeader }%
+            %{ChatboxHeader}%
           </div>
           <div class="chatbox__body">
-            %{ ChatboxBody }%
+            %{ChatboxBody}%
           </div>
           <div class="chatbox__footer">
-            %{ ChatboxFooter }%
+            %{ChatboxFooter}%
           </div>
         </main>
       </div>
