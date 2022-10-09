@@ -69,67 +69,6 @@ const EventBus = {
   },
 };
 
-/*
-EventBus.listeners = {};
-
-EventBus.listEvents = function() {
-  events.split(/[, ]+/).forEach((eventType: string): void => {
-    if (!this.listeners[eventType]) {
-      this.listeners[eventType] = [];
-    }
-    action(eventType);
-  });
-};
-
-EventBus.on = function(events: string, callback: Fn): void {
-  this.listEvents(events, (eventType: string): void => {
-    this.listeners[eventType].push(callback);
-    if (eventType === 'init' || eventType === 'load') {
-      if (isDOMReady()) {
-        callback();
-        DOMLoaded = true;
-      }
-    }
-  });
-};
-
-EventBus.fire = function(events: string, ...args: unknown): void {
-  this.listEvents(events, (eventType: string): void => {
-    this.listeners[eventType].forEach((listener: Fn): void => {
-      listener(...args);
-    });
-  });
-};
-
-EventBus.off = function(events: string, callback: Fn): void {
-  this.listEvents(events, (eventType: string): void => {
-    this.listeners[eventType] = this.listeners[eventType]
-        .filter((listener: Fn) => (listener !== callback));
-  });
-};
-
-EventBus.init = function(): void {
-  if (isDOMReady()) {
-    this.fire('init, load');
-    DOMLoaded = true;
-  } else {
-    window.addEventListener('DOMContentLoaded', (): void => {
-      if (isDOMReady()) {
-        this.fire('init, load');
-        DOMLoaded = true;
-      }
-    });
-    window.addEventListener('load', (): void => {
-      if (!DOMLoaded) {
-        this.fire('init, load');
-        DOMLoaded = true;
-      }
-    });
-  }
-};
-*/
-
-
 EventBus.init();
 
 export {EventBus};

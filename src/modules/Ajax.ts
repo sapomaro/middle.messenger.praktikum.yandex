@@ -1,21 +1,3 @@
-/*
-  SYNTAX:
-
-  ajax({
-    url: 'http://localhost:1234/'
-  })
-  .then(({response}) => {
-    console.log(response);
-  })
-  .catch(({error}) => {
-    console.warn(error);
-  })
-  .finally(() => {
-    console.log('job done');
-  });
-
-*/
-
 enum METHOD {
   GET = 'GET',
   POST = 'POST',
@@ -31,12 +13,12 @@ type InitOptions = {
   method?: METHOD;
   tries?: number;
   timeout?: number;
+  headers?: Record<string, string>;
   data?: Record<string, unknown>;
 }
 
 type Options = InitOptions & {
-  data?: unknown;
-  body?: unknown;
+  data?: Record<string, unknown>;
   successCallback: Fn;
   errorHandler: Fn;
 };
@@ -53,89 +35,9 @@ type State = InitOptions & {
   finally: Handler;
   xhr?: XMLHttpRequest;
   options?: Record<string, unknown>;
-  response?: string;
+  responseText?: string;
+  responseHeaders?: Record<string, string>;
   error?: Error;
-};
-
-const ajaxRequest = function ajaxRequest(url: string,
-    options: Options) {
-  const xhr = new XMLHttpRequest();
-  const method: string = (typeof options.method === 'string') ?
-    options.method : METHOD.GET;
-  if (typeof options.tries === 'number') {
-    --options.tries;
-  } else {
-    options.tries = 0;
-  }
-  let data: Record<string, unknown> = {};
-  if (typeof options.body === 'object' && options.body !== null) {
-    data = options.body as Record<string, unknown>;
-  }
-  if (typeof options.data === 'object' && options.data !== null) {
-    data = options.data as Record<string, unknown>;
-  }
-  let urlParams = '';
-  if (method === METHOD.GET) {
-    try {
-      urlParams = '?' +
-        (new URLSearchParams(data as Record<string, string>)).toString();
-    } catch (error) {
-      if (typeof options.errorHandler === 'function') {
-        options.errorHandler(error);
-      }
-    }
-    if (urlParams === '?') {
-      urlParams = '';
-    }
-  }
-
-  xhr.open(method, url + urlParams, true);
-
-  xhr.timeout = (typeof options.timeout === 'number') ?
-    options.timeout : 3000;
-
-  if (options.method === 'GET' || !data) {
-    xhr.send();
-  } else {
-    try {
-      xhr.send(JSON.stringify(data));
-    } catch (error) {
-      if (typeof options.errorHandler === 'function') {
-        options.errorHandler(error);
-      }
-    }
-  }
-
-  console.log(`${method} ${url + urlParams}`);
-
-  xhr.onreadystatechange = (): void => {
-    if (xhr.readyState === 4) {
-      if (xhr.status >= 200 && xhr.status <= 299) {
-        const response = xhr.responseText.replace(/^\"|\"$/g, '');
-        if (typeof options.successCallback === 'function') {
-          options.successCallback(response);
-        }
-      } else if (xhr.status >= 400) {
-        if (typeof options.errorHandler === 'function') {
-          options.errorHandler({status: xhr.status});
-        }
-      }
-    }
-  };
-
-  const handleError = (error: unknown): void => {
-    if (options.tries) {
-      ajaxRequest(url, options);
-    } else {
-      if (typeof options.errorHandler === 'function') {
-        options.errorHandler(error);
-      }
-    }
-  };
-  xhr.onabort = handleError;
-  xhr.onerror = handleError;
-  xhr.ontimeout = handleError;
-  return xhr;
 };
 
 const ajax = function(options: InitOptions): State {
@@ -192,8 +94,9 @@ const ajax = function(options: InitOptions): State {
   try {
     request.xhr = ajaxRequest(request.url ?? '', {
       ...(request.options || {}),
-      successCallback: (response: string): void => {
-        request.response = response;
+      successCallback: ({responseText, responseHeaders}): void => {
+        request.responseText = responseText;
+        request.responseHeaders = responseHeaders;
         request.then.trigger();
       },
       errorHandler: (error: Error): void => {
@@ -220,6 +123,96 @@ ajax.put = (url: string, data?: Record<string, unknown>): State => {
 };
 ajax.delete = (url: string, data?: Record<string, unknown>): State => {
   return ajax({url, method: METHOD.DELETE, data});
+};
+
+const ajaxRequest = function ajaxRequest(url: string,
+    options: Options) {
+  const xhr = new XMLHttpRequest();
+  const method = (options.method ? options.method : METHOD.GET);
+  const tries = (options.tries ? --options.tries : 0);
+  const data = (options.data ? options.data : {});
+  const urlParams = (method === METHOD.GET ? getUrlParams(data) : '');
+
+  xhr.open(method, url + urlParams, true);
+  xhr.timeout = (options.timeout ? options.timeout : 3000);
+
+  const headers = options.headers || {};
+  if (typeof data === 'object' && !headers['Content-Type']) {
+    headers['Content-Type'] = 'application/json; charset = UTF-8';
+  }
+  for (const [key, value] of Object.entries(headers)) {
+    xhr.setRequestHeader(key, value);
+  }
+
+  const handleError = (error: unknown): void => {
+    if (tries) {
+      ajaxRequest(url, options);
+    } else {
+      if (typeof options.errorHandler === 'function') {
+        options.errorHandler(error);
+      }
+    }
+  };
+
+  if (options.method === METHOD.GET || !data) {
+    xhr.send();
+  } else {
+    try {
+      xhr.send(JSON.stringify(data));
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  xhr.onreadystatechange = (): void => {
+    if (xhr.readyState === 4) {
+      const responseHeaders = getResponseHeaders(xhr);
+      if (xhr.status >= 200 && xhr.status <= 299) {
+        const responseText = xhr.responseText.replace(/^\"|\"$/g, '');
+        if (typeof options.successCallback === 'function') {
+          options.successCallback({responseText, responseHeaders});
+        }
+      } else if (xhr.status >= 400) {
+        if (typeof options.errorHandler === 'function') {
+          options.errorHandler({responseHeaders, status: xhr.status});
+        }
+      }
+    }
+  };
+  xhr.onabort = handleError;
+  xhr.onerror = handleError;
+  xhr.ontimeout = handleError;
+
+  return xhr;
+};
+
+const getUrlParams = (data: Record<string, unknown>) => {
+  const urlData: Record<string, string> = {};
+  for (const [key, value] of Object.entries(data)) {
+    if (typeof value !== 'string' ||
+        typeof value !== 'number' ||
+        typeof value !== 'boolean') {
+      continue;
+    }
+    urlData[key] = value;
+  }
+  let urlParams = '?';
+  urlParams += (new URLSearchParams(urlData)).toString();
+  if (urlParams === '?') {
+    urlParams = '';
+  }
+  return urlParams;
+};
+
+const getResponseHeaders = (xhr: XMLHttpRequest) => {
+  const headers: Record<string, string> = {};
+  const headersString = xhr.getAllResponseHeaders();
+  const headersList = headersString.trim().split('\r\n');
+  for (const header of headersList) {
+    const [key, value] = header.split(': ');
+    headers[key] = value;
+  }
+  return headers;
 };
 
 export {ajax};

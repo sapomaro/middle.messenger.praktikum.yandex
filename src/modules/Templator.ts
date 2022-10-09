@@ -18,18 +18,22 @@ export class Templator {
   }
 
   resolveVariable(pattern: string): unknown {
-    let context: unknown = this.context;
+    let currentContext: unknown = this.context;
     const props = pattern.split('.');
-    for (let i = 0; i < props.length; ++i) {
-      if (context !== null &&
-          (typeof context === 'object' || typeof context === 'function') &&
-          props[i] in context) {
-        context = context[props[i] as keyof typeof context];
-      } else {
+    for (const key of props) {
+      if (currentContext === null) {
         return null;
       }
+      if (typeof currentContext !== 'object' &&
+          typeof currentContext !== 'function') {
+        return null;
+      }
+      if (!(key in currentContext)) {
+        return null;
+      }
+      currentContext = currentContext[key as keyof typeof currentContext];
     }
-    return context;
+    return currentContext;
   }
 
   resolveSubPattern(pattern: string): unknown | null {
@@ -39,10 +43,9 @@ export class Templator {
     this.PP_SUBPATTERN_JSONFUNC.lastIndex = 0;
     if (matches = this.PP_SUBPATTERN_JSONFUNC.exec(pattern)) {
       const blockName = matches[1];
-      // cleans up the mess from Parcel:
       const jsonStr = matches[2]
           .replace(/([{,"])\s*(\\[\\tn]+)\s*([},"])/g, '$1 $3')
-          .replace(/&quot;/ig, '"');
+          .replace(/&quot;/ig, '"'); // чистит пакости Парсела
       const unwrapRule = matches[3];
       let jsonObj: AnyObj = JSONWrapper.parse(jsonStr);
 
@@ -54,9 +57,9 @@ export class Templator {
         }
         for (const item of jsonObj) {
           let asset: AnyObj | string;
-          if (Block.hasOwnProperty('prototype')) { // normal function or class
+          if (Block.hasOwnProperty('prototype')) { // обычная функция/класс
             asset = new Block(item);
-          } else { // arrow function
+          } else { // стрелочная функция
             asset = context[blockName as keyof AnyContext](item);
           }
           if (typeof asset === 'object') {
@@ -71,30 +74,6 @@ export class Templator {
       }
     } else {
       return this.resolveVariable(pattern);
-    }
-    return null;
-  }
-
-  resolveString(str: string): string | null { // for plain text nodes
-    this.PP_PATTERN.lastIndex = 0;
-    if (!this.PP_PATTERN.test(str)) {
-      return null;
-    }
-    let matches: Array<string> | null;
-    let asset: unknown;
-    const old: string = str;
-    this.PP_PATTERN.lastIndex = 0;
-    while (matches = this.PP_PATTERN.exec(str)) {
-      asset = this.resolveVariable(matches[1].trim());
-      if (asset !== null && typeof asset === 'string') {
-        str = str.replace(matches[0], asset);
-        // subtract pattern length to start next exec from new insertion
-        // allows resolving nested patterns
-        this.PP_PATTERN.lastIndex -= matches[0].length;
-      }
-    }
-    if (str !== old) {
-      return str;
     }
     return null;
   }
@@ -163,4 +142,3 @@ export class Templator {
     }
   }
 }
-

@@ -1,22 +1,12 @@
 import './StandardInput.scss';
 
-import {Input} from './Input';
-
-type IncomingProps = {
-  name: string;
-  label: string;
-  value?: string;
-  type?: string;
-  placeholder?: string;
-  error?: string;
-  readonly?: boolean;
-}
+import {Input, InputPropsType} from './Input';
 
 export class StandardInput extends Input {
-  constructor(props: IncomingProps) {
+  constructor(props: InputPropsType) {
     super(props);
   }
-  render(props: IncomingProps): string {
+  render(props: InputPropsType): string {
     return `
       <div class="container__element">
         <input name="${props.name}" type="${props.type || 'text'}"

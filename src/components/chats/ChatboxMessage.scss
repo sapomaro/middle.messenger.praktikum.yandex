@@ -1,8 +1,8 @@
-@import "../layouts/colors.scss";
+@import "../../constants/colors.scss";
 
 .chatbox__date {
   margin: 2rem 0;
-  color: #999;
+  color: $note-color;
   text-align: center;
 }
 
@@ -15,7 +15,7 @@
 
 .chatbox__message_inc {
   align-self: flex-start;
-  background: #f8f8f8;
+  background: $subelem-bg;
   border-top-left-radius: 0;
 }
 
@@ -36,7 +36,7 @@
 }
 
 .chatbox__message_inc .chatbox__message__info {
-  color: #999;
+  color: $note-color;
 }
 
 .chatbox__message_out .chatbox__message__info {

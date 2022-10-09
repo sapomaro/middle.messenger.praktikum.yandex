@@ -3,19 +3,17 @@ import {Form} from '../components/forms/Form';
 import {StandardButton as Button} from '../components/forms/StandardButton';
 import {RowInput as Input} from '../components/forms/RowInput';
 import {RowLink} from '../components/forms/RowLink';
-import {RoundButtonLink} from '../components/forms/RoundButtonLink';
-import {AvatarControl, AvatarPopup} from '../components/forms/Avatar';
+import {AvatarControl} from '../components/forms/AvatarControl';
+import {AvatarPopup as Popup} from '../components/forms/AvatarPopup';
+import {RoundButtonLink} from '../components/RoundButtonLink';
 import {JSONWrapper} from '../modules/Utils';
 
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
-  Form, Button, Input, RowLink, AvatarControl, AvatarPopup,
+  Popup, AvatarControl,
+  Form, Button, Input, RowLink,
+  BackButtonLink: new RoundButtonLink({url: 'chats.html'}),
 });
-
-view.props.popup = AvatarPopup;
-view.props.contents = `%{ Form({ "name": "profile", "action": "" }) }%`;
-
-view.props.BackButtonLink = new RoundButtonLink({url: 'chats.html'});
 
 const userData = {
   email: 'pochta@yandex.ru',
@@ -48,16 +46,20 @@ for (const input of inputsData) {
 
 const inputs = JSONWrapper.stringify(inputsData);
 
-view.props.fieldset = () => `
-  %{ AvatarControl }%
-  <h1 class="container__header">${userData.first_name}</h1>
-  %{ Input(${inputs}...) }%
-  <br><br><br>
-  %{ RowLink({"url": "profile_edit.html", "label": "Изменить данные"}) }%
-  %{ RowLink({"url": "profile_newpass.html", "label": "Изменить пароль"}) }%
-  %{ RowLink({"url": "auth.html", "label": "Выйти",
-              "style": "container__link_red"}) }%
-  <br><br>
-`;
+view.props.contents = new Form({
+  name: 'profile',
+  action: '',
+  fieldset: () => `
+    %{ AvatarControl }%
+    <h1 class="container__header">${userData.first_name}</h1>
+    %{ Input(${inputs}...) }%
+    <br><br><br>
+    %{ RowLink({"url": "profile_edit.html", "label": "Изменить данные"}) }%
+    %{ RowLink({"url": "profile_newpass.html", "label": "Изменить пароль"}) }%
+    %{ RowLink({"url": "auth.html", "label": "Выйти",
+                "style": "container__link_danger"}) }%
+    <br><br>
+  `,
+});
 
 export {view};

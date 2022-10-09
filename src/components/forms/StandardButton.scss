@@ -1,11 +1,11 @@
-@import "../layouts/colors.scss";
+@import "../../constants/colors.scss";
 
 .form__button_standard {
   display: inline-block;
   width: 100%;
   max-width: 23rem;
   font-size: 1.2rem;
-  color: #fff;
+  color: $plain-color;
   background: $main-color;
   border-radius: 0.8rem;
 

@@ -5,6 +5,7 @@ import {Block} from '../../modules/Block';
 type IncomingProps = {
   name: string;
   action?: string;
+  method?: 'GET' | 'PUT' | 'POST' | 'DELETE';
   fieldset?: () => string;
 }
 
@@ -16,11 +17,7 @@ export class Form extends Block {
     this.setProps({
       onSubmit: (event: Event) => {
         event.preventDefault();
-        // @ts-ignore: TS7015: Element implicitly has an 'any' type
-        // because index expression is not of type 'number'.
-        // Что ему не нравится? document.forms работает не только по number,
-        // но и по string, плюс сделаны все необходимые проверки
-        const form: unknown = document.forms[props.name];
+        const form = document.forms.namedItem(props.name);
         if (typeof form !== 'object' || !(form instanceof HTMLFormElement)) {
           return false;
         }
@@ -31,7 +28,7 @@ export class Form extends Block {
         }
         const state: EventState = {errorMsgs: {}};
         this.listDescendants((block: Block) => {
-          block.fire('submit', event, state);
+          block.fire('submit', event, state); // для валидации инпутов формы
         });
 
         if (Object.keys(state.errorMsgs).length === 0) {

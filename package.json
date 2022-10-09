@@ -7,9 +7,9 @@
     "build": "parcel build ./src/pages/*.html --dist-dir ./dist/",
     "start": "npm run build && node ./server.js",
     "tscheck": "npx tsc --noEmit",
-    "tslint": "npx eslint \"./src/**/*.ts\" --ext .ts",
+    "eslint": "npx eslint \"./src/**/*.ts\" --ext .ts",
     "csslint": "npx stylelint \"./src/**/*.scss\"",
-    "lint": "npm run tscheck && npm run tslint && npm run csslint"
+    "lint": "npm run tscheck && npm run eslint && npm run csslint"
   },
   "targets": {
     "default": {

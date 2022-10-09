@@ -1,4 +1,4 @@
-@import "../layouts/colors.scss";
+@import "../../constants/colors.scss";
 
 .form {
   width: inherit;
@@ -37,7 +37,7 @@
 
 .form__input__error {
   font-size: 0.75rem;
-  color: $error-color;
+  color: $danger-color;
 }
 
 .form__element_hidden {

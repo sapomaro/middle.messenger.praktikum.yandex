@@ -2,14 +2,11 @@ import {EventBus} from '../../modules/EventBus';
 import {Block} from '../../modules/Block';
 import {getValidationMessage} from './ValidationMessage';
 
-// имя поля для повторного ввода оканчивается на 2
-const repeatFieldNameSuffix = '2';
-
-type IncomingProps = {
+export type InputPropsType = {
   name: string;
   label?: string;
   value?: string;
-  type?: string;
+  type?: 'text' | 'password' | 'email' | 'tel' | 'number';
   placeholder?: string;
   error?: string;
   readonly?: boolean;
@@ -18,15 +15,14 @@ type IncomingProps = {
 type EventState = Record<string, Record<string, string>>;
 
 export class Input extends Block {
-  constructor(props: IncomingProps) {
+  constructor(props: InputPropsType) {
     super(props);
-    const self = this;
+    const self = this; /* потому что в событийных коллбэках ниже
+                          this = элементу, на который они вешаются */
     this.setProps({
       value: props.value || props.placeholder || '',
       onFocus: function(event: Event): void {
-        if (self.props.value !== '' &&
-             (!self.props.placeholder ||
-              self.props.placeholder !== self.props.value)) {
+        if (self.hasActualValue) {
           self.validate.call(self, event);
         }
         self.togglePlaceholder.call(self, event);
@@ -36,7 +32,8 @@ export class Input extends Block {
         self.togglePlaceholder.call(self, event);
       },
       onInput: function(): void {
-        this.setAttribute('value', this.value);
+        this.setAttribute('value', this.value); /* для правильного отображения
+                                                   лейблов на инпутах */
         self.props.value = this.value;
         self.autoResize(this);
       },
@@ -49,12 +46,54 @@ export class Input extends Block {
       }, 10);
     });
 
-
-    if (props.type === 'password' &&
-        props.name.slice(-1) === repeatFieldNameSuffix) {
+    if (this.isPasswordInput && this.isRepeatInput) {
       EventBus.on('passwordFieldChange', (password: string) => {
         this.props.value2 = password;
       });
+    }
+  }
+
+  get hasActualValue() {
+    const {value, placeholder} = this.props;
+    const valueNotEmpty = (value && value !== '');
+    const valueNotPlaceholder = (!placeholder || placeholder !== value);
+    if (valueNotEmpty && valueNotPlaceholder) {
+      return true;
+    }
+    return false;
+  }
+
+  get isPasswordInput() {
+    return (this.props.type && this.props.type === 'password');
+  }
+  get isRepeatInput() {
+    // имя поля для повторного ввода оканчивается на 2
+    const repeatFieldNameSuffix = '2';
+    return (typeof this.props.name === 'string' &&
+      this.props.name.slice(-1) === repeatFieldNameSuffix);
+  }
+
+  validate(event: Event, state: EventState) {
+    if (this.isPasswordInput && !this.isRepeatInput) {
+      EventBus.fire('passwordFieldChange', this.props.value);
+    }
+    let actualValue = '';
+    if (this.hasActualValue && typeof this.props.value === 'string') {
+      actualValue = this.props.value;
+    }
+    const msg: string | null = getValidationMessage({
+      ...this.props,
+      value: actualValue,
+    });
+    if (msg && typeof this.props.name === 'string') {
+      this.setProps({error: msg});
+      if (state && typeof state.errorMsgs === 'object' &&
+          state.errorMsgs !== null) {
+        state.errorMsgs[this.props.name] = msg;
+      }
+      event.preventDefault();
+    } else if (this.props.error) {
+      this.setProps({error: null});
     }
   }
 
@@ -71,49 +110,17 @@ export class Input extends Block {
     }
   }
 
-  autoResize(messageField: HTMLTextAreaElement) {
-    if (!messageField.nodeName || messageField.nodeName !== 'TEXTAREA') {
+  autoResize(textarea: HTMLTextAreaElement) {
+    if (!textarea.nodeName || textarea.nodeName !== 'TEXTAREA') {
       return;
     }
-    // type of style??
-    const style = window.getComputedStyle(messageField);
+    const style = window.getComputedStyle(textarea);
     const boxSizing: number = (style.boxSizing === 'border-box') ?
       parseInt(style.borderBottomWidth, 10) +
       parseInt(style.borderTopWidth, 10) : 0;
 
-    messageField.style.overflowY = 'hidden';
-    messageField.style.height = 'auto';
-    messageField.style.height = (messageField.scrollHeight + boxSizing) + 'px';
-  }
-
-  validate(event: Event, state: EventState) {
-    if (this.props.type === 'password' &&
-        typeof this.props.name === 'string' &&
-        this.props.name.slice(-1) !== repeatFieldNameSuffix) {
-      EventBus.fire('passwordFieldChange', this.props.value);
-    }
-    let actualValue = '';
-    if (typeof this.props.value === 'string') {
-      if (typeof this.props.placeholder !== 'undefined' &&
-          this.props.placeholder === this.props.value) {
-        actualValue = '';
-      } else {
-        actualValue = this.props.value;
-      }
-    }
-    const msg: string | null = getValidationMessage({
-      ...this.props,
-      value: actualValue,
-    });
-    if (msg && typeof this.props.name === 'string') {
-      this.setProps({error: msg});
-      if (state && typeof state.errorMsgs === 'object' &&
-          state.errorMsgs !== null) {
-        state.errorMsgs[this.props.name] = msg;
-      }
-      event.preventDefault();
-    } else if (this.props.error) {
-      this.setProps({error: null});
-    }
+    textarea.style.overflowY = 'hidden';
+    textarea.style.height = 'auto';
+    textarea.style.height = (textarea.scrollHeight + boxSizing) + 'px';
   }
 }

@@ -1,3 +1,5 @@
+@import "../../constants/colors.scss";
+
 .chatbox__send__textarea {
   box-sizing: border-box;
   min-height: 3rem;
@@ -10,10 +12,10 @@
   resize: none;
   overflow: hidden;
   font: inherit;
-  background: #efefef;
-  color: #999;
+  background: $elem-bg;
+  color: $note-color;
 
   &:focus {
-    color: #000;
+    color: $text-color;
   }
 }
