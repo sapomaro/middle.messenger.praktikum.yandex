@@ -6,7 +6,10 @@
 
 Ссылка на собранную рабочую версию на Netlify: https://cheery-pothos-620783.netlify.app/
 
-Ссылка на текущий пулл-реквест из второго спринта в главную ветку: https://github.com/sapomaro/middle.messenger.praktikum.yandex/pull/13
+Ссылка на текущий пулл-реквест в главную ветку по итогам второго спринта: https://github.com/sapomaro/middle.messenger.praktikum.yandex/pull/13
+
+Ссылка на прошлую попытку пулл-реквеста во втором спринте:
+https://github.com/sapomaro/middle.messenger.praktikum.yandex/pull/10
 
 ## Команды
 
