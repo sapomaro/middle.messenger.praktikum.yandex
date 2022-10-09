@@ -11,7 +11,7 @@ const generateUid = () => {
   do {
     num = rand(1, 99999);
     num2 = rand(1, 99999);
-    uid = `pp_${num}_${num2}_uid`;
+    uid = `id_${num}_${num2}_`;
   } while (uids[uid]);
   uids[uid] = true;
   return uid;
@@ -95,7 +95,7 @@ export class Block {
     // self = this;
     const forbiddenCheck = (prop: string): void => {
       if (prop.indexOf('_') === 0) {
-        throw new Error('Нет прав');
+        throw new Error('Нельзя использовать _');
       }
     };
     return new Proxy(props as Props, {
@@ -107,9 +107,9 @@ export class Block {
         forbiddenCheck(prop);
         if (target[prop] !== value) {
           target[prop] = value;
+          // self.fire(Block.EVENTS.UPDATE);
           // Для реактивности используется метод setProps(),
           // чтобы избежать слишком частых перерисовок
-          // self.fire(Block.EVENTS.UPDATE);
         }
         return true;
       },
@@ -147,15 +147,16 @@ export class Block {
       return;
     }
     for (const node of elementNodes) {
-      if (node instanceof HTMLElement) {
-        const nestedElementNodes = node.querySelectorAll('[data-blockuid]');
-        for (const nestedNode of nestedElementNodes) {
-          if (nestedNode instanceof HTMLElement &&
-              nestedNode.dataset && nestedNode.dataset.blockuid) {
-            const block: Block = instancesOfBlock[nestedNode.dataset.blockuid];
-            if (block) {
-              callback(block);
-            }
+      if (!(node instanceof HTMLElement)) {
+        continue;
+      }
+      const nestedElementNodes = node.querySelectorAll('[data-blockuid]');
+      for (const nestedNode of nestedElementNodes) {
+        if (nestedNode instanceof HTMLElement &&
+            nestedNode.dataset && nestedNode.dataset.blockuid) {
+          const block: Block = instancesOfBlock[nestedNode.dataset.blockuid];
+          if (block) {
+            callback(block);
           }
         }
       }
@@ -170,7 +171,7 @@ export class Block {
             node.setAttribute('data-blockuid', this.blockuid);
           }
         });
-    // traverse using local context of the block
+    // поиск шаблонов для замены на локальные пропсы
     this.traverseChildren(this.element);
     this.fire(Block.EVENTS.RENDER);
     return this.element;
@@ -212,24 +213,25 @@ export class Block {
     if (typeof asset === 'string') {
       elem = document.createTextNode(asset);
     } else if (typeof asset === 'function') {
-      const BlockConstructor = asset;
-      if (BlockConstructor.hasOwnProperty('prototype')) {
-//TS2351: This expression is not constructable.
-//Type 'Function' has no construct signatures.
-        const block = new BlockConstructor();
-        elem = block.build();
+      if (asset.hasOwnProperty('prototype')) {
+        // const block = new asset();
+        const block = new (asset as new() => typeof asset)() as {
+          (): void;
+          build: () => BlockNodes;
+        }; // Typescript...
+        if (typeof block.build === 'function') {
+          elem = block.build();
+        }
       } else {
         elem = this.buildNode(asset as RenderFn);
       }
-      this.traverseChildren(elem);
     } else if (typeof asset === 'object' && asset instanceof Block) {
       elem = asset.build();
-      // traverse using context of the parent
-      this.traverseChildren(elem);
     } else if (typeof asset === 'object' && asset instanceof HTMLElement) {
       elem = asset;
-      this.traverseChildren(elem);
     }
+    // поиск шаблонов для замены на пропсы родителя
+    this.traverseChildren(elem);
     return elem;
   }
 
@@ -303,7 +305,7 @@ export class Block {
     EventBus.on('load', () => {
       document.body.innerHTML = '';
       const elem = this.build();
-      // traverse using global context of the app
+      // поиск шаблонов для замены на глобальрные пропсы
       this.traverseChildren(elem);
       document.body.appendChild(elem);
       this.fire(Block.EVENTS.MOUNT);

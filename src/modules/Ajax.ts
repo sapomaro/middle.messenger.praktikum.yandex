@@ -192,7 +192,7 @@ const getUrlParams = (data: Record<string, unknown>) => {
     if (typeof value !== 'string' ||
         typeof value !== 'number' ||
         typeof value !== 'boolean') {
-      continue; 
+      continue;
     }
     urlData[key] = value;
   }

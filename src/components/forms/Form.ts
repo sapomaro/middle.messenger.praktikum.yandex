@@ -4,7 +4,8 @@ import {Block} from '../../modules/Block';
 
 type IncomingProps = {
   name: string;
-  action?: 'GET' | 'PUT' | 'POST' | 'DELETE';
+  action?: string;
+  method?: 'GET' | 'PUT' | 'POST' | 'DELETE';
   fieldset?: () => string;
 }
 
@@ -27,7 +28,7 @@ export class Form extends Block {
         }
         const state: EventState = {errorMsgs: {}};
         this.listDescendants((block: Block) => {
-          block.fire('submit', event, state);
+          block.fire('submit', event, state); // для валидации инпутов формы
         });
 
         if (Object.keys(state.errorMsgs).length === 0) {

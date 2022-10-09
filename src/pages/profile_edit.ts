@@ -11,11 +11,8 @@ import {JSONWrapper} from '../modules/Utils';
 const view = new WideLayoutWithSidebar({
   title: 'Изменить данные',
   Form, Button, Input, Link, AvatarControl, Popup,
+  BackButtonLink: new RoundButtonLink({url: 'profile.html'}),
 });
-
-view.props.contents = `%{ Form({ "name": "profile", "action": "" }) }%`;
-
-view.props.BackButtonLink = new RoundButtonLink({url: 'profile.html'});
 
 const userData: Record<string, string> = {
   email: 'pochta@yandex.ru',
@@ -38,15 +35,18 @@ const inputsData: Array<Record<string, string>> = [
 for (const input of inputsData) {
   input.value = userData[input.name];
 }
-
 const inputs = JSONWrapper.stringify(inputsData);
 
-view.props.fieldset = () => `
-  %{ AvatarControl({"unclickable": true}) }%
-  %{ Input(${inputs}...) }%
-  <br><br><br>
-  %{ Button({ "name": "submit", "type": "submit", "label": "Сохранить" }) }%
-  <br><br>
-`;
+view.props.contents = new Form({
+  name: 'profile',
+  action: '',
+  fieldset: () => `
+    %{ AvatarControl({"unclickable": true}) }%
+    %{ Input(${inputs}...) }%
+    <br><br><br>
+    %{ Button({ "name": "submit", "type": "submit", "label": "Сохранить" }) }%
+    <br><br>
+  `,
+});
 
 export {view};

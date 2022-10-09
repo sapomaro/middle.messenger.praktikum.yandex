@@ -1,8 +1,26 @@
 import './ChatboxControls.scss';
 
+import {Block} from '../../modules/Block';
 import {Form} from '../forms/Form';
+import {ChatboxTextarea} from './ChatboxTextarea';
 
-const ChatboxFooterChildren = (): string => `
+export class ChatboxFooter extends Block {
+  constructor() {
+    super();
+    this.setProps({
+      content: new Form({
+        name: 'msg',
+        fieldset: ChatboxFooterChildren,
+      }),
+      ChatboxTextarea,
+    });
+  }
+  render() {
+    return `%{content}%`;
+  }
+}
+
+const ChatboxFooterChildren = () => `
   <label class="chatbox__footer__control__wrapper">
     <input type="checkbox" 
       class="chatbox__dropdown__toggle chatbox__element_hidden">
@@ -24,7 +42,7 @@ const ChatboxFooterChildren = (): string => `
       </span>
     </span>
   </label>
-  
+
   %{ ChatboxTextarea({"name": "message", "placeholder": "Сообщение..."}) }%
 
   <button type="submit" 
@@ -33,8 +51,3 @@ const ChatboxFooterChildren = (): string => `
       ➜
   </button>
 `;
-
-export const ChatboxFooter = new Form({
-  name: 'msg',
-  fieldset: ChatboxFooterChildren,
-});

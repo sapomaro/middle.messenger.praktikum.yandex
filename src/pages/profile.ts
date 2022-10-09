@@ -12,11 +12,8 @@ const view = new WideLayoutWithSidebar({
   title: 'Профиль',
   Popup, AvatarControl,
   Form, Button, Input, RowLink,
+  BackButtonLink: new RoundButtonLink({url: 'chats.html'}),
 });
-
-view.props.contents = `%{ Form({ "name": "profile", "action": "" }) }%`;
-
-view.props.BackButtonLink = new RoundButtonLink({url: 'chats.html'});
 
 const userData = {
   email: 'pochta@yandex.ru',
@@ -49,16 +46,20 @@ for (const input of inputsData) {
 
 const inputs = JSONWrapper.stringify(inputsData);
 
-view.props.fieldset = () => `
-  %{ AvatarControl }%
-  <h1 class="container__header">${userData.first_name}</h1>
-  %{ Input(${inputs}...) }%
-  <br><br><br>
-  %{ RowLink({"url": "profile_edit.html", "label": "Изменить данные"}) }%
-  %{ RowLink({"url": "profile_newpass.html", "label": "Изменить пароль"}) }%
-  %{ RowLink({"url": "auth.html", "label": "Выйти",
-              "style": "container__link_danger"}) }%
-  <br><br>
-`;
+view.props.contents = new Form({
+  name: 'profile',
+  action: '',
+  fieldset: () => `
+    %{ AvatarControl }%
+    <h1 class="container__header">${userData.first_name}</h1>
+    %{ Input(${inputs}...) }%
+    <br><br><br>
+    %{ RowLink({"url": "profile_edit.html", "label": "Изменить данные"}) }%
+    %{ RowLink({"url": "profile_newpass.html", "label": "Изменить пароль"}) }%
+    %{ RowLink({"url": "auth.html", "label": "Выйти",
+                "style": "container__link_danger"}) }%
+    <br><br>
+  `,
+});
 
 export {view};

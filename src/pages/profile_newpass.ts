@@ -9,31 +9,31 @@ import {RoundButtonLink} from '../components/RoundButtonLink';
 const view = new WideLayoutWithSidebar({
   title: 'Изменить пароль',
   Form, Button, Input, AvatarControl, Popup,
+  BackButtonLink: new RoundButtonLink({url: 'profile.html'}),
 });
 
-view.props.contents = `%{ Form({ "name": "changepassword",
-                                 "action": "profile.html" }) }%`;
-
-view.props.BackButtonLink = new RoundButtonLink({url: 'profile.html'});
-
-view.props.fieldset = () => `
-  %{ AvatarControl({"unclickable": true}) }%
-  %{ Input({
-    "label": "Старый пароль", "name": "oldPassword", "type": "password",
-    "placeholder": "********"
-  }) }%
-  %{ Input({
-    "label": "Новый пароль", "name": "newPassword", "type": "password",
-    "placeholder": "********"
-  }) }%
-  %{ Input({
-    "label": "Повторите новый пароль", "name": "newPassword2",
-    "type": "password",
-    "placeholder": "********"
-  }) }%
-  <br><br><br>
-  %{ Button({ "name": "submit", "type": "submit", "label": "Сохранить" }) }%
-  <br><br>
-`;
+view.props.contents = new Form({
+  name: 'changepassword',
+  action: 'profile.html',
+  fieldset: () => `
+    %{ AvatarControl({"unclickable": true}) }%
+    %{ Input({
+      "label": "Старый пароль", "name": "oldPassword", "type": "password",
+      "placeholder": "********"
+    }) }%
+    %{ Input({
+      "label": "Новый пароль", "name": "newPassword", "type": "password",
+      "placeholder": "********"
+    }) }%
+    %{ Input({
+      "label": "Повторите новый пароль", "name": "newPassword2",
+      "type": "password",
+      "placeholder": "********"
+    }) }%
+    <br><br><br>
+    %{ Button({ "name": "submit", "type": "submit", "label": "Сохранить" }) }%
+    <br><br>
+  `,
+});
 
 export {view};

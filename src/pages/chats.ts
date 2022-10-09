@@ -1,11 +1,9 @@
 import {ChatsLayout} from '../components/layouts/Chats';
-import {Link} from '../components/Link';
 import {ChatlistItem} from '../components/chats/ChatlistItem';
 import {ChatlistControls} from '../components/chats/ChatlistControls';
 import {ChatboxMessage} from '../components/chats/ChatboxMessage';
 import {ChatboxHeader} from '../components/chats/ChatboxHeader';
 import {ChatboxFooter} from '../components/chats/ChatboxFooter';
-import {ChatboxTextarea} from '../components/chats/ChatboxTextarea';
 import {AddUserPopup as Popup} from '../components/chats/AddUserPopup';
 import {JSONWrapper} from '../modules/Utils';
 
@@ -13,8 +11,8 @@ const view = new ChatsLayout({
   title: 'Чаты',
   user: 'Собеседник',
   Popup,
-  Link, ChatlistItem, ChatlistControls,
-  ChatboxMessage, ChatboxHeader, ChatboxFooter, ChatboxTextarea,
+  ChatlistControls, ChatlistItem,
+  ChatboxHeader, ChatboxFooter, ChatboxMessage,
 });
 
 const chats = JSONWrapper.stringify([
@@ -60,11 +58,6 @@ view.props.Chatlist = () => `
     %{ ChatlistItem(${chats}...) }%
   </ul>
 `;
-
-view.props.ProfileLink = new Link({
-  url: 'profile.html',
-  label: 'Профиль&ensp;<small>❯</small>',
-});
 
 view.props.ChatboxBody = () => `
   <div class="chatbox__date">19 июня (вс)</div>
