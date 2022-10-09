@@ -15,8 +15,9 @@ view.props.contents = () => `
 `;
 
 view.on('mounted', () => {
-  ajax.get('').then(({response}) => {
-    console.log(response);
+  ajax.get('').then(({responseText, responseHeaders}) => {
+    console.log(responseText);
+    console.log(responseHeaders);
     view.props.result1 = 'success';
   }).catch(({error}) => {
     console.warn(error);
@@ -32,8 +33,9 @@ view.on('mounted', () => {
     tries: 2,
     timeout: 1000,
     data: {test: 123},
-  }).then(({response}) => {
-    console.log(response);
+  }).then(({responseText, responseHeaders}) => {
+    console.log(responseText);
+    console.log(responseHeaders);
     view.props.result2 = 'success';
   }).catch(({error}) => {
     console.warn(error);
