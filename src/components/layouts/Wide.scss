@@ -1,0 +1,29 @@
+@import "../../constants/colors.scss";
+
+.container__header_big {
+  font-size: 2.5rem;
+}
+
+.container_wide {
+  flex: 0 1 45rem;
+  padding: 1rem 5rem 1rem 1rem;
+}
+
+.sidebar {
+  align-self: stretch;
+  background: $sidebar-bg;
+  border-right: 2px solid $border-color;
+}
+
+.sidebar_nav {
+  display: flex;
+  flex: 0 0 2rem;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar__control {
+  position: fixed;
+  top: 50%;
+}

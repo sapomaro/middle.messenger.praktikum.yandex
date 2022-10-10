@@ -2,14 +2,11 @@
 
 Это веб-мессенджер: учебный проект «Яндекс.Практикума» (курс «Мидл фронтенд-разработчик»). 
 
-Сейчас проект находится в стадии разработки интерфейса (2-й спринт).
+Сейчас проект находится в стадии разработки интерфейса (пройдено два спринта).
 
 Ссылка на собранную рабочую версию на Netlify: https://cheery-pothos-620783.netlify.app/
 
-Ссылка на текущий пулл-реквест в главную ветку по итогам второго спринта: https://github.com/sapomaro/middle.messenger.praktikum.yandex/pull/13
-
-Ссылка на прошлую попытку пулл-реквеста во втором спринте:
-https://github.com/sapomaro/middle.messenger.praktikum.yandex/pull/10
+Ссылка на пулл-реквест в главную ветку по итогам второго спринта: https://github.com/sapomaro/middle.messenger.praktikum.yandex/pull/13
 
 ## Команды
 
@@ -29,4 +26,4 @@ https://github.com/sapomaro/middle.messenger.praktikum.yandex/pull/10
 
 В проекте используется самописный шаблонизатор.
 
-Ссылка на макет в Figma: https://www.figma.com/file/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=0%3A1 (в интерфейсе ещё предполагается доработка некоторых мелких деталей по макету)
+Ссылка на макет в Figma: https://www.figma.com/file/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=0%3A1 (в интерфейсе ещё предполагается доработка некоторых мелких деталей по макету).

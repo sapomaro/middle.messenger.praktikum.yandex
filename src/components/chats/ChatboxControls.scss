@@ -1,152 +1,141 @@
+@import "../../constants/colors.scss";
+
 .chatbox__header__avatar {
-	flex: 0 0 3rem;
-	height: 3rem;
-	width: 3rem;
-	border-radius: 50%;
-	background: #efefef;
-
+  flex: 0 0 3rem;
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50%;
+  background: $elem-bg;
 }
+
 .chatbox__header__text {
-	flex: 1;
-	margin: 0 1rem;
-	font-size: 1rem;
-	padding: 1rem 0;
-}
-.chatbox__header__control__wrapper, .chatbox__footer__control__wrapper {
-	display: block;
-	flex: 0;
+  flex: 1;
+  margin: 0 1rem;
+  font-size: 1rem;
+  padding: 1rem 0;
 }
 
-
-.chatbox__header__control, .chatbox__attach__control {
-	display: inline-block;
-	box-sizing: border-box;
-	width: 3rem;
-	height: 3rem;
-	padding: 1rem;
-	border: none;
-	border-radius: 50%;
-	font-size: 2rem;
-	line-height: 1rem;
-	font-weight: bold;
-	text-align: center;
-	cursor: pointer;
-	
-	&:active {
-		transform: scale(0.98);
-	}
-}
-.chatbox__header__control:hover, .chatbox__dropdown__toggle:checked+.chatbox__header__control {
-	color: #3369F3;
-	background: #F5F5F5;
+.chatbox__header__control__wrapper,
+.chatbox__footer__control__wrapper {
+  display: block;
+  flex: 0;
 }
 
 .chatbox__attach__control {
-	background: url("/public/fileclip_icon.svg");
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: contain;
-}
-.chatbox__send__textarea {
-	box-sizing: border-box;
-	min-height: 3rem;
-	width: 100%;
-	margin: 0 1rem;
-	padding: 1rem 2rem;
-	border: none;
-	border-radius: 1.5rem;
-	outline: none;
-	resize: none;
-	overflow: hidden;
-	font: inherit;
-	background: #EFEFEF;
-	color: #999;
-	
-	&:focus {
-		color: #000;
-	}
-}
-.chatbox__send__button {
-	align-self: flex-end;
+  background: url("/public/fileclip_icon.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
+.chatbox__header__control,
+.chatbox__attach__control {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 3rem;
+  height: 3rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 50%;
+  font-size: 2rem;
+  line-height: 1rem;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.chatbox__header__control:hover,
+.chatbox__dropdown__toggle:checked + .chatbox__header__control {
+  color: $main-color;
+  background: $elem-bg;
+}
+
+.chatbox__send__button {
+  align-self: flex-end;
+}
 
 .chatbox__icon_photo {
-	background: url("/public/photo_icon.svg");
+  background: url("/public/photo_icon.svg");
 }
+
 .chatbox__icon_file {
-	background: url("/public/file_icon.svg");
+  background: url("/public/file_icon.svg");
 }
+
 .chatbox__icon_location {
-	background: url("/public/location_icon.svg");
+  background: url("/public/location_icon.svg");
 }
 
 .chatbox__icon {
-	display: inline-block;
-	width: 1.5rem;
-	height: 1.5rem;
-	margin-right: 1rem;
-	vertical-align: bottom;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: contain;
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 1rem;
+  vertical-align: bottom;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
-
-
 .chatbox__element_hidden {
-	display: none;
+  display: none;
 }
 
 .chatbox__dropdown {
-	display: none;
-	position: absolute;
-	
+  display: none;
+  position: absolute;
 }
+
 .chatbox__dropdown__element {
-	position: relative;
-	display: block;
-	margin: 1.5rem;
-	box-sizing: border-box;
-	cursor: pointer;
+  position: relative;
+  display: block;
+  margin: 1.5rem;
+  box-sizing: border-box;
+  cursor: pointer;
 }
 
 .chatbox__dropdown__icon {
-	display: inline-block;
-	box-sizing: border-box;
-	margin-right: 0.5rem;
-	width: 2rem;
-	height: 2rem;
-	font-size: 2rem;
-	line-height: 1.7rem;
-	padding: 0;
-	color: #3369F3;
-	border: 2px solid #3369F3;
-	border-radius: 50%;
-	vertical-align: middle;
-	text-align: center;
+  display: inline-block;
+  box-sizing: border-box;
+  margin-right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  font-size: 2rem;
+  line-height: 1.7rem;
+  padding: 0;
+  color: $main-color;
+  border: 2px solid $main-color;
+  border-radius: 50%;
+  vertical-align: middle;
+  text-align: center;
 }
-
 
 .chatbox__dropdown_top {
-	margin-top: -0.5rem;
-	margin-left: -21rem;
-	width: 27rem;
+  margin-top: -0.5rem;
+  margin-left: -21rem;
+  width: 27rem;
 }
+
 .chatbox__dropdown_bottom {
-	margin-top: -19rem;
-	margin-left: -3rem;
-	width: 22rem;
+  margin-top: -19rem;
+  margin-left: -3rem;
+  width: 22rem;
 }
-.chatbox__dropdown__toggle:checked+.chatbox__dropdown__control+.chatbox__dropdown {
-	display: block;
+
+.chatbox__dropdown__toggle:checked + .chatbox__dropdown__control + .chatbox__dropdown {
+  display: block;
 }
+
 .chatbox__dropdown__menu {
-	display: block;
-	padding: 1rem;
-	margin: 2rem;
-	font-size: 1.2rem;
-	box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.14);
-	border-radius: 1rem;
-	background: #fff;
+  display: block;
+  padding: 1rem;
+  margin: 2rem;
+  font-size: 1.2rem;
+  box-shadow: 0 0 6px rgba(0 0 0 / 14%);
+  border-radius: 1rem;
+  background: $container-bg;
 }
