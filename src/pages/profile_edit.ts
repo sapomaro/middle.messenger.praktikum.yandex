@@ -11,7 +11,7 @@ import {JSONWrapper} from '../modules/Utils';
 const view = new WideLayoutWithSidebar({
   title: 'Изменить данные',
   Form, Button, Input, Link, AvatarControl, Popup,
-  BackButtonLink: new RoundButtonLink({url: 'profile.html'}),
+  BackButtonLink: new RoundButtonLink({url: '/settings'}),
 });
 
 const userData: Record<string, string> = {

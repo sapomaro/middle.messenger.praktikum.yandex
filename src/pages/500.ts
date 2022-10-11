@@ -6,7 +6,7 @@ const view = new WideLayout({
   title: '500',
   comment: 'Уже фиксим',
   contents: ErrorStatusMsg,
-  navLink: new Link({url: 'chats.html', label: 'Назад к чатам'}),
+  navLink: new Link({url: '/messenger', label: 'Назад к чатам'}),
 });
 
 export {view};

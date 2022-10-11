@@ -9,7 +9,7 @@ export class ChatlistControls extends Block {
     super();
     this.setProps({
       ProfileLink: new Link({
-        url: 'profile.html',
+        url: '/settings',
         label: 'Профиль&ensp;<small>❯</small>',
       }),
       SearchInput: new SearchInput({name: 'search'}),

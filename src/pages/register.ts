@@ -20,15 +20,17 @@ const inputs = JSONWrapper.stringify([
   {name: 'password2', type: 'password', label: 'Пароль (ещё раз)'},
 ]);
 
-view.props.contents = `%{ Form({"name": "reg", "action": "chats.html"}) }%`;
-
-view.props.fieldset = () => `
-  <h1 class="container__header">%{title}%</h1>
-  %{ Input(${inputs}...) }%
-  <br><br>
-  %{ Button({"name": "submit", "type": "submit",
-             "label": "Зарегистрироваться"}) }%
-  %{ Link({"url": "auth.html", "label": "Войти"}) }%
-`;
+view.props.contents = new Form({
+  name: 'reg',
+  action: '/messenger',
+  fieldset: () => `
+    <h1 class="container__header">%{title}%</h1>
+    %{ Input(${inputs}...) }%
+    <br><br>
+    %{ Button({"name": "submit", "type": "submit",
+               "label": "Зарегистрироваться"}) }%
+    %{ Link({"url": "/", "label": "Войти"}) }%
+  `,
+});
 
 export {view};

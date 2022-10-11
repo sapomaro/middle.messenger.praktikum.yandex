@@ -12,7 +12,7 @@ const view = new WideLayoutWithSidebar({
   title: 'Профиль',
   Popup, AvatarControl,
   Form, Button, Input, RowLink,
-  BackButtonLink: new RoundButtonLink({url: 'chats.html'}),
+  BackButtonLink: new RoundButtonLink({url: '/messenger'}),
 });
 
 const userData = {
@@ -54,9 +54,9 @@ view.props.contents = new Form({
     <h1 class="container__header">${userData.first_name}</h1>
     %{ Input(${inputs}...) }%
     <br><br><br>
-    %{ RowLink({"url": "profile_edit.html", "label": "Изменить данные"}) }%
-    %{ RowLink({"url": "profile_newpass.html", "label": "Изменить пароль"}) }%
-    %{ RowLink({"url": "auth.html", "label": "Выйти",
+    %{ RowLink({"url": "/settings/edit", "label": "Изменить данные"}) }%
+    %{ RowLink({"url": "/settings/password", "label": "Изменить пароль"}) }%
+    %{ RowLink({"url": "/", "label": "Выйти",
                 "style": "container__link_danger"}) }%
     <br><br>
   `,

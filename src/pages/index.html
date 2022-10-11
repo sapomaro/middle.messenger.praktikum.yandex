@@ -13,18 +13,18 @@
   import {view as TestPage} from './test';
 
   Router.registerViews({
-    'index.html': IndexPage,
-    'auth.html': AuthPage,
-    'register.html': RegisterPage,
-    'profile.html': ProfilePage,
-    'profile_edit.html': ProfileEditPage,
-    'profile_newpass.html': ProfilePassPage,
-    'chats.html': ChatsPage,
-    '404.html': NotFoundPage,
-    '500.html': ServerErrorPage,
-    'test.html': TestPage,
+    '/menu': IndexPage,
+    '/': AuthPage,
+    '/sing-up': RegisterPage,
+    '/settings': ProfilePage,
+    '/settings/edit': ProfileEditPage,
+    '/settings/password': ProfilePassPage,
+    '/messenger': ChatsPage,
+    '/404': NotFoundPage,
+    '/500': ServerErrorPage,
+    '/test': TestPage,
   });
 
-  Router.renderView('index.html');
+  Router.renderView('/menu');
 
 </script>

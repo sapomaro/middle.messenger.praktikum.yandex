@@ -9,7 +9,7 @@ import {RoundButtonLink} from '../components/RoundButtonLink';
 const view = new WideLayoutWithSidebar({
   title: 'Изменить пароль',
   Form, Button, Input, AvatarControl, Popup,
-  BackButtonLink: new RoundButtonLink({url: 'profile.html'}),
+  BackButtonLink: new RoundButtonLink({url: '/settings'}),
 });
 
 view.props.contents = new Form({
