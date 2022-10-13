@@ -4,6 +4,7 @@ class RouterService {
   static __instance: RouterService;
   public routes: Record<string, Block>;
   private counter: number;
+  private notFoundRoute = '/404';
 
   constructor() {
     if (RouterService.__instance) {
@@ -28,26 +29,33 @@ class RouterService {
     this.routes = {...this.routes, ...routes};
   }
   renderView(route: string) {
-    if (!this.routeExists(route)) {
-      console.warn(`${route} doesn't exist!`);
-      return;
-    }
     if (++this.counter > 1) { // для определения перезагрузки страницы
       if (!history.state || !history.state.route ||
           history.state.route !== route) {
+        if (!this.routeExists(route) && this.routeExists(this.notFoundRoute)) {
+          route = this.notFoundRoute;
+        }
         history.pushState({route}, '', route);
       }
     } else {
       if (this.routeExists(location.pathname)) {
         route = location.pathname;
+      } else if (this.routeExists(this.notFoundRoute)) {
+        route = this.notFoundRoute;
       }
       history.replaceState({route}, '', route);
     }
     const view = this.routes[route];
     view.renderToBody();
   }
+  back() {
+    history.back();
+  }
+  forward() {
+    history.forward();
+  }
 }
 
-const Router = new RouterService;
+const Router = new RouterService();
 
 export {Router};
