@@ -16,6 +16,10 @@ const generateUid = () => {
   uids[uid] = true;
   return uid;
 };
+const clearUid = (uid: string) => {
+  delete uids[uid];
+};
+
 
 const instancesOfBlock: Record<string, Block> = {};
 
@@ -36,7 +40,7 @@ type Props = Record<string, unknown>;
 export class Block {
   static EVENTS = {
     INIT: 'INIT',
-    PREPARE: 'preparing',
+    UNMOUNT: 'unmounting',
     RENDER: 'rendered',
     MOUNT: 'mounted',
     REMOUNT: 'remounted',
@@ -77,7 +81,7 @@ export class Block {
     this.on('eventAttached', (data: EventAttachment) => {
       this.nativeEventsList.push(data);
     });
-    this.on(Block.EVENTS.PREPARE, () => {
+    this.on(Block.EVENTS.UNMOUNT, () => {
       for (const {node, eventType, callback} of this.nativeEventsList) {
         if (typeof node === 'object' && node instanceof HTMLElement) {
           node.removeEventListener(eventType as string,
@@ -86,7 +90,9 @@ export class Block {
       }
       this.nativeEventsList = [];
       this.listDescendants((block: Block) => {
-        block.fire(Block.EVENTS.PREPARE);
+        block.fire(Block.EVENTS.UNMOUNT);
+        delete instancesOfBlock[block.blockuid];
+        clearUid(block.blockuid);
       });
     });
   }
@@ -164,7 +170,7 @@ export class Block {
   }
 
   build(): BlockNodes {
-    this.fire(Block.EVENTS.PREPARE);
+    this.fire(Block.EVENTS.UNMOUNT);
     this.element = this.buildNode(this.render, this.props,
         (node: HTMLElement) => {
           if (node.nodeType === 1) {

@@ -6,7 +6,7 @@ import {Block} from '../../modules/Block';
 export class Layout extends Block {
   constructor(props: Record<string, unknown>) {
     super(props);
-    this.on('preparing', () => {
+    this.on(Block.EVENTS.UNMOUNT, () => {
       const title = document.querySelector<HTMLElement>('title');
       if (title) {
         title.innerHTML = '%{title}%';
