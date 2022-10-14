@@ -2,8 +2,8 @@ import {Block} from '../modules/Block';
 
 class RouterService {
   static __instance: RouterService;
-  public routes: Record<string, Block>;
-  private counter: number;
+  public routes: Record<string, Block> = {};
+  private firstRender = true;
   private notFoundRoute = '/404';
 
   constructor() {
@@ -11,8 +11,6 @@ class RouterService {
       return RouterService.__instance;
     }
     RouterService.__instance = this;
-    this.routes = {};
-    this.counter = 0;
     this.init();
   }
   init() {
@@ -25,25 +23,21 @@ class RouterService {
   routeExists(route: string) {
     return (route in this.routes);
   }
-  registerViews(routes: Record<string, Block>) {
+  registerRoutes(routes: Record<string, Block>) {
     this.routes = {...this.routes, ...routes};
   }
   renderView(route: string) {
-    if (++this.counter > 1) { // для определения перезагрузки страницы
+    if (!this.routeExists(route) && this.routeExists(this.notFoundRoute)) {
+      route = this.notFoundRoute;
+    }
+    if (this.firstRender) {
+      history.replaceState({route}, '', route);
+      this.firstRender = false;
+    } else {
       if (!history.state || !history.state.route ||
           history.state.route !== route) {
-        if (!this.routeExists(route) && this.routeExists(this.notFoundRoute)) {
-          route = this.notFoundRoute;
-        }
         history.pushState({route}, '', route);
       }
-    } else {
-      if (this.routeExists(location.pathname)) {
-        route = location.pathname;
-      } else if (this.routeExists(this.notFoundRoute)) {
-        route = this.notFoundRoute;
-      }
-      history.replaceState({route}, '', route);
     }
     const view = this.routes[route];
     view.renderToBody();

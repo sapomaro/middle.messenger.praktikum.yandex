@@ -12,7 +12,7 @@
   import {view as ServerErrorPage} from './500';
   import {view as TestPage} from './test';
 
-  Router.registerViews({
+  Router.registerRoutes({
     '/menu': IndexPage,
     '/': AuthPage,
     '/sing-up': RegisterPage,
@@ -25,6 +25,8 @@
     '/test': TestPage,
   });
 
-  Router.renderView('/menu');
+  //Router.redirectRules({});
+
+  Router.renderView(location.pathname);
 
 </script>
