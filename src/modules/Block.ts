@@ -20,9 +20,6 @@ const clearUid = (uid: string) => {
   delete uids[uid];
 };
 
-
-console.log(objIntersect({chats:[1,2]}, {chats:[]}));
-
 const instancesOfBlock: Record<string, Block> = {};
 
 type BlockNodes = DocumentFragment | HTMLElement | ChildNode;
@@ -39,7 +36,7 @@ type EventAttachment = {
 
 type Props = Record<string, unknown>;
 
-export class Block {
+export class Block extends EventBus {
   public static EVENTS: Record<string, string> = {
     INIT: 'INIT',
     UNMOUNT: 'unmounting',
@@ -51,16 +48,12 @@ export class Block {
 
   private blockuid: string;
   private templator: Templator;
-  public listeners: Record<string, unknown>;
   private nativeEventsList: Array<Record<string, unknown>>;
   private element: BlockNodes;
-  public listEvents: Fn;
-  public on: Fn;
-  public off: Fn;
-  public fire: Fn;
   public props: Props;
 
   constructor(props: Props = {}) {
+    super();
     this.props = this.makePropsProxy(props);
     this.blockuid = generateUid();
     instancesOfBlock[this.blockuid] = this;
@@ -70,12 +63,6 @@ export class Block {
   }
 
   registerEvents(): void {
-    this.on = EventBus.on;
-    this.off = EventBus.off;
-    this.fire = EventBus.fire;
-    this.listEvents = EventBus.listEvents;
-    this.listeners = {};
-
     this.nativeEventsList = [];
     this.on(Block.EVENTS.UPDATE, () => {
       this.replaceMultipleNodes(`[data-blockuid=${this.blockuid}]`, [this]);
@@ -129,9 +116,9 @@ export class Block {
     });
   }
 
-  setProps(obj: Record<string, unknown>): void {
-    if (!objIntersect(this.props, obj)) {
-      Object.assign(this.props, obj);
+  setProps(newProps: Record<string, unknown>): void {
+    if (!objIntersect(this.props, newProps)) {
+      Object.assign(this.props, newProps);
       this.fire(Block.EVENTS.UPDATE);
     }
   }

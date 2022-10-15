@@ -1,4 +1,4 @@
-let DOMLoaded = false;
+let isDOMLoaded = false;
 
 const isDOMReady = (): boolean => {
   if (document.readyState === 'interactive' &&
@@ -14,60 +14,68 @@ const isDOMReady = (): boolean => {
 
 type Fn = (...args: Array<unknown>) => void;
 
-const EventBus = {
-  listeners: {},
-  listEvents: function(events: string, action: Fn) {
+type Listeners = Record<string, Array<Fn>>;
+
+class EventBus {
+  static listeners: Listeners = {};
+  public listeners: Listeners = {};
+  constructor() {}
+  static listEvents(events: string, action: Fn) {
     events.split(/[, ]+/).forEach((eventType: string): void => {
       if (!this.listeners[eventType]) {
         this.listeners[eventType] = [];
       }
       action(eventType);
     });
-  },
-  on: function(events: string, callback: Fn): void {
+  }
+  listEvents = EventBus.listEvents;
+  static on(events: string, callback: Fn): void {
     this.listEvents(events, (eventType: string): void => {
       this.listeners[eventType].push(callback);
       if (eventType === 'init' || eventType === 'load') {
         if (isDOMReady()) {
           callback();
-          DOMLoaded = true;
+          isDOMLoaded = true;
         }
       }
     });
-  },
-  fire: function(events: string, ...args: Array<unknown>): void {
+  }
+  on = EventBus.on;
+  static fire(events: string, ...args: Array<unknown>): void {
     this.listEvents(events, (eventType: string): void => {
       this.listeners[eventType].forEach((listener: Fn): void => {
         listener.apply(this, args);
       });
     });
-  },
-  off: function(events: string, callback: Fn): void {
+  }
+  fire = EventBus.fire;
+  static off(events: string, callback: Fn): void {
     this.listEvents(events, (eventType: string): void => {
       this.listeners[eventType] = this.listeners[eventType]
           .filter((listener: Fn) => (listener !== callback));
     });
-  },
-  init: function(): void {
+  }
+  off = EventBus.off;
+  static init(): void {
     if (isDOMReady()) {
       this.fire('init, load');
-      DOMLoaded = true;
+      isDOMLoaded = true;
     } else {
       window.addEventListener('DOMContentLoaded', (): void => {
         if (isDOMReady()) {
           this.fire('init, load');
-          DOMLoaded = true;
+          isDOMLoaded = true;
         }
       });
       window.addEventListener('load', (): void => {
-        if (!DOMLoaded) {
+        if (!isDOMLoaded) {
           this.fire('init, load');
-          DOMLoaded = true;
+          isDOMLoaded = true;
         }
       });
     }
-  },
-};
+  }
+}
 
 EventBus.init();
 

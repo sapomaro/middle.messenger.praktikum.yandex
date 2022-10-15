@@ -94,13 +94,24 @@ const ajax = function(options: InitOptions): State {
   try {
     request.xhr = ajaxRequest(request.url ?? '', {
       ...(request.options || {}),
-      successCallback: ({responseText, responseHeaders}): void => {
+      successCallback: ({
+        responseText,
+        responseHeaders,
+        responseJSON,
+        status,
+      }): void => {
         request.responseText = responseText;
         request.responseHeaders = responseHeaders;
+        request.responseJSON = responseJSON;
+        request.status = status;
         request.then.trigger();
       },
       errorHandler: (error: Error): void => {
         request.error = error;
+        request.responseText = error.responseText;
+        request.responseHeaders = error.responseHeaders;
+        request.responseJSON = error.responseJSON;
+        request.status = error.status;
         request.catch.trigger();
       },
     });
@@ -111,6 +122,8 @@ const ajax = function(options: InitOptions): State {
 
   return request;
 };
+
+ajax.baseUrl = '';
 
 ajax.get = (url: string, data?: Record<string, string>): State => {
   return ajax({url, method: METHOD.GET, data});
@@ -133,7 +146,7 @@ const ajaxRequest = function ajaxRequest(url: string,
   const data = (options.data ? options.data : {});
   const urlParams = (method === METHOD.GET ? getUrlParams(data) : '');
 
-  xhr.open(method, url + urlParams, true);
+  xhr.open(method, ajax.baseUrl + url + urlParams, true);
   xhr.timeout = (options.timeout ? options.timeout : 3000);
 
   const headers = options.headers || {};
@@ -166,15 +179,34 @@ const ajaxRequest = function ajaxRequest(url: string,
 
   xhr.onreadystatechange = (): void => {
     if (xhr.readyState === 4) {
+      const responseText = xhr.responseText.replace(/^\"|\"$/g, '');
       const responseHeaders = getResponseHeaders(xhr);
+      let responseJSON: Record<string, unknown> = {};
+      if (responseHeaders['content-type'] &&
+          responseHeaders['content-type'].indexOf('application/json') !== -1) {
+        try {
+          responseJSON = JSON.parse(responseText);
+        } catch (error) {
+          handleError(error);
+        }
+      }
       if (xhr.status >= 200 && xhr.status <= 299) {
-        const responseText = xhr.responseText.replace(/^\"|\"$/g, '');
         if (typeof options.successCallback === 'function') {
-          options.successCallback({responseText, responseHeaders});
+          options.successCallback({
+            responseText,
+            responseJSON,
+            responseHeaders,
+            status: xhr.status,
+          });
         }
       } else if (xhr.status >= 400) {
         if (typeof options.errorHandler === 'function') {
-          options.errorHandler({responseHeaders, status: xhr.status});
+          options.errorHandler({
+            responseText,
+            responseJSON,
+            responseHeaders,
+            status: xhr.status,
+          });
         }
       }
     }
@@ -210,7 +242,7 @@ const getResponseHeaders = (xhr: XMLHttpRequest) => {
   const headersList = headersString.trim().split('\r\n');
   for (const header of headersList) {
     const [key, value] = header.split(': ');
-    headers[key] = value;
+    headers[key.toLowerCase()] = value.toLowerCase();
   }
   return headers;
 };
