@@ -1,0 +1,11 @@
+.form__input__field {
+  position: relative;
+  z-index: 2;
+  display: block;
+  font-size: 1.2rem;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 30rem;
+  background: transparent;
+  outline: none;
+}

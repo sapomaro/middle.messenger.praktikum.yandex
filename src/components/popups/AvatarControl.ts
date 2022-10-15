@@ -1,6 +1,6 @@
-import './Avatar.scss';
+import './AvatarControl.scss';
 
-import {PopupControl} from '../PopupControl';
+import {PopupControl} from './PopupControl';
 
 export class AvatarControl extends PopupControl {
   constructor(props?: Record<string, unknown>) {

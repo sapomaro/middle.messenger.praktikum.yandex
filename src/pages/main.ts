@@ -1,5 +1,5 @@
 import {NarrowLayout} from '../components/layouts/Narrow';
-import {MenuLink as Link} from '../components/MenuLink';
+import {MenuLink as Link} from '../components/links/MenuLink';
 import {JSONWrapper} from '../modules/Utils';
 
 const view = new NarrowLayout({

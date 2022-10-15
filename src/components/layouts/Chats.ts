@@ -1,28 +1,27 @@
 import './Chats.scss';
 
+import {EventBus} from '../../modules/EventBus';
 import {Layout} from './Layout';
 
 export class ChatsLayout extends Layout {
   constructor(props: Record<string, unknown>) {
     super(props);
+    EventBus.on('updateLayoutScrollPosition', () => {
+      const container = document.querySelector<HTMLElement>('main');
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+    });
   }
   render(): string {
     return `
       %{Popup}% 
       <div class="root">
         <aside class="sidebar sidebar_chatlist scrollable">
-          %{Chatlist}%
+          %{aside}%
         </aside>
         <main class="container container_chatbox scrollable">
-          <div class="chatbox__header">
-            %{ChatboxHeader}%
-          </div>
-          <div class="chatbox__body">
-            %{ChatboxBody}%
-          </div>
-          <div class="chatbox__footer">
-            %{ChatboxFooter}%
-          </div>
+          %{contents}%
         </main>
       </div>
     `;

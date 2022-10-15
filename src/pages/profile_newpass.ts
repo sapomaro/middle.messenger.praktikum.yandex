@@ -1,15 +1,15 @@
 import {WideLayoutWithSidebar} from '../components/layouts/Wide+Side';
 import {Form} from '../components/forms/Form';
-import {StandardButton as Button} from '../components/forms/StandardButton';
-import {RowInput as Input} from '../components/forms/RowInput';
-import {AvatarControl} from '../components/forms/AvatarControl';
-import {Popup} from '../components/Popup';
-import {RoundButtonLink} from '../components/RoundButtonLink';
+import {StandardButton as Button} from '../components/buttons/StandardButton';
+import {RowInput as Input} from '../components/inputs/RowInput';
+import {AvatarControl} from '../components/popups/AvatarControl';
+import {Popup} from '../components/popups/Popup';
+import {RoundButtonLink} from '../components/buttons/RoundButtonLink';
 
 const view = new WideLayoutWithSidebar({
   title: 'Изменить пароль',
   Form, Button, Input, AvatarControl, Popup,
-  BackButtonLink: new RoundButtonLink({url: '/settings'}),
+  aside: new RoundButtonLink({url: '/settings'}),
 });
 
 view.props.contents = new Form({

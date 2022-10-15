@@ -1,8 +1,8 @@
-import './ChatboxTextarea.scss';
+import './MessageTextarea.scss';
 
-import {Input, InputPropsType} from '../forms/Input';
+import {Input, InputPropsType} from './Input';
 
-export class ChatboxTextarea extends Input {
+export class MessageTextarea extends Input {
   constructor(props: InputPropsType) {
     super(props);
     this.on('submit', (): void => {

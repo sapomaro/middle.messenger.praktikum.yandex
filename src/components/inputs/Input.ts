@@ -1,6 +1,8 @@
+import './Input.scss';
+
 import {EventBus} from '../../modules/EventBus';
 import {Block} from '../../modules/Block';
-import {getValidationMessage} from './ValidationMessage';
+import {getValidationMessage} from '../../services/inputValidation';
 
 export type InputPropsType = {
   name: string;
@@ -26,16 +28,19 @@ export class Input extends Block {
           self.validate.call(self, event);
         }
         self.togglePlaceholder.call(self, event);
+        self.fire('focus', event);
       },
       onBlur: function(event: Event): void {
         self.validate.call(self, event);
         self.togglePlaceholder.call(self, event);
+        self.fire('blur', event);
       },
-      onInput: function(): void {
+      onInput: function(event: Event): void {
         this.setAttribute('value', this.value); /* для правильного отображения
                                                    лейблов на инпутах */
         self.props.value = this.value;
         self.autoResize(this);
+        self.fire('input', event);
       },
     });
 

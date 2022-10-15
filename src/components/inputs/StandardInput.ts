@@ -1,6 +1,6 @@
-import './StandardInput.scss';
-
 import {Input, InputPropsType} from './Input';
+
+import './StandardInput.scss';
 
 export class StandardInput extends Input {
   constructor(props: InputPropsType) {

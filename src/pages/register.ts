@@ -1,8 +1,8 @@
 import {NarrowLayout} from '../components/layouts/Narrow';
 import {Form} from '../components/forms/Form';
-import {StandardInput as Input} from '../components/forms/StandardInput';
-import {StandardButton as Button} from '../components/forms/StandardButton';
-import {StandardLink as Link} from '../components/forms/StandardLink';
+import {StandardInput as Input} from '../components/inputs/StandardInput';
+import {StandardButton as Button} from '../components/buttons/StandardButton';
+import {StandardLink as Link} from '../components/links/StandardLink';
 import {JSONWrapper} from '../modules/Utils';
 
 const view = new NarrowLayout({

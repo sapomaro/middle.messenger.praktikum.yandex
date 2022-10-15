@@ -1,6 +1,6 @@
 import './common.scss';
 
-import '../Head';
+import './Head';
 import {Block} from '../../modules/Block';
 
 export class Layout extends Block {

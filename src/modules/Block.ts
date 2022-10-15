@@ -21,6 +21,8 @@ const clearUid = (uid: string) => {
 };
 
 
+console.log(objIntersect({chats:[1,2]}, {chats:[]}));
+
 const instancesOfBlock: Record<string, Block> = {};
 
 type BlockNodes = DocumentFragment | HTMLElement | ChildNode;
@@ -38,7 +40,7 @@ type EventAttachment = {
 type Props = Record<string, unknown>;
 
 export class Block {
-  static EVENTS = {
+  public static EVENTS: Record<string, string> = {
     INIT: 'INIT',
     UNMOUNT: 'unmounting',
     RENDER: 'rendered',

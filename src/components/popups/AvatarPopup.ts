@@ -1,8 +1,6 @@
-import './Avatar.scss';
-
-import {Popup} from '../Popup';
+import {Popup} from './Popup';
 import {Form} from '../forms/Form';
-import {StandardButton as Button} from '../forms/StandardButton';
+import {StandardButton as Button} from '../buttons/StandardButton';
 
 export class AvatarPopup extends Popup {
   constructor() {

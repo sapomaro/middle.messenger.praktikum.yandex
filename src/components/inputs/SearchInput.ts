@@ -1,6 +1,6 @@
-import './ChatlistControls.scss';
+import './SearchInput.scss';
 
-import {Input, InputPropsType} from '../forms/Input';
+import {Input, InputPropsType} from './Input';
 
 export class SearchInput extends Input {
   constructor(props: InputPropsType) {

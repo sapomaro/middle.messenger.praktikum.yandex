@@ -1,17 +1,17 @@
 import {NarrowLayout} from '../components/layouts/Narrow';
 import {Form} from '../components/forms/Form';
-import {StandardInput as Input} from '../components/forms/StandardInput';
-import {StandardButton as Button} from '../components/forms/StandardButton';
-import {StandardLink as Link} from '../components/forms/StandardLink';
+import {StandardInput as Input} from '../components/inputs/StandardInput';
+import {StandardButton as Button} from '../components/buttons/StandardButton';
+import {StandardLink as Link} from '../components/links/StandardLink';
 
 const view = new NarrowLayout({
   title: 'Вход',
-  Form, Input, Button, Link,
 });
 
-view.props.contents = new Form({
+const authForm = new Form({
   name: 'auth',
   action: '/messenger',
+  Input, Button, Link,
   fieldset: () => `
     <h1 class="container__header">%{title}%</h1>
     %{ Input({"name": "login", "type": "text", "label": "Логин"}) }%
@@ -22,5 +22,12 @@ view.props.contents = new Form({
     %{ Link({"url": "/sing-up", "label": "Нет аккаунта?"}) }%
   `,
 });
+
+authForm.on(Form.EVENTS.SUBMIT_OK, (data: Record<string, unknown>) => {
+  console.log('SUBMIT OK');
+  console.log(data);
+});
+
+view.props.contents = authForm;
 
 export {view};

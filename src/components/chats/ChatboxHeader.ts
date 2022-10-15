@@ -1,6 +1,4 @@
-import './ChatboxControls.scss';
-
-import {PopupControl} from '../PopupControl';
+import {PopupControl} from '../popups/PopupControl';
 
 export class ChatboxHeader extends PopupControl {
   constructor() {

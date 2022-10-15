@@ -1,6 +1,6 @@
 import {WideLayout} from '../components/layouts/Wide';
-import {ErrorStatusMsg} from '../components/ErrorStatusMsg';
-import {Link} from '../components/Link';
+import {ErrorStatusMsg} from '../components/layouts/ErrorStatusMsg';
+import {Link} from '../components/links/Link';
 
 const view = new WideLayout({
   title: '404',

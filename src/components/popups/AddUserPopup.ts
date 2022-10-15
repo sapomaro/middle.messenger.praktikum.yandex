@@ -1,7 +1,7 @@
-import {Popup} from '../Popup';
+import {Popup} from './Popup';
 import {Form} from '../forms/Form';
-import {StandardInput as Input} from '../forms/StandardInput';
-import {StandardButton as Button} from '../forms/StandardButton';
+import {StandardInput as Input} from '../inputs/StandardInput';
+import {StandardButton as Button} from '../buttons/StandardButton';
 
 export class AddUserPopup extends Popup {
   constructor() {

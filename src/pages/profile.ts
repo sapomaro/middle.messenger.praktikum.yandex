@@ -1,18 +1,18 @@
 import {WideLayoutWithSidebar} from '../components/layouts/Wide+Side';
 import {Form} from '../components/forms/Form';
-import {StandardButton as Button} from '../components/forms/StandardButton';
-import {RowInput as Input} from '../components/forms/RowInput';
-import {RowLink} from '../components/forms/RowLink';
-import {AvatarControl} from '../components/forms/AvatarControl';
-import {AvatarPopup as Popup} from '../components/forms/AvatarPopup';
-import {RoundButtonLink} from '../components/RoundButtonLink';
+import {StandardButton as Button} from '../components/buttons/StandardButton';
+import {RowInput as Input} from '../components/inputs/RowInput';
+import {RowLink} from '../components/links/RowLink';
+import {AvatarControl} from '../components/popups/AvatarControl';
+import {AvatarPopup as Popup} from '../components/popups/AvatarPopup';
+import {RoundButtonLink} from '../components/buttons/RoundButtonLink';
 import {JSONWrapper} from '../modules/Utils';
 
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
   Popup, AvatarControl,
   Form, Button, Input, RowLink,
-  BackButtonLink: new RoundButtonLink({url: '/messenger'}),
+  aside: new RoundButtonLink({url: '/messenger'}),
 });
 
 const userData = {

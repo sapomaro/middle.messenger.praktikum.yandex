@@ -1,5 +1,5 @@
-import {EventBus} from '../modules/EventBus';
-import {Block} from '../modules/Block';
+import {EventBus} from '../../modules/EventBus';
+import {Block} from '../../modules/Block';
 
 export class PopupControl extends Block {
   constructor(props?: Record<string, unknown>) {

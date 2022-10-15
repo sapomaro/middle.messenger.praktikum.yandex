@@ -1,8 +1,6 @@
-import './ChatboxControls.scss';
-
 import {Block} from '../../modules/Block';
 import {Form} from '../forms/Form';
-import {ChatboxTextarea} from './ChatboxTextarea';
+import {MessageTextarea} from '../inputs/MessageTextarea';
 
 export class ChatboxFooter extends Block {
   constructor() {
@@ -12,7 +10,7 @@ export class ChatboxFooter extends Block {
         name: 'msg',
         fieldset: ChatboxFooterChildren,
       }),
-      ChatboxTextarea,
+      MessageTextarea,
     });
   }
   render() {
@@ -43,7 +41,7 @@ const ChatboxFooterChildren = () => `
     </span>
   </label>
 
-  %{ ChatboxTextarea({"name": "message", "placeholder": "Сообщение..."}) }%
+  %{ MessageTextarea({"name": "message", "placeholder": "Сообщение..."}) }%
 
   <button type="submit" 
     class="form__button form__button_standard form__button_round 

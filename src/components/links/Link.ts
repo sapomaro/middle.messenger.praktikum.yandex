@@ -1,5 +1,5 @@
-import {Block} from '../modules/Block';
-import {Router} from '../modules/Router';
+import {Block} from '../../modules/Block';
+import {Router} from '../../modules/Router';
 
 type IncomingProps = {
   url: string;
