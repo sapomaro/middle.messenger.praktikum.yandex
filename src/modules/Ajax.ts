@@ -37,6 +37,8 @@ type State = InitOptions & {
   options?: Record<string, unknown>;
   responseText?: string;
   responseHeaders?: Record<string, string>;
+  responseJSON?: Record<string, unknown>;
+  status?: number;
   error?: Error;
 };
 
@@ -106,12 +108,15 @@ const ajax = function(options: InitOptions): State {
         request.status = status;
         request.then.trigger();
       },
-      errorHandler: (error: Error): void => {
-        request.error = error;
-        request.responseText = error.responseText;
-        request.responseHeaders = error.responseHeaders;
-        request.responseJSON = error.responseJSON;
-        request.status = error.status;
+      errorHandler: (error: Error | State): void => {
+        if (error instanceof Error) {
+          request.error = error;
+        } else {
+          request.status = error.status;
+          request.responseText = error.responseText;
+          request.responseHeaders = error.responseHeaders;
+          request.responseJSON = error.responseJSON;
+        }
         request.catch.trigger();
       },
     });

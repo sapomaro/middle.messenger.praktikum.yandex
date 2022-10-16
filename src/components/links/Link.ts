@@ -11,7 +11,7 @@ export class Link extends Block {
     super(props);
     this.setProps({
       onClick: function(): void {
-        Router.renderView(props.url);
+        Router.navigate(props.url);
       },
     });
   }

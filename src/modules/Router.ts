@@ -16,7 +16,7 @@ class RouterService {
   init() {
     window.addEventListener('popstate', (event: PopStateEvent) => {
       if (event && event.state && event.state.route) {
-        this.renderView(event.state.route);
+        this.navigate(event.state.route);
       }
     });
   }
@@ -26,7 +26,7 @@ class RouterService {
   registerRoutes(routes: Record<string, Block>) {
     this.routes = {...this.routes, ...routes};
   }
-  renderView(route: string) {
+  navigate(route: string) {
     if (!this.routeExists(route) && this.routeExists(this.notFoundRoute)) {
       route = this.notFoundRoute;
     }

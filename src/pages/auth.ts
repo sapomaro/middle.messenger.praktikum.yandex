@@ -1,5 +1,6 @@
 import {NarrowLayout} from '../components/layouts/Narrow';
 import {Form} from '../components/forms/Form';
+import {FormError} from '../components/forms/FormError';
 import {StandardInput as Input} from '../components/inputs/StandardInput';
 import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {StandardLink as Link} from '../components/links/StandardLink';
@@ -15,6 +16,7 @@ const authForm = new Form({
   name: 'auth',
   action: '/messenger',
   Input, Button, Link,
+  formError: new FormError(),
   fieldset: () => `
     <h1 class="container__header">%{title}%</h1>
     %{ Input({"name": "login", "type": "text", "label": "Логин"}) }%
@@ -22,6 +24,7 @@ const authForm = new Form({
     <br><br><br>
     %{ Button({"name": "submit", "type": "submit",
                "label": "Авторизоваться"}) }%
+    %{formError}%
     %{ Link({"url": "/sing-up", "label": "Нет аккаунта?"}) }%
   `,
 });
