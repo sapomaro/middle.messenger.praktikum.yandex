@@ -1,13 +1,16 @@
 import {NarrowLayout} from '../components/layouts/Narrow';
 import {Form} from '../components/forms/Form';
+import {FormError} from '../components/forms/FormError';
 import {StandardInput as Input} from '../components/inputs/StandardInput';
 import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {StandardLink as Link} from '../components/links/StandardLink';
 import {JSONWrapper} from '../modules/Utils';
 
+import {StoreSynced} from '../modules/Store';
+import {registerService, RegDataType} from '../services/register';
+
 const view = new NarrowLayout({
   title: 'Регистрация',
-  Form, Input, Button, Link,
 });
 
 const inputs = JSONWrapper.stringify([
@@ -20,17 +23,31 @@ const inputs = JSONWrapper.stringify([
   {name: 'password2', type: 'password', label: 'Пароль (ещё раз)'},
 ]);
 
-view.props.contents = new Form({
+const regForm = new Form({
   name: 'reg',
   action: '/messenger',
+  Input, Link,
+  formSubmitButton: new (StoreSynced(Button))({
+    name: 'submit',
+    type: 'submit',
+    label: 'Зарегистрироваться',
+    isLoading: false,
+  }),
+  formError: new (StoreSynced(FormError))({currentFormError: null}),
   fieldset: () => `
     <h1 class="container__header">%{title}%</h1>
     %{ Input(${inputs}...) }%
     <br><br>
-    %{ Button({"name": "submit", "type": "submit",
-               "label": "Зарегистрироваться"}) }%
+    %{formSubmitButton}%
+    %{formError}%
     %{ Link({"url": "/", "label": "Войти"}) }%
   `,
 });
+
+regForm.on(Form.EVENTS.SUBMIT_SUCCESS, (data: RegDataType) => {
+  registerService(data);
+});
+
+view.props.contents = regForm;
 
 export {view};

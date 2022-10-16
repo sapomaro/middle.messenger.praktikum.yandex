@@ -14,8 +14,8 @@ type EventState = Record<string, Record<string, string>>;
 
 export class Form extends Block {
   public static EVENTS: Record<string, string> = {
-    SUBMIT_OK: 'formSubmitSuccess',
-    SUBMIT_FAIL: 'formSubmitFail',
+    SUBMIT_SUCCESS: 'submitSuccess',
+    SUBMIT_FAIL: 'submitFail',
   };
   constructor(props: IncomingProps) {
     super(props);
@@ -37,13 +37,19 @@ export class Form extends Block {
         });
 
         if (Object.keys(state.errorMsgs).length === 0) {
-          console.log('Form successfully submitted: ');
-          console.log(data);
-          this.fire(Form.EVENTS.SUBMIT_OK, data);
+          // console.log('Form successfully submitted: ');
+          // console.log(data);
+          this.fire(Form.EVENTS.SUBMIT_SUCCESS, data);
+          this.listDescendants((block: Block) => {
+            block.fire(Form.EVENTS.SUBMIT_SUCCESS, event, data);
+          });
         } else {
-          console.warn('Form validation failed: ');
-          console.warn(state.errorMsgs);
+          // console.warn('Form validation failed: ');
+          // console.warn(state.errorMsgs);
           this.fire(Form.EVENTS.SUBMIT_FAIL, state.errorMsgs);
+          this.listDescendants((block: Block) => {
+            block.fire(Form.EVENTS.SUBMIT_FAIL, event, data);
+          });
         }
         return false;
       },

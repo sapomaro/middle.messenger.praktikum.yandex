@@ -55,9 +55,7 @@ const profileForm = new Form({
     url: '/',
     label: 'Выйти',
     style: 'container__link_danger',
-    onclick: () => {
-      logoutService();
-    },
+    onclick: logoutService,
   }),
   fieldset: () => `
     %{ AvatarControl }%

@@ -1,5 +1,6 @@
 import {EventBus} from './EventBus';
 import {objIntersect} from './Utils';
+import type {Block} from './Block';
 
 type State = Record<string, unknown>;
 
@@ -9,6 +10,7 @@ enum StoreEvents {
 
 const defaultState: State = {
   user: null,
+  isLoading: false,
 };
 
 class StoreService extends EventBus {
@@ -44,4 +46,15 @@ class StoreService extends EventBus {
 
 const Store = new StoreService();
 
-export {Store};
+const StoreSynced = (CustomBlock: typeof Block) => {
+  return class extends CustomBlock {
+    constructor(props?: State) {
+      super(props);
+      Store.on(Store.EVENTS.UPDATE, () => {
+        this.setProps(Store.getState());
+      });
+    }
+  } 
+};
+
+export {Store, StoreSynced};

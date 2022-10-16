@@ -5,7 +5,7 @@ import {StandardInput as Input} from '../components/inputs/StandardInput';
 import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {StandardLink as Link} from '../components/links/StandardLink';
 
-//import {Store} from '../modules/Store';
+import {StoreSynced} from '../modules/Store';
 import {loginService, LoginDataType} from '../services/auth';
 
 const view = new NarrowLayout({
@@ -15,25 +15,26 @@ const view = new NarrowLayout({
 const authForm = new Form({
   name: 'auth',
   action: '/messenger',
-  Input, Button, Link,
-  formError: new FormError(),
+  Input, Link,
+  formSubmitButton: new (StoreSynced(Button))({
+    name: 'submit',
+    type: 'submit',
+    label: 'Авторизоваться',
+    isLoading: false,
+  }),
+  formError: new (StoreSynced(FormError))({currentFormError: null}),
   fieldset: () => `
     <h1 class="container__header">%{title}%</h1>
     %{ Input({"name": "login", "type": "text", "label": "Логин"}) }%
     %{ Input({"name": "password", "type": "password", "label": "Пароль"}) }%
     <br><br><br>
-    %{ Button({"name": "submit", "type": "submit",
-               "label": "Авторизоваться"}) }%
+    %{formSubmitButton}%
     %{formError}%
     %{ Link({"url": "/sing-up", "label": "Нет аккаунта?"}) }%
   `,
 });
 
-//Store.on('load', () => { console.log('Store loaded'); });
-
-authForm.on(Form.EVENTS.SUBMIT_OK, (data: LoginDataType) => {
-  console.log('SUBMIT OK');
-  console.log(data);
+authForm.on(Form.EVENTS.SUBMIT_SUCCESS, (data: LoginDataType) => {
   loginService(data);
 });
 

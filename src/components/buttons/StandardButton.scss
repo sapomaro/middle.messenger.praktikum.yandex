@@ -10,7 +10,11 @@
   background: transparent;
   text-decoration: none;
 
-  &:active {
+  &:disabled {
+    cursor: not-allowed;
+    background: $disabled-color !important;
+  }
+  &:enabled:active {
     transform: scale(0.98);
   }
 }
@@ -24,9 +28,14 @@
   background: $main-color;
   border-radius: 0.8rem;
 
-  &:hover {
+  &:enabled:hover {
     filter: brightness(1.3);
   }
+}
+
+.form__button__emoji {
+  color: transparent;  
+  text-shadow: 0 0 0 $plain-color;
 }
 
 .form__button_round {

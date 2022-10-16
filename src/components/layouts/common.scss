@@ -81,6 +81,11 @@ body {
     justify-content: center;
   }
 
+  &_adjacent {
+    margin-top: -1rem;
+    min-height: 1px;
+  }
+
   &_right {
     text-align: right;
     justify-content: flex-end;

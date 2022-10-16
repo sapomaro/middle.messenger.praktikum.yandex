@@ -7,6 +7,7 @@ type IncomingProps = {
   label: string;
   type?: 'submit' | 'button';
   error?: string;
+  isLoading?: boolean;
 }
 
 export class StandardButton extends Block {
@@ -17,8 +18,9 @@ export class StandardButton extends Block {
     return `
       <div class="container__element container__element_centered">
         <button name="${props.name}" type="${props.type || 'button'}" 
-          class="form__button form__button_standard">
-            ${props.label}
+          class="form__button form__button_standard"
+          ${props.isLoading? 'disabled="disabled"' : ''}>
+            ${props.isLoading? 'Запрос обрабатывается...' : props.label}
         </button>
         <span class="form__input__error">${props.error || ''}</span>
       </div>

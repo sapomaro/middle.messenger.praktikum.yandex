@@ -152,6 +152,7 @@ const ajaxRequest = function ajaxRequest(url: string,
   const urlParams = (method === METHOD.GET ? getUrlParams(data) : '');
 
   xhr.open(method, ajax.baseUrl + url + urlParams, true);
+  xhr.withCredentials = true;
   xhr.timeout = (options.timeout ? options.timeout : 3000);
 
   const headers = options.headers || {};

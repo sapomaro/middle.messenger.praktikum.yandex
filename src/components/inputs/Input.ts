@@ -25,7 +25,7 @@ export class Input extends Block {
       value: props.value || props.placeholder || '',
       onFocus: function(event: Event): void {
         if (self.hasActualValue) {
-          self.validate.call(self, event);
+          // self.validate.call(self, event);
         }
         self.togglePlaceholder.call(self, event);
         self.fire('focus', event);

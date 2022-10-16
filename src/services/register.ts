@@ -1,13 +1,14 @@
 import {Store} from '../modules/Store';
 import {Router} from '../modules/Router';
-import {authAPI, LoginDataType} from '../api/auth';
+import {registerAPI, RegDataType} from '../api/register';
+import {authAPI} from '../api/auth';
 import {errorHandler} from './errorHandler';
 
-export {LoginDataType};
+export {RegDataType};
 
-export const loginService = async (data: LoginDataType) => {
+export const registerService = async (data: RegDataType) => {
   Store.setState({isLoading: true});
-  authAPI.login(data)
+  registerAPI.signup(data)
   .then(() => {
     authAPI.getUserData()
     .then(({responseJSON}) => {
@@ -15,22 +16,13 @@ export const loginService = async (data: LoginDataType) => {
         user: responseJSON.user,
         currentFormError: null,
       });
-      Router.navigate('/messenger');
+console.log(responseJSON.user);
+      Router.navigate('/profile');
     })
     .catch(errorHandler);
   })
   .catch(errorHandler)
   .finally(() => {
     Store.setState({isLoading: false});
-  });
-};
-
-export const logoutService = async () => {
-  Store.setState({isLoading: true});
-  authAPI.logout()
-  .catch(errorHandler)
-  .finally(() => {
-    Store.setState({user: null, isLoading: false});
-    Router.navigate('/');
   });
 };
