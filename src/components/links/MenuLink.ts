@@ -12,7 +12,9 @@ export class MenuLink extends Link {
   render(props: IncomingProps): string {
     return `
       <li class="container__row container__element_centered">
-        <a onclick="%{onClick}%" class="container__link">${props.label}</a>
+        <a onclick="%{onclickHandler}%" class="container__link">
+          ${props.label}
+        </a>
       </li>
     `;
   }

@@ -8,6 +8,8 @@ import {AvatarPopup as Popup} from '../components/popups/AvatarPopup';
 import {RoundButtonLink} from '../components/buttons/RoundButtonLink';
 import {JSONWrapper} from '../modules/Utils';
 
+import {logoutService} from '../services/auth';
+
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
   Popup, AvatarControl,
@@ -46,9 +48,17 @@ for (const input of inputsData) {
 
 const inputs = JSONWrapper.stringify(inputsData);
 
-view.props.contents = new Form({
+const profileForm = new Form({
   name: 'profile',
   action: '',
+  logoutLink: new RowLink({
+    url: '/',
+    label: 'Выйти',
+    style: 'container__link_danger',
+    onclick: () => {
+      logoutService();
+    },
+  }),
   fieldset: () => `
     %{ AvatarControl }%
     <h1 class="container__header">${userData.first_name}</h1>
@@ -56,10 +66,11 @@ view.props.contents = new Form({
     <br><br><br>
     %{ RowLink({"url": "/settings/edit", "label": "Изменить данные"}) }%
     %{ RowLink({"url": "/settings/password", "label": "Изменить пароль"}) }%
-    %{ RowLink({"url": "/", "label": "Выйти",
-                "style": "container__link_danger"}) }%
+    %{logoutLink}%
     <br><br>
   `,
 });
+
+view.props.contents = profileForm;
 
 export {view};

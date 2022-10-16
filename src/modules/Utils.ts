@@ -38,6 +38,11 @@ function arrEqual(baseArr: Array<unknown>, secondArr: Array<unknown>) {
 export const objIntersect = function objIntersect(
     baseObj: AnyObj, chunkObj: AnyObj,
 ): boolean {
+  if (baseObj === null || baseObj === chunkObj) {
+    return true;
+  } else {
+    return false;
+  }
   const entries: [string, unknown][] = Object.entries(chunkObj);
   for (const [key, value] of entries) {
     if (typeof baseObj[key as keyof typeof baseObj] !== 'undefined') {

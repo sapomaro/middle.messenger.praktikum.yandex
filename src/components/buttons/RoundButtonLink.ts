@@ -11,7 +11,7 @@ export class RoundButtonLink extends Link {
   }
   render(): string {
     return `
-      <button onclick="%{onClick}%" 
+      <button onclick="%{onclickHandler}%" 
         class="form__button form__button_standard form__button_round">
           ⬅
       </button>

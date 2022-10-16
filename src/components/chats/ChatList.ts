@@ -11,6 +11,7 @@ export class ChatList extends Block {
     this.setProps({ChatListItem});
   }
   filterChats(searchValue: string) {
+    // this.props.allChats 
     if (this.props.chats instanceof Array) {
       return this.props.chats.filter((chat: Record<string, unknown>) => {
          for (const chatValue of Object.values(chat)) {

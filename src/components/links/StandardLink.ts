@@ -12,7 +12,9 @@ export class StandardLink extends Link {
   render(props: IncomingProps): string {
     return `
       <div class="container__element container__element_centered">
-        <a onclick="%{onClick}%" class="container__link">${props.label}</a>
+        <a onclick="%{onclickHandler}%" class="container__link">
+          ${props.label}
+        </a>
       </div>
     `;
   }

@@ -1,25 +1,31 @@
 import {Store} from '../modules/Store';
 import {Router} from '../modules/Router';
 import {authAPI, LoginDataType} from '../api/auth';
+import {errorHandler} from './errorHandler';
+
+export {LoginDataType};
 
 export const loginService = async (data: LoginDataType) => {
   authAPI.login(data)
-  .then(({responseJSON}) => {
-    console.log(responseJSON);
-    Store.setState({currentFormError: null});
-    Router.navigate('/messenger');
+  .then(() => {
+    authAPI.getUserData()
+    .then(({responseJSON}) => {
+      Store.setState({
+        user: responseJSON.user,
+        currentFormError: null,
+      });
+      Router.navigate('/messenger');
+    })
+    .catch(errorHandler);
   })
-  .catch(({responseJSON, error, status}) => {
-    let currentFormError = '';
-    if (responseJSON && responseJSON.reason) {
-      currentFormError = responseJSON.reason;
-      console.warn(currentFormError);
-    } else {
-      currentFormError = 'Что-то пошло не так...';
-      console.warn(`Status: ${status}`, error);
-    }
-    Store.setState({currentFormError});
-  });
+  .catch(errorHandler);
 };
 
-export {LoginDataType};
+export const logoutService = async () => {
+  authAPI.logout()
+  .catch(errorHandler)
+  .finally(() => {
+    Store.setState({user: null});
+    Router.navigate('/');
+  });
+};

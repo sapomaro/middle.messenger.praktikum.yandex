@@ -24,12 +24,12 @@ type Options = InitOptions & {
 };
 
 type Handler = {
-  (callback: Fn): State;
+  (callback: Fn): AjaxState;
   trigger: () => void;
   callbacks: Array<Fn>;
 }
 
-type State = InitOptions & {
+export type AjaxState = InitOptions & {
   then: Handler;
   catch: Handler;
   finally: Handler;
@@ -42,12 +42,12 @@ type State = InitOptions & {
   error?: Error;
 };
 
-const ajax = function(options: InitOptions): State {
-  const request: State = {
+const ajax = function(options: InitOptions): AjaxState {
+  const request: AjaxState = {
     url: options.url,
     options,
     then: (() => {
-      const handler: Handler = (callback: Fn): State => {
+      const handler: Handler = (callback: Fn): AjaxState => {
         handler.callbacks.push(callback);
         return request;
       };
@@ -68,7 +68,7 @@ const ajax = function(options: InitOptions): State {
     })(),
 
     catch: (() => {
-      const handler: Handler = (callback: Fn): State => {
+      const handler: Handler = (callback: Fn): AjaxState => {
         handler.callbacks = [callback];
         return request;
       };
@@ -81,7 +81,7 @@ const ajax = function(options: InitOptions): State {
     })(),
 
     finally: (() => {
-      const handler: Handler = (callback: Fn): State => {
+      const handler: Handler = (callback: Fn): AjaxState => {
         handler.callbacks = [callback];
         return request;
       };
@@ -108,7 +108,7 @@ const ajax = function(options: InitOptions): State {
         request.status = status;
         request.then.trigger();
       },
-      errorHandler: (error: Error | State): void => {
+      errorHandler: (error: Error | AjaxState): void => {
         if (error instanceof Error) {
           request.error = error;
         } else {
@@ -130,16 +130,16 @@ const ajax = function(options: InitOptions): State {
 
 ajax.baseUrl = '';
 
-ajax.get = (url: string, data?: Record<string, string>): State => {
+ajax.get = (url: string, data?: Record<string, string>): AjaxState => {
   return ajax({url, method: METHOD.GET, data});
 };
-ajax.post = (url: string, data?: Record<string, unknown>): State => {
+ajax.post = (url: string, data?: Record<string, unknown>): AjaxState => {
   return ajax({url, method: METHOD.POST, data});
 };
-ajax.put = (url: string, data?: Record<string, unknown>): State => {
+ajax.put = (url: string, data?: Record<string, unknown>): AjaxState => {
   return ajax({url, method: METHOD.PUT, data});
 };
-ajax.delete = (url: string, data?: Record<string, unknown>): State => {
+ajax.delete = (url: string, data?: Record<string, unknown>): AjaxState => {
   return ajax({url, method: METHOD.DELETE, data});
 };
 

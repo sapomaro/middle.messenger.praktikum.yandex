@@ -5,7 +5,7 @@ import {StandardInput as Input} from '../components/inputs/StandardInput';
 import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {StandardLink as Link} from '../components/links/StandardLink';
 
-import {Store} from '../modules/Store';
+//import {Store} from '../modules/Store';
 import {loginService, LoginDataType} from '../services/auth';
 
 const view = new NarrowLayout({
@@ -29,9 +29,7 @@ const authForm = new Form({
   `,
 });
 
-Store.on('load', () => {
-  console.log('Store loaded');
-});
+//Store.on('load', () => { console.log('Store loaded'); });
 
 authForm.on(Form.EVENTS.SUBMIT_OK, (data: LoginDataType) => {
   console.log('SUBMIT OK');

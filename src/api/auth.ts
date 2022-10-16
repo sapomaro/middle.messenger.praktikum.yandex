@@ -1,14 +1,10 @@
 import {ajax} from '../modules/Ajax';
-import {baseAPIUrl, APIError} from './base';
-
-export {APIError};
+import {baseAPIUrl} from './base';
 
 export type LoginDataType = {
   login: string;
   password: string;
 };
-
-//type LoginResponseData = {} | APIError;
 
 ajax.baseUrl = baseAPIUrl;
 
