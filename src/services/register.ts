@@ -1,14 +1,13 @@
 import {Store} from '../modules/Store';
 import {Router} from '../modules/Router';
-import {registerAPI, RegDataType} from '../api/register';
-import {authAPI} from '../api/auth';
+import {authAPI, RegDataType} from '../api/auth';
 import {errorHandler} from './errorHandler';
 
 export {RegDataType};
 
 export const registerService = async (data: RegDataType) => {
   Store.setState({isLoading: true});
-  registerAPI.signup(data)
+  authAPI.signup(data)
   .then(() => {
     authAPI.getUserData()
     .then(({responseJSON}) => {
@@ -16,7 +15,6 @@ export const registerService = async (data: RegDataType) => {
         user: responseJSON.user,
         currentFormError: null,
       });
-console.log(responseJSON.user);
       Router.navigate('/profile');
     })
     .catch(errorHandler);

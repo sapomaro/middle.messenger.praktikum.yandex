@@ -25,7 +25,6 @@ const inputs = JSONWrapper.stringify([
 
 const regForm = new Form({
   name: 'reg',
-  action: '/messenger',
   Input, Link,
   formSubmitButton: new (StoreSynced(Button))({
     name: 'submit',

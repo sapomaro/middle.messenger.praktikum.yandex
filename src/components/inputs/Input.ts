@@ -24,16 +24,20 @@ export class Input extends Block {
     this.setProps({
       value: props.value || props.placeholder || '',
       onFocus: function(event: Event): void {
-        if (self.hasActualValue) {
-          // self.validate.call(self, event);
+        if (!this.getAttribute('readonly')) {
+          // if (self.hasActualValue) {
+            // self.validate.call(self, event);
+          // }
+          self.togglePlaceholder.call(self, event);
+          self.fire('focus', event);
         }
-        self.togglePlaceholder.call(self, event);
-        self.fire('focus', event);
       },
       onBlur: function(event: Event): void {
-        self.validate.call(self, event);
-        self.togglePlaceholder.call(self, event);
-        self.fire('blur', event);
+        if (!this.getAttribute('readonly')) {
+          self.validate.call(self, event);
+          self.togglePlaceholder.call(self, event);
+          self.fire('blur', event);
+        }
       },
       onInput: function(event: Event): void {
         this.setAttribute('value', this.value); /* для правильного отображения

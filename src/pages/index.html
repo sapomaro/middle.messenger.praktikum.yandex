@@ -2,8 +2,8 @@
 <script type="module">
   import {Router} from '../modules/Router';
   import {view as IndexPage} from './main';
-  import {view as AuthPage} from './auth';
-  import {view as RegisterPage} from './register';
+  import {view as SignInPage} from './signin';
+  import {view as SignUpPage} from './signup';
   import {view as ProfilePage} from './profile';
   import {view as ProfileEditPage} from './profile_edit';
   import {view as ProfilePassPage} from './profile_newpass';
@@ -14,8 +14,8 @@
 
   Router.registerRoutes({
     '/menu': IndexPage,
-    '/': AuthPage,
-    '/sing-up': RegisterPage,
+    '/': SignInPage,
+    '/sing-up': SignUpPage,
     '/settings': ProfilePage,
     '/settings/edit': ProfileEditPage,
     '/settings/password': ProfilePassPage,

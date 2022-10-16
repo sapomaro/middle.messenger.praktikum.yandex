@@ -1,3 +1,12 @@
+export const user = {
+  email: 'pochta@yandex.ru',
+  login: 'ivanovivan',
+  first_name: 'Иван',
+  second_name: 'Иванов',
+  display_name: 'Ivan Ivanov',
+  phone: '+77777777777',
+};
+
 export const chats = [
   {
     user: 'Андрей',

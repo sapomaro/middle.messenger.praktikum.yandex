@@ -1,7 +1,7 @@
 import {Block} from '../../modules/Block';
 
 type IncomingProps = {
-  currentFormError: string | null;
+  currentError: string | null;
 }
 
 export class FormError extends Block {
@@ -12,7 +12,7 @@ export class FormError extends Block {
     return `
       <div class="container__element container__element_centered
           container__element_adjacent">
-        <span class="form__input__error">${props.currentFormError ?? ''}</span>
+        <span class="form__input__error">${props.currentError ?? ''}</span>
       </div>
     `;
   }

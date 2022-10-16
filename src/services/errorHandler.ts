@@ -1,15 +1,17 @@
-import {AjaxState} from '../modules/Ajax';
+import type {AjaxState} from '../modules/Ajax';
 import {Store} from '../modules/Store';
 
-export const errorHandler = (error: AjaxState | Error) => {
-  let currentFormError = '';
+export type ErrorType = AjaxState | Error;
+
+export const errorHandler = (error: ErrorType) => {
+  let currentError = '';
   if (error instanceof Error || !error.responseJSON ||
       typeof error.responseJSON.reason !== 'string') {
-    currentFormError = 'Что-то пошло не так...';
+    currentError = 'Что-то пошло не так...';
     console.warn(error);
   } else {
-    currentFormError = error.responseJSON.reason;
-    console.warn(currentFormError);
+    currentError = error.responseJSON.reason;
+    console.warn(currentError);
   }
-  Store.setState({currentFormError});
+  Store.setState({currentError});
 };

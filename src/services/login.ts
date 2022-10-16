@@ -1,6 +1,7 @@
 import {Store} from '../modules/Store';
 import {Router} from '../modules/Router';
 import {authAPI, LoginDataType} from '../api/auth';
+import type {ProfileDataType} from '../api/profile';
 import {errorHandler} from './errorHandler';
 
 export {LoginDataType};
@@ -11,9 +12,10 @@ export const loginService = async (data: LoginDataType) => {
   .then(() => {
     authAPI.getUserData()
     .then(({responseJSON}) => {
+      const user: ProfileDataType = responseJSON;
       Store.setState({
-        user: responseJSON.user,
-        currentFormError: null,
+        user,
+        currentError: null,
       });
       Router.navigate('/messenger');
     })

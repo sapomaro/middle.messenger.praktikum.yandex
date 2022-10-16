@@ -6,7 +6,7 @@ import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {StandardLink as Link} from '../components/links/StandardLink';
 
 import {StoreSynced} from '../modules/Store';
-import {loginService, LoginDataType} from '../services/auth';
+import {loginService, LoginDataType} from '../services/login';
 
 const view = new NarrowLayout({
   title: 'Вход',
@@ -14,7 +14,6 @@ const view = new NarrowLayout({
 
 const authForm = new Form({
   name: 'auth',
-  action: '/messenger',
   Input, Link,
   formSubmitButton: new (StoreSynced(Button))({
     name: 'submit',
