@@ -1,3 +1,5 @@
+import './Popup.scss';
+
 import {EventBus} from '../../modules/EventBus';
 import {Block} from '../../modules/Block';
 

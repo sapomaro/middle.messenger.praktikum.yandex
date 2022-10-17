@@ -15,7 +15,7 @@ export const registerService = async (data: RegDataType) => {
         user: responseJSON.user,
         currentFormError: null,
       });
-      Router.navigate('/profile');
+      Router.navigate('/messenger');
     })
     .catch(errorHandler);
   })

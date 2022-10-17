@@ -1,3 +1,5 @@
+import './Link.scss';
+
 import {Block} from '../../modules/Block';
 import {Router} from '../../modules/Router';
 

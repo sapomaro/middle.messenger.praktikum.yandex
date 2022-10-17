@@ -1,0 +1,29 @@
+@import "../../constants/colors.scss";
+
+.container__link {
+  color: $main-color;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(0.9);
+    text-decoration: underline;
+  }
+
+  &_danger {
+    color: $danger-color;
+  }
+
+  &_secondary {
+    color: $note-color;
+  }
+
+  &_underlined {
+    text-decoration: underline;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}

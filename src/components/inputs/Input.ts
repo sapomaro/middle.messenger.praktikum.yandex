@@ -8,7 +8,7 @@ export type InputPropsType = {
   name: string;
   label?: string;
   value?: string;
-  type?: 'text' | 'password' | 'email' | 'tel' | 'number';
+  type?: 'text' | 'password' | 'email' | 'tel'| 'file' | 'number';
   placeholder?: string;
   error?: string;
   readonly?: boolean;
