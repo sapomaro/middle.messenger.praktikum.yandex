@@ -44,11 +44,11 @@ const profileForm = new (StoreSynced(Form))({
   }),
   fieldset: () => {
     const user = profileForm.props.user;
-    if (user && profileForm.inputs) {
+    if (user && profileForm.props.inputs) {
       return `
         %{ AvatarControl }%
         <h1 class="container__header">${(<ProfileDataType>user).first_name ?? ''}</h1>
-        %{ RowInput(${profileForm.inputs}...) }%
+        %{ RowInput(${profileForm.props.inputs}...) }%
         <br><br><br>
         %{ RowLink({"url": "/settings/edit", "label": "Изменить данные"}) }%
         %{ RowLink({"url": "/settings/password", "label": "Изменить пароль"}) }%
@@ -68,7 +68,7 @@ profileForm.on(Block.EVENTS.UNMOUNT, () => {
       input.value = user[input.name as keyof typeof user];
       input.readonly = true;
     }
-    profileForm.inputs = JSONWrapper.stringify(profileInputs);
+    profileForm.props.inputs = JSONWrapper.stringify(profileInputs);
   }
 });
 

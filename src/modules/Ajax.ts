@@ -14,11 +14,11 @@ type InitOptions = {
   tries?: number;
   timeout?: number;
   headers?: Record<string, string>;
-  data?: Record<string, unknown>;
+  data?: unknown;
 }
 
 type Options = InitOptions & {
-  data?: Record<string, unknown>;
+  //data?: unknown;
   successCallback: Fn;
   errorHandler: Fn;
 };
@@ -130,16 +130,16 @@ const ajax = function(options: InitOptions): AjaxState {
 
 ajax.baseUrl = '';
 
-ajax.get = (url: string, data?: Record<string, string>): AjaxState => {
+ajax.get = (url: string, data?: unknown): AjaxState => {
   return ajax({url, method: METHOD.GET, data});
 };
-ajax.post = (url: string, data?: Record<string, unknown>): AjaxState => {
+ajax.post = (url: string, data?: unknown): AjaxState => {
   return ajax({url, method: METHOD.POST, data});
 };
-ajax.put = (url: string, data?: Record<string, unknown>): AjaxState => {
+ajax.put = (url: string, data?: unknown): AjaxState => {
   return ajax({url, method: METHOD.PUT, data});
 };
-ajax.delete = (url: string, data?: Record<string, unknown>): AjaxState => {
+ajax.delete = (url: string, data?: unknown): AjaxState => {
   return ajax({url, method: METHOD.DELETE, data});
 };
 
@@ -148,8 +148,12 @@ const ajaxRequest = function ajaxRequest(url: string,
   const xhr = new XMLHttpRequest();
   const method = (options.method ? options.method : METHOD.GET);
   const tries = (options.tries ? --options.tries : 0);
-  const data = (options.data ? options.data : {});
-  const urlParams = (method === METHOD.GET ? getUrlParams(data) : '');
+  const data = (options.data ? options.data : '');
+  const dataType = (typeof data === 'string') ? 'string' :
+    (typeof data === 'object' && data instanceof Blob) ? 'file' :
+    (typeof data === 'object' && data !== null) ? 'json' : 'unknown';
+  const urlParams = (method === METHOD.GET && dataType === 'json') ?
+    getUrlParams(data as Record<string, unknown>) : '';
 
   xhr.open(method, ajax.baseUrl + url + urlParams, true);
   xhr.withCredentials = true;
@@ -177,7 +181,9 @@ const ajaxRequest = function ajaxRequest(url: string,
     xhr.send();
   } else {
     try {
-      xhr.send(JSON.stringify(data));
+      xhr.send((dataType === 'json') ?
+        JSON.stringify(data as Record<string, unknown>) :
+        data as string | Blob);
     } catch (error) {
       handleError(error);
     }

@@ -11,6 +11,7 @@ export type InputPropsType = {
   type?: 'text' | 'password' | 'email' | 'tel'| 'file' | 'number';
   placeholder?: string;
   error?: string;
+  accept?: string;
   readonly?: boolean;
 }
 
@@ -45,6 +46,11 @@ export class Input extends Block {
         self.props.value = this.value;
         self.autoResize(this);
         self.fire('input', event);
+      },
+      onChange: function(event: Event): void {
+        this.setAttribute('value', this.value);
+        self.props.value = this.value;
+        self.fire('change', event);
       },
     });
 

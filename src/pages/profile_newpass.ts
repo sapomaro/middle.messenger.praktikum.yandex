@@ -24,7 +24,7 @@ const profileForm = new Form({
     label: 'Сохранить',
     isLoading: false,
   }),
-  formError: new (StoreSynced(FormError))({currentFormError: null}),
+  formError: new (StoreSynced(FormError))({currentError: null}),
   fieldset: () => `
     %{ AvatarControl({"unclickable": true}) }%
     %{ Input({

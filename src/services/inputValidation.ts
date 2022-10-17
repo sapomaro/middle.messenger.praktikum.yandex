@@ -84,6 +84,10 @@ export const getValidationMessage = ({
       if (value.length === 0) return `Сообщение не может быть пустым`;
       break;
 
+    case 'avatar':
+      if (value.length === 0) return `Нужно выбрать файл`;
+      break;
+
     default:
       return null;
   }

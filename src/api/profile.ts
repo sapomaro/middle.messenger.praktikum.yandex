@@ -17,9 +17,15 @@ export type ProfilePassType = {
   newPassword: string;
 };
 
+export type AvatarDataType = {
+  avatar: Blob;
+};
+
 ajax.baseUrl = baseAPIUrl;
 
 export const profileAPI = {
   editData: (data: ProfileDataType) => ajax.put('user/profile', data),
   changePassword: (data: ProfilePassType) => ajax.put('user/password', data),
+  changeAvatar: (data: AvatarDataType) =>
+    ajax.put('user/profile/avatar', data.avatar),
 };

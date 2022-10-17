@@ -29,13 +29,13 @@ const profileForm = new (StoreSynced(Form))({
     label: 'Сохранить',
     isLoading: false,
   }),
-  formError: new (StoreSynced(FormError))({currentFormError: null}),
+  formError: new (StoreSynced(FormError))({currentError: null}),
   fieldset: () => {
     const user = profileForm.props.user;
-    if (user && profileForm.inputs) {
+    if (user && profileForm.props.inputs) {
       return `
         %{ AvatarControl({"unclickable": true}) }%
-        %{ Input(${profileForm.inputs}...) }%
+        %{ Input(${profileForm.props.inputs}...) }%
         <br><br><br>
         %{formSubmitButton}%
         %{formError}%
@@ -54,7 +54,7 @@ profileForm.on(Block.EVENTS.UNMOUNT, () => {
       input.value = user[input.name as keyof typeof user];
       input.readonly = false;
     }
-    profileForm.inputs = JSONWrapper.stringify(profileInputs);
+    profileForm.props.inputs = JSONWrapper.stringify(profileInputs);
   }
 });
 

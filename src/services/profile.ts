@@ -1,10 +1,11 @@
 import {Store} from '../modules/Store';
 import {Router} from '../modules/Router';
 import {authAPI} from '../api/auth';
-import {profileAPI, ProfileDataType, ProfilePassType} from '../api/profile';
+import {profileAPI, ProfileDataType, ProfilePassType,
+  AvatarDataType} from '../api/profile';
 import {errorHandler, ErrorType} from './errorHandler';
 
-export {ProfileDataType, ProfilePassType};
+export {ProfileDataType, ProfilePassType, AvatarDataType};
 
 export const profileLoadService = async () => {
   authAPI.getUserData()
@@ -42,6 +43,18 @@ export const profilePasswordService = async (data: ProfilePassType) => {
       currentError: null,
     });
     Router.navigate('/settings');
+  })
+  .catch(errorHandler);
+};
+
+export const avatarChangeService = async (data: AvatarDataType) => {
+  profileAPI.changeAvatar(data)
+  .then(({responseJSON}) => {
+    const user: ProfileDataType = responseJSON;
+    Store.setState({
+      user,
+      currentError: null,
+    });
   })
   .catch(errorHandler);
 };
