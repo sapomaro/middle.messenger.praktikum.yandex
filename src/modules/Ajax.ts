@@ -1,3 +1,5 @@
+import {isPlainObject, isArrayOrObject, PlainObject} from './Utils';
+
 enum METHOD {
   GET = 'GET',
   POST = 'POST',
@@ -151,7 +153,7 @@ const ajaxRequest = function ajaxRequest(url: string,
   const data = (options.data ? options.data : '');
   const dataType = (typeof data === 'string') ? 'string' :
     (typeof data === 'object' && data instanceof Blob) ? 'file' :
-    (typeof data === 'object' && data !== null) ? 'json' : 'unknown';
+    (isArrayOrObject(data)) ? 'json' : 'unknown';
   const urlParams = (method === METHOD.GET && dataType === 'json') ?
     getUrlParams(data as Record<string, unknown>) : '';
 
@@ -160,7 +162,7 @@ const ajaxRequest = function ajaxRequest(url: string,
   xhr.timeout = (options.timeout ? options.timeout : 3000);
 
   const headers = options.headers || {};
-  if (typeof data === 'object' && !headers['Content-Type']) {
+  if (dataType === 'json' && !headers['Content-Type']) {
     headers['Content-Type'] = 'application/json; charset = UTF-8';
   }
   for (const [key, value] of Object.entries(headers)) {
@@ -230,24 +232,6 @@ const ajaxRequest = function ajaxRequest(url: string,
   return xhr;
 };
 
-const getUrlParams = (data: Record<string, unknown>) => {
-  const urlData: Record<string, string> = {};
-  for (const [key, value] of Object.entries(data)) {
-    if (typeof value !== 'string' ||
-        typeof value !== 'number' ||
-        typeof value !== 'boolean') {
-      continue;
-    }
-    urlData[key] = value;
-  }
-  let urlParams = '?';
-  urlParams += (new URLSearchParams(urlData)).toString();
-  if (urlParams === '?') {
-    urlParams = '';
-  }
-  return urlParams;
-};
-
 const getResponseHeaders = (xhr: XMLHttpRequest) => {
   const headers: Record<string, string> = {};
   const headersString = xhr.getAllResponseHeaders();
@@ -258,5 +242,26 @@ const getResponseHeaders = (xhr: XMLHttpRequest) => {
   }
   return headers;
 };
+
+const getKey = (key: string, parentKey?: string) => {
+  return parentKey ? `${parentKey}[${key}]` : key;
+}
+const getParams = (data: PlainObject | [], parentKey?: string) => {
+  const result: [string, string][] = [];
+  for(const [key, value] of Object.entries(data)) {
+    if (isArrayOrObject(value)) {
+      result.push(...getParams(value, getKey(key, parentKey)));
+    } else {
+      result.push([getKey(key, parentKey), encodeURIComponent(String(value))]);
+    }
+  }
+  return result;
+}
+const getUrlParams = (data: PlainObject) => {
+  if (!isPlainObject(data)) {
+    throw new Error('input must be an object');
+  }
+  return getParams(data).map((arr) => arr.join('=')).join('&');
+}
 
 export {ajax};
