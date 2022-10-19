@@ -18,8 +18,8 @@ export type RegDataType = {
 ajax.baseUrl = baseAPIUrl;
 
 export const authAPI = {
-  login: (data: LoginDataType) => ajax.post('auth/signin', data),
-  logout: () => ajax.post('auth/logout'),
-  signup: (data: RegDataType) => ajax.post('auth/signup', data),
-  getUserData: () => ajax.get('auth/user'),
+  login: (data: LoginDataType) => ajax.post('/auth/signin', data),
+  logout: () => ajax.post('/auth/logout'),
+  signup: (data: RegDataType) => ajax.post('/auth/signup', data),
+  getUserData: () => ajax.get('/auth/user'),
 };

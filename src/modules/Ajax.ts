@@ -162,6 +162,9 @@ const ajaxRequest = function ajaxRequest(url: string,
   xhr.timeout = (options.timeout ? options.timeout : 3000);
 
   const headers = options.headers || {};
+  if (!headers['accept']) {
+    headers['accept'] = 'application/json';
+  }
   if (!headers['Content-Type']) {
     if (dataType === 'json') {
       headers['Content-Type'] = 'application/json; charset = UTF-8';

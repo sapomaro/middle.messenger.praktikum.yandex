@@ -24,11 +24,11 @@ export type AvatarDataType = {
 ajax.baseUrl = baseAPIUrl;
 
 export const profileAPI = {
-  editData: (data: ProfileDataType) => ajax.put('user/profile', data),
-  changePassword: (data: ProfilePassType) => ajax.put('user/password', data),
+  editData: (data: ProfileDataType) => ajax.put('/user/profile', data),
+  changePassword: (data: ProfilePassType) => ajax.put('/user/password', data),
   changeAvatar: (data: AvatarDataType) => {
     const formData = new FormData();
     formData.append('avatar', data.avatar);
-    return ajax.put('user/profile/avatar', formData);
+    return ajax.put('/user/profile/avatar', formData);
   },
 };
