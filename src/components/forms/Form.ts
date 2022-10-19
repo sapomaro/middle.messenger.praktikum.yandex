@@ -48,7 +48,7 @@ export class Form extends Block {
           // console.warn(state.errorMsgs);
           this.fire(Form.EVENTS.SUBMIT_FAIL, state.errorMsgs);
           this.listDescendants((block: Block) => {
-            block.fire(Form.EVENTS.SUBMIT_FAIL, event, data);
+            block.fire(Form.EVENTS.SUBMIT_FAIL, event, state.errorMsgs);
           });
         }
         return false;

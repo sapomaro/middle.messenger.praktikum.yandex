@@ -152,7 +152,7 @@ const ajaxRequest = function ajaxRequest(url: string,
   const tries = (options.tries ? --options.tries : 0);
   const data = (options.data ? options.data : '');
   const dataType = (typeof data === 'string') ? 'string' :
-    (typeof data === 'object' && data instanceof Blob) ? 'file' :
+    (typeof data === 'object' && data instanceof FormData) ? 'formdata' :
     (isArrayOrObject(data)) ? 'json' : 'unknown';
   const urlParams = (method === METHOD.GET && dataType === 'json') ?
     getUrlParams(data as Record<string, unknown>) : '';
@@ -162,8 +162,12 @@ const ajaxRequest = function ajaxRequest(url: string,
   xhr.timeout = (options.timeout ? options.timeout : 3000);
 
   const headers = options.headers || {};
-  if (dataType === 'json' && !headers['Content-Type']) {
-    headers['Content-Type'] = 'application/json; charset = UTF-8';
+  if (!headers['Content-Type']) {
+    if (dataType === 'json') {
+      headers['Content-Type'] = 'application/json; charset = UTF-8';
+    } else if (dataType === 'formdata') {
+      headers['Content-Type'] = 'multipart/form-data';
+    }
   }
   for (const [key, value] of Object.entries(headers)) {
     xhr.setRequestHeader(key, value);

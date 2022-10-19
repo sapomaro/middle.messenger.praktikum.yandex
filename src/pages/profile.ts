@@ -35,7 +35,8 @@ export const profileInputs: Array<{
 
 const profileForm = new (StoreSynced(Form))({
   name: 'profile',
-  RowInput, RowLink, AvatarControl,
+  RowInput, RowLink,
+  avatarControl: new (StoreSynced(AvatarControl))(),
   logoutLink: new RowLink({
     url: '/',
     label: 'Выйти',
@@ -46,7 +47,7 @@ const profileForm = new (StoreSynced(Form))({
     const user = profileForm.props.user;
     if (user && profileForm.props.inputs) {
       return `
-        %{ AvatarControl }%
+        %{ avatarControl }%
         <h1 class="container__header">${(<ProfileDataType>user).first_name ?? ''}</h1>
         %{ RowInput(${profileForm.props.inputs}...) }%
         <br><br><br>

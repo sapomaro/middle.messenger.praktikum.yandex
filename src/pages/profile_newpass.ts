@@ -17,7 +17,8 @@ const view = new WideLayoutWithSidebar({
 
 const profileForm = new Form({
   name: 'changepassword',
-  Input, AvatarControl,
+  Input,
+  avatarControl: new (StoreSynced(AvatarControl))({unclickable: true}),
   formSubmitButton: new (StoreSynced(Button))({
     name: 'submit',
     type: 'submit',
@@ -26,7 +27,7 @@ const profileForm = new Form({
   }),
   formError: new (StoreSynced(FormError))({currentError: null}),
   fieldset: () => `
-    %{ AvatarControl({"unclickable": true}) }%
+    %{avatarControl}%
     %{ Input({
       "label": "Старый пароль", "name": "oldPassword", "type": "password",
       "placeholder": "********"

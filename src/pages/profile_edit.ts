@@ -22,7 +22,8 @@ const view = new WideLayoutWithSidebar({
 
 const profileForm = new (StoreSynced(Form))({
   name: 'profile',
-  Input, AvatarControl,
+  Input,
+  avatarControl: new (StoreSynced(AvatarControl))({unclickable: true}),
   formSubmitButton: new (StoreSynced(Button))({
     name: 'submit',
     type: 'submit',
@@ -34,7 +35,7 @@ const profileForm = new (StoreSynced(Form))({
     const user = profileForm.props.user;
     if (user && profileForm.props.inputs) {
       return `
-        %{ AvatarControl({"unclickable": true}) }%
+        %{avatarControl}%
         %{ Input(${profileForm.props.inputs}...) }%
         <br><br><br>
         %{formSubmitButton}%

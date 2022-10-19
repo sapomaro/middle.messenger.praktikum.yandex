@@ -10,8 +10,13 @@ export class AvatarControl extends PopupControl {
     if (props && props.unclickable) {
       return `<div class="form__avatar"></div>`;
     } else {
+      let avatar = '';
+      if (props && props.user && props.user.avatar) {
+        avatar = props.user.avatar;
+      }
       return `
-        <div class="form__avatar" onclick="%{showPopup}%">
+        <div class="form__avatar" onclick="%{showPopup}%"
+        ${avatar? 'style="background: url('+avatar+')"' : ''}>
           <div class="form__avatar__control">
             <span>Поменять аватар</span>
           </div>

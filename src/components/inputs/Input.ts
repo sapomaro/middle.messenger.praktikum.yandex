@@ -50,6 +50,7 @@ export class Input extends Block {
       onChange: function(event: Event): void {
         this.setAttribute('value', this.value);
         self.props.value = this.value;
+        self.validate.call(self, event);
         self.fire('change', event);
       },
     });

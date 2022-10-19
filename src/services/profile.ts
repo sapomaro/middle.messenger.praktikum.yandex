@@ -1,5 +1,6 @@
 import {Store} from '../modules/Store';
 import {Router} from '../modules/Router';
+import {EventBus} from '../modules/EventBus';
 import {authAPI} from '../api/auth';
 import {profileAPI, ProfileDataType, ProfilePassType,
   AvatarDataType} from '../api/profile';
@@ -55,6 +56,7 @@ export const avatarChangeService = async (data: AvatarDataType) => {
       user,
       currentError: null,
     });
+    EventBus.fire('popupHide');
   })
   .catch(errorHandler);
 };
