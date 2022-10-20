@@ -1,3 +1,5 @@
+import './RoundButton.scss';
+
 import {Link} from '../links/Link';
 
 type IncomingProps = {
@@ -5,7 +7,7 @@ type IncomingProps = {
   label?: string;
 }
 
-export class RoundButtonLink extends Link {
+export class RoundButton extends Link {
   constructor(props: IncomingProps) {
     super(props);
   }

@@ -5,14 +5,14 @@ import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {RowInput as Input} from '../components/inputs/RowInput';
 import {AvatarControl} from '../components/popups/AvatarControl';
 import {Popup} from '../components/popups/Popup';
-import {RoundButtonLink} from '../components/buttons/RoundButtonLink';
+import {RoundButton} from '../components/buttons/RoundButton';
 import {StoreSynced} from '../modules/Store';
 import {profilePasswordService, ProfilePassType} from '../services/profile';
 
 const view = new WideLayoutWithSidebar({
   title: 'Изменить пароль',
   Popup,
-  aside: new RoundButtonLink({url: '/settings'}),
+  aside: new RoundButton({url: '/settings'}),
 });
 
 const profileForm = new Form({

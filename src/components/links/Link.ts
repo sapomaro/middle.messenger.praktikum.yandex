@@ -3,22 +3,23 @@ import './Link.scss';
 import {Block} from '../../modules/Block';
 import {Router} from '../../modules/Router';
 
-type IncomingProps = {
-  url: string;
+export type LinkProps = {
+  url?: string;
   label?: string;
   onclick?: () => void;
 }
 
 export class Link extends Block {
-  constructor(props: IncomingProps) {
+  constructor(props: LinkProps) {
     super(props);
     this.setProps({
-      onclickHandler: (typeof props.onclick === 'function' ?
+      onclickHandler: ((typeof props.onclick === 'function' &&
+          typeof props.url === 'string') ?
         props.onclick : () => { Router.navigate(props.url); }
       ),
     });
   }
-  render(props: IncomingProps): string {
+  render(props: LinkProps): string {
     return `
       <a onclick="%{onclickHandler}%">
         ${props.label}

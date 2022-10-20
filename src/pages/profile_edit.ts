@@ -6,7 +6,7 @@ import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {RowInput as Input} from '../components/inputs/RowInput';
 import {AvatarControl} from '../components/popups/AvatarControl';
 import {Popup} from '../components/popups/Popup';
-import {RoundButtonLink} from '../components/buttons/RoundButtonLink';
+import {RoundButton} from '../components/buttons/RoundButton';
 import {JSONWrapper} from '../modules/Utils';
 import {profileInputs} from './profile';
 import {StoreSynced} from '../modules/Store';
@@ -17,7 +17,7 @@ import {profileLoadService, profileEditService,
 const view = new WideLayoutWithSidebar({
   title: 'Изменить данные',
   Popup,
-  aside: new RoundButtonLink({url: '/settings'}),
+  aside: new RoundButton({url: '/settings'}),
 });
 
 const profileForm = new (StoreSynced(Form))({

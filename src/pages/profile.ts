@@ -5,7 +5,7 @@ import {RowInput} from '../components/inputs/RowInput';
 import {RowLink} from '../components/links/RowLink';
 import {AvatarControl} from '../components/popups/AvatarControl';
 import {AvatarPopup as Popup} from '../components/popups/AvatarPopup';
-import {RoundButtonLink} from '../components/buttons/RoundButtonLink';
+import {RoundButton} from '../components/buttons/RoundButton';
 import {StoreSynced} from '../modules/Store';
 import {profileLoadService, ProfileDataType} from '../services/profile';
 import {logoutService} from '../services/login';
@@ -15,7 +15,7 @@ import {JSONWrapper} from '../modules/Utils';
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
   Popup,
-  aside: new RoundButtonLink({url: '/messenger'}),
+  aside: new RoundButton({url: '/messenger'}),
 });
 
 export const profileInputs: Array<{
