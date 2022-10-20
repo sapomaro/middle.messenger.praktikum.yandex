@@ -9,7 +9,8 @@
     "tscheck": "npx tsc --noEmit",
     "eslint": "npx eslint \"./src/**/*.ts\" --ext .ts",
     "csslint": "npx stylelint \"./src/**/*.scss\"",
-    "lint": "npm run tscheck && npm run eslint && npm run csslint"
+    "lint": "npm run tscheck && npm run eslint && npm run csslint",
+    "test": "npm audit"
   },
   "targets": {
     "default": {

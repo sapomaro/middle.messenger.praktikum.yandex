@@ -1,21 +1,16 @@
 import './RoundButton.scss';
 
-import {Link} from '../links/Link';
-
-type IncomingProps = {
-  url: string;
-  label?: string;
-}
+import {Link, LinkProps} from '../links/Link';
 
 export class RoundButton extends Link {
-  constructor(props: IncomingProps) {
+  constructor(props: LinkProps) {
     super(props);
   }
-  render(): string {
+  render(props: LinkProps) {
     return `
       <button onclick="%{onclickHandler}%" 
         class="form__button form__button_standard form__button_round">
-          ⬅
+          ${props.label}
       </button>
     `;
   }

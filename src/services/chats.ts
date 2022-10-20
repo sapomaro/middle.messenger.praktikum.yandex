@@ -1,8 +1,9 @@
 import {Store} from '../modules/Store';
+import {Router} from '../modules/Router';
 import {chatsAPI} from '../api/chats';
 import {errorHandler, ErrorType} from './errorHandler';
 
-export const getChatsService = async () => {
+export const chatsLoadService = async () => {
   Store.setState({isLoading: true});
   chatsAPI.getChats()
   .then(({responseJSON}) => {
@@ -14,7 +15,7 @@ export const getChatsService = async () => {
   .catch((error: ErrorType) => {
     errorHandler(error);
     Store.setState({currentError: null});
-    Router.navigate('/');
+    Router.redirect('/');
   })
   .finally(() => {
     Store.setState({isLoading: false});

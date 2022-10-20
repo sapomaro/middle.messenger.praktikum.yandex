@@ -1,13 +1,12 @@
 import {ajax} from '../modules/Ajax';
-import {baseAPIUrl, chatsWebSocketUrl} from './base';
+import {chatsWebSocketUrl} from './base';
 
 export const chatsAPI = {
   getChats: () => ajax.get('/chats'),
 
 };
 
-
-const chatsSocketAPI = ({userId, chatId, token}) => {
+const chatsSocketAPI = ({userId, chatId, token}: Record<string, string>) => {
   const socket = new WebSocket(`${chatsWebSocketUrl}/${userId}/${chatId}/${token}`); 
 
   socket.addEventListener('open', () => {
@@ -18,7 +17,7 @@ const chatsSocketAPI = ({userId, chatId, token}) => {
     }));
   });
 
-  socket.addEventListener('close', event => {
+  socket.addEventListener('close', (event: CloseEvent) => {
     if (event.wasClean) {
       console.log('Соединение закрыто чисто');
     } else {
@@ -27,11 +26,11 @@ const chatsSocketAPI = ({userId, chatId, token}) => {
     console.log(`Код: ${event.code} | Причина: ${event.reason}`);
   });
 
-  socket.addEventListener('message', event => {
+  socket.addEventListener('message', (event: MessageEvent) => {
     console.log('Получены данные', event.data);
   });
 
-  socket.addEventListener('error', event => {
+  socket.addEventListener('error', (event: ErrorEvent) => {
     console.log('Ошибка', event.message);
   });
 }

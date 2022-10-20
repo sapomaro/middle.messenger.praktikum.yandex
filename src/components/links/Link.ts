@@ -13,9 +13,13 @@ export class Link extends Block {
   constructor(props: LinkProps) {
     super(props);
     this.setProps({
-      onclickHandler: ((typeof props.onclick === 'function' &&
-          typeof props.url === 'string') ?
-        props.onclick : () => { Router.navigate(props.url); }
+      onclickHandler: ((typeof props.onclick === 'function') ?
+        props.onclick :
+        () => {
+          if (typeof props.url === 'string') {
+            Router.navigate(props.url);
+          }
+        }
       ),
     });
   }

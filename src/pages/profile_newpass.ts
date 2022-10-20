@@ -1,4 +1,5 @@
 import {WideLayoutWithSidebar} from '../components/layouts/Wide+Side';
+import {Block} from '../modules/Block';
 import {Form} from '../components/forms/Form';
 import {FormError} from '../components/forms/FormError';
 import {StandardButton as Button} from '../components/buttons/StandardButton';
@@ -7,12 +8,13 @@ import {AvatarControl} from '../components/popups/AvatarControl';
 import {Popup} from '../components/popups/Popup';
 import {RoundButton} from '../components/buttons/RoundButton';
 import {StoreSynced} from '../modules/Store';
-import {profilePasswordService, ProfilePassType} from '../services/profile';
+import {profileLoadService, profilePasswordService,
+  ProfilePassType} from '../services/profile';
 
 const view = new WideLayoutWithSidebar({
   title: 'Изменить пароль',
   Popup,
-  aside: new RoundButton({url: '/settings'}),
+  aside: new RoundButton({url: '/settings', label: '⬅'}),
 });
 
 const profileForm = new Form({
@@ -53,5 +55,7 @@ profileForm.on(Form.EVENTS.SUBMIT_SUCCESS, (data: ProfilePassType) => {
 });
 
 view.props.contents = profileForm;
+
+view.on(Block.EVENTS.MOUNT, profileLoadService);
 
 export {view};

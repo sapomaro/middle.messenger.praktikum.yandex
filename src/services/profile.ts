@@ -9,19 +9,21 @@ import {errorHandler, ErrorType} from './errorHandler';
 export {ProfileDataType, ProfilePassType, AvatarDataType};
 
 export const profileLoadService = async () => {
-  authAPI.getUserData()
-  .then(({responseJSON}) => {
-    const user: ProfileDataType = responseJSON;
-    Store.setState({
-      user,
-      currentError: null,
+  if (!Store.state || !Store.state.user) {
+    authAPI.getUserData()
+    .then(({responseJSON}) => {
+      const user: ProfileDataType = responseJSON;
+      Store.setState({
+        user,
+        currentError: null,
+      });
+    })
+    .catch((error: ErrorType) => {
+      errorHandler(error);
+      Store.setState({currentError: null});
+      Router.redirect('/');
     });
-  })
-  .catch((error: ErrorType) => {
-    errorHandler(error);
-    Store.setState({currentError: null});
-    Router.navigate('/');
-  });
+  }
 };
 
 export const profileEditService = async (data: ProfileDataType) => {

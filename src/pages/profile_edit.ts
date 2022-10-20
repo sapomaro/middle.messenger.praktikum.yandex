@@ -17,7 +17,7 @@ import {profileLoadService, profileEditService,
 const view = new WideLayoutWithSidebar({
   title: 'Изменить данные',
   Popup,
-  aside: new RoundButton({url: '/settings'}),
+  aside: new RoundButton({url: '/settings', label: '⬅'}),
 });
 
 const profileForm = new (StoreSynced(Form))({

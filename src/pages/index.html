@@ -10,7 +10,7 @@
   import {view as ChatsPage} from './chats';
   import {view as NotFoundPage} from './404';
   import {view as ServerErrorPage} from './500';
-  import {view as TestPage} from './test';
+  // import {view as TestPage} from './test';
 
   Router.registerRoutes({
     '/menu': IndexPage,
@@ -20,12 +20,10 @@
     '/settings/edit': ProfileEditPage,
     '/settings/password': ProfilePassPage,
     '/messenger': ChatsPage,
-    '/404': NotFoundPage,
     '/500': ServerErrorPage,
-    '/test': TestPage,
   });
 
-  //Router.redirectRules({});
+  Router.registerNotFound({'/404': NotFoundPage});
 
   Router.navigate(location.pathname);
 

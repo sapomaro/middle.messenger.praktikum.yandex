@@ -4,7 +4,7 @@ class RouterService {
   static __instance: RouterService;
   public routes: Record<string, Block> = {};
   private firstRender = true;
-  private notFoundRoute = '/404';
+  private notFoundRoute = '';
 
   constructor() {
     if (RouterService.__instance) {
@@ -20,27 +20,48 @@ class RouterService {
       }
     });
   }
-  routeExists(route: string) {
-    return (route in this.routes);
-  }
   registerRoutes(routes: Record<string, Block>) {
     this.routes = {...this.routes, ...routes};
   }
-  navigate(route: string) {
-    if (!this.routeExists(route) && this.routeExists(this.notFoundRoute)) {
-      route = this.notFoundRoute;
+  registerNotFound(route: Record<string, Block>) {
+    this.routes = {...this.routes, ...route};
+    this.notFoundRoute = Object.keys(route).pop() as string;
+  }
+  routeExists(pathname: string) {
+    return (pathname in this.routes);
+  }
+  getRealRoute(pathname: string) {
+    if (!this.routeExists(pathname)) {
+      if (this.routeExists(this.notFoundRoute)) {
+        return this.notFoundRoute;
+      }
+      return null;
     }
+    return pathname;
+  }
+  renderRoute(route: string) {
+    const view = this.routes[route];
+    view.renderToBody();
+  }
+  redirect(pathname: string) {
+    const route = this.getRealRoute(pathname);
+    if (route === null) return;
+    history.replaceState({route}, '', pathname);
+    this.renderRoute(route);
+  }
+  navigate(pathname: string) {
+    const route = this.getRealRoute(pathname);
+    if (route === null) return;
     if (this.firstRender) {
-      history.replaceState({route}, '', route);
+      history.replaceState({route}, '', pathname);
       this.firstRender = false;
     } else {
       if (!history.state || !history.state.route ||
           history.state.route !== route) {
-        history.pushState({route}, '', route);
+        history.pushState({route}, '', pathname);
       }
     }
-    const view = this.routes[route];
-    view.renderToBody();
+    this.renderRoute(route);
   }
   back() {
     history.back();

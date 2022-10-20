@@ -1,5 +1,11 @@
 @import "../../constants/colors.scss";
 
+.chatlist__controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .chatlist__item {
   cursor: pointer;
 }
@@ -22,6 +28,9 @@
   width: 4rem;
   border-radius: 50%;
   background: $elem-bg;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 .chatlist__item__text {

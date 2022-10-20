@@ -15,7 +15,7 @@ import {JSONWrapper} from '../modules/Utils';
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
   Popup,
-  aside: new RoundButton({url: '/messenger'}),
+  aside: new RoundButton({url: '/messenger', label: '⬅'}),
 });
 
 export const profileInputs: Array<{

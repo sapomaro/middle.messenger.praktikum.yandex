@@ -16,7 +16,6 @@ const links = JSONWrapper.stringify([
   {url: '/messenger', label: 'Чаты'},
   {url: '/404', label: 'Страница 404'},
   {url: '/500', label: 'Страница 500'},
-  {url: '/test', label: 'Тест XHR'},
 ]);
 
 view.props.contents = () => `

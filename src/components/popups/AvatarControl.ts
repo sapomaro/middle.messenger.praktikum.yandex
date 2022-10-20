@@ -1,7 +1,7 @@
 import './AvatarControl.scss';
 
 import {PopupControl} from './PopupControl';
-import {resourcesAPIUrl} from '../../api/base';
+import {resolveResourceUrl} from '../../services/resources';
 
 export class AvatarControl extends PopupControl {
   constructor(props?: Record<string, unknown>) {
@@ -15,7 +15,7 @@ export class AvatarControl extends PopupControl {
       if (props && props.user) {
         const user = props.user as Record<string, string>;
         if (user.avatar) {
-          avatar = resourcesAPIUrl + user.avatar;
+          avatar = resolveResourceUrl(user.avatar);
         }
       }
       return `
