@@ -1,6 +1,7 @@
 import {Store} from '../modules/Store';
 import {Router} from '../modules/Router';
 import {EventBus} from '../modules/EventBus';
+import {JSONWrapper} from '../modules/Utils';
 import {chatsAPI, chatsSocketAPI,
   AddChatDataType, ChatDataType} from '../api/chats';
 import {profileLoadService, ProfileDataType} from './profile';
@@ -78,6 +79,16 @@ export const sendMessageService = async (data: {message: string}) => {
     chatsSocketAPI.send({content: data.message, type: 'message'});
   }
 };
+EventBus.on('webSocketInit', () => {
+  Store.setState({activeChatMessages: []});
+});
+EventBus.on('webSocketMessage', (data: string) => {
+  const messages = Store.getState().activeChatMessages;
+  if (typeof messages === 'object' && messages instanceof Array) {
+    messages.push(JSONWrapper.parse(data));
+    Store.setState({activeChatMessages: messages});
+  }
+});
 
 export const addUserToChatService = async (data: {login: string},
     silent = false) => {

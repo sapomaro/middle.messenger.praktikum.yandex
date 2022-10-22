@@ -6,6 +6,14 @@
   text-align: center;
 }
 
+.chatbox__messages__wrapper {
+  display: inherit;
+  flex: inherit;
+  flex-flow: inherit;
+  align-items: inherit;
+  justify-content: inherit;
+}
+
 .chatbox__message {
   max-width: 31rem;
   padding: 1rem;

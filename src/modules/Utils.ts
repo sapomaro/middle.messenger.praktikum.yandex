@@ -23,7 +23,7 @@ export const isArrayOrObject = (value: unknown): value is [] | PlainObject => {
 export const JSONWrapper = {
   parse: (data: string): AnyObj => {
     try {
-      return JSON.parse(data);
+      return JSON.parse(data.replace(/^\"|\"$/g, ''));
     } catch (error) {
       console.warn(data);
       console.warn(error);
