@@ -13,15 +13,5 @@ export class Layout extends Block {
         this.traverseChildren(document.head);
       }
     });
-    this.on('mounted', () => {
-      const popup = document.querySelector<HTMLElement>('.popup');
-      if (popup) {
-        popup.addEventListener('click', (event: Event) => {
-          if (event.target === popup) {
-            popup.style.display = 'none';
-          }
-        });
-      }
-    });
   }
 }

@@ -5,7 +5,8 @@ import {ChatBox} from '../components/chats/ChatBox';
 import {Link} from '../components/links/Link';
 import {RoundButton} from '../components/buttons/RoundButton';
 import {SearchInput} from '../components/inputs/SearchInput';
-import {AddUserPopup as Popup} from '../components/popups/AddUserPopup';
+import {AddUserPopup} from '../components/popups/AddUserPopup';
+import {AddChatPopup} from '../components/popups/AddChatPopup';
 import {chatsLoadService} from '../services/chats';
 import {StoreSynced} from '../modules/Store';
 
@@ -13,8 +14,9 @@ import {chats, messages} from '../services/_testStubData';
 
 const view = new ChatsLayout({
   title: 'Чаты',
-  user: 'Собеседник',
-  Popup,
+  addUserPopup: new AddUserPopup({id: 'AddUserPopup'}),
+  addChatPopup: new AddChatPopup({id: 'AddUserPopup'}),
+  popup: '%{addUserPopup}% %{addChatPopup}%',
 });
 
 const searchInput = new SearchInput({name: 'search'});
@@ -42,7 +44,7 @@ view.props.profileLink = new Link({
   label: 'Профиль&ensp;<small>❯</small>',
 });
 view.props.addChatButton = new RoundButton({
-  label: '<b>＋</b> Добавить чат',
+  label: '<b>＋</b> Добавить чат&nbsp;',
   onclick: () => { console.log('addChatButton clicked'); },
 });
 view.props.searchInput = searchInput;
@@ -64,6 +66,6 @@ view.props.aside = () => `
   %{chatList}%
 `;
 
-view.on(Block.EVENTS.MOUNT, chatsLoadService);
+//view.on(Block.EVENTS.MOUNT, chatsLoadService);
 
 export {view};

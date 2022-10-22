@@ -2,8 +2,8 @@ import './ChatBox.scss';
 
 import {EventBus} from '../../modules/EventBus';
 import {Block} from '../../modules/Block';
-import {ChatboxHeader} from './ChatboxHeader';
-import {ChatboxFooter} from './ChatboxFooter';
+import {ChatBoxHeader} from './ChatBoxHeader';
+import {ChatBoxFooter} from './ChatBoxFooter';
 import {Message} from './Message';
 import {JSONWrapper} from '../../modules/Utils';
 
@@ -13,8 +13,8 @@ export class ChatBox extends Block {
   constructor(props: ChatBoxType) {
     super(props);
     this.setProps({
-      ChatboxHeader,
-      ChatboxFooter,
+      ChatBoxHeader,
+      ChatBoxFooter,
       Message,
     });
     this.on(`${Block.EVENTS.MOUNT}, ${Block.EVENTS.REMOUNT}`, () => {
@@ -26,7 +26,7 @@ export class ChatBox extends Block {
       const messages = JSONWrapper.stringify(props.messages);
       return `
         <div class="chatbox__header">
-          %{ChatboxHeader}%
+          %{ChatBoxHeader}%
         </div>
         <div class="chatbox__body">
           <div class="chatbox__date">19 июня (вс)</div>
@@ -34,7 +34,7 @@ export class ChatBox extends Block {
           %{ Message(${messages}...) }%
         </div>
         <div class="chatbox__footer">
-          %{ChatboxFooter}%
+          %{ChatBoxFooter}%
         </div>
       `;
     } else {

@@ -1,8 +1,23 @@
-import {PopupControl} from '../popups/PopupControl';
+import {Block} from '../../modules/Block';
+import {ChatBoxControl} from '../popups/ChatBoxControl';
 
-export class ChatboxHeader extends PopupControl {
+export class ChatBoxHeader extends Block {
   constructor() {
     super();
+    this.setProps({
+      addUser: new ChatBoxControl({
+        label: 'Добавить пользователя',
+        iconStyle: 'chatbox__icon__circle',
+        iconText: '+',
+        forId: 'AddUserPopup',
+      }),
+      remUser: new ChatBoxControl({
+        label: 'Удалить пользователя',
+        iconStyle: 'chatbox__icon__circle',
+        iconText: '×',
+        forId: 'DeleteUserPopup',
+      }),
+    });
   }
   render(): string {
     return `
@@ -16,14 +31,8 @@ export class ChatboxHeader extends PopupControl {
         <a class="chatbox__header__control chatbox__dropdown__control">⋮</a>
         <span class="chatbox__dropdown chatbox__dropdown_top">
           <span class="chatbox__dropdown__menu">
-            <span class="chatbox__dropdown__element" onclick="%{showPopup}%">
-              <span class="chatbox__dropdown__icon">+</span>
-              Добавить пользователя
-            </span>
-            <span class="chatbox__dropdown__element">
-              <span class="chatbox__dropdown__icon">×</span>
-              Удалить пользователя
-            </span>
+            %{addUser}%
+            %{remUser}%
           </span>
         </span>
       </label>

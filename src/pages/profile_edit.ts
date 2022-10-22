@@ -5,7 +5,7 @@ import {FormError} from '../components/forms/FormError';
 import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {RowInput as Input} from '../components/inputs/RowInput';
 import {AvatarControl} from '../components/popups/AvatarControl';
-import {Popup} from '../components/popups/Popup';
+import {AvatarPopup} from '../components/popups/AvatarPopup';
 import {RoundButton} from '../components/buttons/RoundButton';
 import {JSONWrapper} from '../modules/Utils';
 import {profileInputs} from './profile';
@@ -16,14 +16,14 @@ import {profileLoadService, profileEditService,
 
 const view = new WideLayoutWithSidebar({
   title: 'Изменить данные',
-  Popup,
+  popup: new AvatarPopup({id: 'AvatarPopup'}),
   aside: new RoundButton({url: '/settings', label: '⬅'}),
 });
 
 const profileForm = new (StoreSynced(Form))({
   name: 'profile',
   Input,
-  avatarControl: new (StoreSynced(AvatarControl))({unclickable: true}),
+  avatarControl: new (StoreSynced(AvatarControl))({forId: 'AvatarPopup'}),
   formSubmitButton: new (StoreSynced(Button))({
     name: 'submit',
     type: 'submit',

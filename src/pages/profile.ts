@@ -4,7 +4,7 @@ import {Form} from '../components/forms/Form';
 import {RowInput} from '../components/inputs/RowInput';
 import {RowLink} from '../components/links/RowLink';
 import {AvatarControl} from '../components/popups/AvatarControl';
-import {AvatarPopup as Popup} from '../components/popups/AvatarPopup';
+import {AvatarPopup} from '../components/popups/AvatarPopup';
 import {RoundButton} from '../components/buttons/RoundButton';
 import {StoreSynced} from '../modules/Store';
 import {profileLoadService, ProfileDataType} from '../services/profile';
@@ -14,7 +14,7 @@ import {JSONWrapper} from '../modules/Utils';
 
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
-  Popup,
+  popup: new AvatarPopup({id: 'AvatarPopup'}),
   aside: new RoundButton({url: '/messenger', label: '⬅'}),
 });
 
@@ -36,7 +36,7 @@ export const profileInputs: Array<{
 const profileForm = new (StoreSynced(Form))({
   name: 'profile',
   RowInput, RowLink,
-  avatarControl: new (StoreSynced(AvatarControl))(),
+  avatarControl: new (StoreSynced(AvatarControl))({forId: 'AvatarPopup'}),
   logoutLink: new RowLink({
     url: '/',
     label: 'Выйти',

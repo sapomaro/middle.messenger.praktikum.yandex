@@ -15,7 +15,7 @@ export class ChatsLayout extends Layout {
   }
   render(): string {
     return `
-      %{Popup}% 
+      %{popup}% 
       <div class="root">
         <aside class="sidebar sidebar_chatlist scrollable">
           %{aside}%

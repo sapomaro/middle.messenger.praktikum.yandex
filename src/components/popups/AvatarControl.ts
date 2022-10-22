@@ -8,16 +8,17 @@ export class AvatarControl extends PopupControl {
     super(props);
   }
   render(props?: Record<string, unknown>): string {
-    if (props && props.unclickable) {
-      return `<div class="form__avatar"></div>`;
-    } else {
-      let avatar = '';
-      if (props && props.user) {
-        const user = props.user as Record<string, string>;
-        if (user.avatar) {
-          avatar = resolveResourceUrl(user.avatar);
-        }
+    let avatar = '';
+    if (props && props.user) {
+      const user = props.user as Record<string, string>;
+      if (user.avatar) {
+        avatar = resolveResourceUrl(user.avatar);
       }
+    }
+    if (props && props.unclickable) {
+      return `<div class="form__avatar"
+        ${avatar? 'style="background-image: url('+avatar+')"' : ''}></div>`;
+    } else {
       return `
         <div class="form__avatar" onclick="%{showPopup}%"
         ${avatar? 'style="background-image: url('+avatar+')"' : ''}>

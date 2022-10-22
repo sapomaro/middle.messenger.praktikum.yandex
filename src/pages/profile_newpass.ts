@@ -5,7 +5,7 @@ import {FormError} from '../components/forms/FormError';
 import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {RowInput as Input} from '../components/inputs/RowInput';
 import {AvatarControl} from '../components/popups/AvatarControl';
-import {Popup} from '../components/popups/Popup';
+//import {Popup} from '../components/popups/Popup';
 import {RoundButton} from '../components/buttons/RoundButton';
 import {StoreSynced} from '../modules/Store';
 import {profileLoadService, profilePasswordService,
@@ -13,7 +13,7 @@ import {profileLoadService, profilePasswordService,
 
 const view = new WideLayoutWithSidebar({
   title: 'Изменить пароль',
-  Popup,
+  popup: '',
   aside: new RoundButton({url: '/settings', label: '⬅'}),
 });
 

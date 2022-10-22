@@ -43,7 +43,7 @@ export class ChatList extends Block {
 
 const ChatListItem = (props: Record<string, unknown>) => {
   let avatar = '';
-  if (props.avatar) {
+  if (typeof props.avatar === 'string') {
     avatar = resolveResourceUrl(props.avatar);
   }
   return `

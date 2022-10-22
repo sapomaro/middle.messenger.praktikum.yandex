@@ -1,8 +1,9 @@
 import {Block} from '../../modules/Block';
 import {Form} from '../forms/Form';
 import {MessageTextarea} from '../inputs/MessageTextarea';
+import {ChatBoxControl} from '../popups/ChatBoxControl';
 
-export class ChatboxFooter extends Block {
+export class ChatBoxFooter extends Block {
   constructor() {
     super();
     this.setProps({
@@ -11,6 +12,18 @@ export class ChatboxFooter extends Block {
         fieldset: ChatboxFooterChildren,
       }),
       MessageTextarea,
+      attachPhoto: new ChatBoxControl({
+        label: 'Фото или видео',
+        iconStyle: 'chatbox__icon_photo',
+      }),
+      attachFile: new ChatBoxControl({
+        label: 'Файл',
+        iconStyle: 'chatbox__icon_file',
+      }),
+      attachLocation: new ChatBoxControl({
+        label: 'Локация',
+        iconStyle: 'chatbox__icon_location',
+      }),
     });
   }
   render() {
@@ -25,18 +38,9 @@ const ChatboxFooterChildren = () => `
     <a class="chatbox__attach__control chatbox__dropdown__control"></a>
     <span class="chatbox__dropdown chatbox__dropdown_bottom">
       <span class="chatbox__dropdown__menu">
-        <span class="chatbox__dropdown__element">
-          <span class="chatbox__icon chatbox__icon_photo"></span> 
-          Фото или видео
-        </span>
-        <span class="chatbox__dropdown__element">
-          <span class="chatbox__icon chatbox__icon_file"></span> 
-          Файл
-        </span>
-        <span class="chatbox__dropdown__element">
-          <span class="chatbox__icon chatbox__icon_location"></span> 
-          Локация
-        </span>
+        %{attachPhoto}%
+        %{attachFile}%
+        %{attachLocation}%
       </span>
     </span>
   </label>
