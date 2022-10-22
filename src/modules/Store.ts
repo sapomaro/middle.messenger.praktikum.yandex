@@ -12,6 +12,8 @@ const defaultState: State = {
   user: null,
   chats: [],
   activeChatId: 0,
+  activeChatToken: '',
+  activeChatMessages: [],
   isLoading: false,
 };
 

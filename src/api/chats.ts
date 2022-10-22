@@ -1,5 +1,7 @@
 import {ajax} from '../modules/Ajax';
 import {chatsWebSocketUrl} from './base';
+import {EventBus} from '../modules/EventBus';
+import {JSONWrapper} from '../modules/Utils';
 
 export type AddChatDataType = {
   title: string;
@@ -9,7 +11,7 @@ export type DeleteChatDataType = {
   chatId: number;
 };
 
-export type AddUserDataType = {
+export type ChangeUserDataType = {
   users: Array<number>;
   chatId: number;
 };
@@ -34,39 +36,67 @@ export type ChatDataType = {
   };
 };
 
+export type TextMessage = {
+  content: string;
+  type: 'message';
+};
+
 export const chatsAPI = {
   getChats: () => ajax.get('/chats'),
   addChat: (data: {title: string}) => ajax.post('/chats', data),
   deleteChat: (data: DeleteChatDataType) => ajax.delete('/chats', data),
   getUsersByLogin: (data: {login: string}) => ajax.post('/user/search', data),
-  addUsersToChat: (data: AddUserDataType) => ajax.put('/chats/users', data),
+  addUsersToChat: (data: ChangeUserDataType) => ajax.put('/chats/users', data),
+  deleteUsersFromChat: (data: ChangeUserDataType) =>
+    ajax.delete('/chats/users', data),
+  getChatToken: (chatId: number) => ajax.post(`/chats/token/${chatId}`),
 };
 
-const chatsSocketAPI = ({userId, chatId, token}: Record<string, string>) => {
-  const socket = new WebSocket(`${chatsWebSocketUrl}/${userId}/${chatId}/${token}`); 
-
-  socket.addEventListener('open', () => {
-    console.log('Соединение установлено');
-    socket.send(JSON.stringify({
-      content: 'Моё первое сообщение миру!',
-      type: 'message',
-    }));
-  });
-
-  socket.addEventListener('close', (event: CloseEvent) => {
-    if (event.wasClean) {
-      console.log('Соединение закрыто чисто');
-    } else {
-      console.log('Обрыв соединения');
+export const chatsSocketAPI: {
+  socket: WebSocket | null;
+  init: (data: Record<string, string | number>) => void;
+  send: (data: TextMessage) => void;
+} = {
+  socket: null,
+  init: ({userId, chatId, token}) => {
+    if (chatsSocketAPI.socket) {
+      chatsSocketAPI.socket.close();
     }
-    console.log(`Код: ${event.code} | Причина: ${event.reason}`);
-  });
+    chatsSocketAPI.socket =
+      new WebSocket(`${chatsWebSocketUrl}/${userId}/${chatId}/${token}`);
+    const socket = chatsSocketAPI.socket;
 
-  socket.addEventListener('message', (event: MessageEvent) => {
-    console.log('Получены данные', event.data);
-  });
+    EventBus.fire('webSocketInit');
 
-  socket.addEventListener('error', (event: ErrorEvent) => {
-    console.log('Ошибка', event.message);
-  });
-}
+    socket.addEventListener('open', () => {
+      EventBus.fire('webSocketOpen');
+      console.log('Соединение установлено');
+    });
+
+    socket.addEventListener('close', (event: CloseEvent) => {
+      EventBus.fire('webSocketClose', event);
+      if (event.wasClean) {
+        console.log('Соединение закрыто чисто');
+      } else {
+        console.log('Обрыв соединения');
+      }
+      console.log(`Код: ${event.code} | Причина: ${event.reason}`);
+    });
+
+    socket.addEventListener('message', (event: MessageEvent) => {
+      EventBus.fire('webSocketMessage', event.data);
+      console.log('Получены данные', event.data);
+    });
+
+    socket.addEventListener('error', (event: ErrorEvent) => {
+      EventBus.fire('webSocketError', event);
+      console.log('Ошибка', event.message);
+    });
+  },
+  send: (data) => {
+    const socket = chatsSocketAPI.socket;
+    if (socket) {
+      socket.send(JSONWrapper.stringify(data));
+    }
+  },
+};

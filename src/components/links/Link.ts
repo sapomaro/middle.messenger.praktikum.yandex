@@ -6,6 +6,9 @@ import {Router} from '../../modules/Router';
 export type LinkProps = {
   url?: string;
   label?: string;
+  style?: string;
+  type?: string;
+  isLoading?: boolean;
   onclick?: () => void;
 }
 

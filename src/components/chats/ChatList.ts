@@ -2,7 +2,6 @@ import './ChatList.scss';
 
 import {Block} from '../../modules/Block';
 import {ChatListItem} from './ChatListItem';
-//import {JSONWrapper} from '../../modules/Utils';
 
 type ChatListType = Record<string, unknown>;
 

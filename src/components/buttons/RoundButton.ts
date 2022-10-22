@@ -9,7 +9,10 @@ export class RoundButton extends Link {
   render(props: LinkProps) {
     return `
       <button onclick="%{onclickHandler}%" 
-        class="form__button form__button_standard form__button_round">
+        ${props.type? 'type="'+props.type+'"' : '' }
+        ${props.isLoading? 'disabled="disabled"' : ''}
+        class="form__button form__button_standard form__button_round 
+        ${props.style || ''}">
           ${props.label}
       </button>
     `;

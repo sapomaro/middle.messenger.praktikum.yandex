@@ -10,19 +10,20 @@ export {ProfileDataType, ProfilePassType, AvatarDataType};
 
 export const profileLoadService = async () => {
   if (!Store.state || !Store.state.user) {
-    authAPI.getUserData()
+    return new Promise((resolve, reject) => authAPI.getUserData()
     .then(({responseJSON}) => {
       const user: ProfileDataType = responseJSON;
       Store.setState({
         user,
         currentError: null,
       });
+      resolve(user);
     })
     .catch((error: ErrorType) => {
-      errorHandler(error);
+      reject(errorHandler(error));
       Store.setState({currentError: null});
       Router.redirect('/');
-    });
+    }));
   }
 };
 

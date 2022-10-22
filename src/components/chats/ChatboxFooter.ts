@@ -1,17 +1,30 @@
 import {Block} from '../../modules/Block';
+import {StoreSynced} from '../../modules/Store';
 import {Form} from '../forms/Form';
+import {RoundButton} from '../buttons/RoundButton';
 import {MessageTextarea} from '../inputs/MessageTextarea';
 import {ChatBoxControl} from '../popups/ChatBoxControl';
+import {sendMessageService} from '../../services/chats';
 
 export class ChatBoxFooter extends Block {
   constructor() {
     super();
+    const msgForm = new Form({
+      name: 'msg',
+      fieldset: ChatboxFooterChildren,
+    });
     this.setProps({
-      content: new Form({
-        name: 'msg',
-        fieldset: ChatboxFooterChildren,
+      content: msgForm,
+      messageTextarea: new MessageTextarea({
+        name: 'message',
+        placeholder: 'Сообщение...',
       }),
-      MessageTextarea,
+      sendButton: new (StoreSynced(RoundButton))({
+        label: '➜',
+        type: 'submit',
+        style: 'chatbox__send__button',
+        isLoading: true,
+      }),
       attachPhoto: new ChatBoxControl({
         label: 'Фото или видео',
         iconStyle: 'chatbox__icon_photo',
@@ -24,6 +37,10 @@ export class ChatBoxFooter extends Block {
         label: 'Локация',
         iconStyle: 'chatbox__icon_location',
       }),
+    });
+
+    msgForm.on(Form.EVENTS.SUBMIT_SUCCESS, (data: {message: string}) => {
+      sendMessageService(data);
     });
   }
   render() {
@@ -45,11 +62,7 @@ const ChatboxFooterChildren = () => `
     </span>
   </label>
 
-  %{ MessageTextarea({"name": "message", "placeholder": "Сообщение..."}) }%
+  %{messageTextarea}%
 
-  <button type="submit" 
-    class="form__button form__button_standard form__button_round 
-      chatbox__send__button">
-      ➜
-  </button>
+  %{sendButton}%
 `;

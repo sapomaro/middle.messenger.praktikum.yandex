@@ -6,6 +6,7 @@ import {Link} from '../components/links/Link';
 import {RoundButton} from '../components/buttons/RoundButton';
 import {SearchInput} from '../components/inputs/SearchInput';
 import {AddUserPopup} from '../components/popups/AddUserPopup';
+import {DeleteUserPopup} from '../components/popups/DeleteUserPopup';
 import {AddChatPopup} from '../components/popups/AddChatPopup';
 import {DeleteChatPopup} from '../components/popups/DeleteChatPopup';
 import {PopupControl} from '../components/popups/PopupControl';
@@ -17,9 +18,11 @@ import {StoreSynced} from '../modules/Store';
 const view = new ChatsLayout({
   title: 'Чаты',
   addUserPopup: new AddUserPopup({id: 'AddUserPopup'}),
+  deleteUserPopup: new DeleteUserPopup({id: 'DeleteUserPopup'}),
   addChatPopup: new AddChatPopup({id: 'AddChatPopup'}),
   deleteChatPopup: new DeleteChatPopup({id: 'DeleteChatPopup'}),
-  popup: '%{addUserPopup}% %{addChatPopup}% %{deleteChatPopup}%',
+  popup: `%{addUserPopup}% %{deleteUserPopup}%
+    %{addChatPopup}% %{deleteChatPopup}%`,
 });
 
 const searchInput = new SearchInput({name: 'search'});
