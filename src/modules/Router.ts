@@ -3,6 +3,7 @@ import type {Block} from '../modules/Block';
 class RouterService {
   static __instance: RouterService;
   public routes: Record<string, Block> = {};
+  public currentView: Block;
   private firstRender = true;
   private notFoundRoute = '';
 
@@ -40,8 +41,11 @@ class RouterService {
     return pathname;
   }
   renderRoute(route: string) {
-    const view = this.routes[route];
-    view.renderToBody();
+    if (this.currentView) {
+      this.currentView.destroy();
+    }
+    this.currentView = this.routes[route];
+    this.currentView.renderToBody();
   }
   redirect(pathname: string) {
     const route = this.getRealRoute(pathname);

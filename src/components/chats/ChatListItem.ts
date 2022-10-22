@@ -1,0 +1,72 @@
+import './ChatList.scss';
+
+import {EventBus} from '../../modules/EventBus';
+import {Store} from '../../modules/Store';
+import {Block} from '../../modules/Block';
+import {resolveResourceUrl} from '../../services/resources';
+import {timeConverter} from '../../services/timeConverter';
+
+export class ChatListItem extends Block {
+  constructor(props: Record<string, unknown>) {
+    super(props);
+    const activeChatId = Store.getState().activeChatId;
+    this.setProps({
+      active: (props.id === activeChatId),
+      activate: () => {
+        setTimeout(() => {
+          this.toggleActive();
+          const chatId = this.props.id ?? 0;
+          Store.setState({activeChatId: chatId});
+          EventBus.fire('chatSelected', chatId);
+        }, 1);
+      },
+    });
+  }
+  toggleActive() {
+    this.setProps({active: true});
+  }
+  toggleInactive() {
+    this.setProps({active: false});
+  }
+  render(props: Record<string, unknown>) {
+    let avatar = '';
+    if (typeof props.avatar === 'string') {
+      avatar = resolveResourceUrl(props.avatar);
+    }
+    let lastMsg = {
+      time: '',
+      content: '',
+    };
+    if (typeof props.last_message === 'object' &&
+        props.last_message !== null) {
+      lastMsg = props.last_message as typeof lastMsg;
+    }
+
+    return `
+      <li class="chatlist__item ${props.active? 'chatlist__item_active' : ''}"
+        onclick="%{activate}%">
+        <div class="chatlist__item__wrapper">
+          <div class="chatlist__item__avatar"
+          ${avatar? 'style="background-image: url('+avatar+')"' : ''}></div>
+          <div class="chatlist__item__text">
+            <div class="chatlist__item__name">${props.title||''}</div>
+            <div class="chatlist__item__message">
+              <span class="chatlist__item__message__quote">
+                ${lastMsg.content || 'В этом чате пока нет сообщений'}
+              </span>
+            </div>
+          </div>
+          <div class="chatlist__item__info">
+            <div class="chatlist__item__time">
+              ${timeConverter(lastMsg.time)}
+            </div>
+            <div class="chatlist__item__unreads">
+              <span class="chatlist__item__unreads__count"
+                >${props.unread_count||''}</span>
+            </div>
+          </div>
+        </div>
+      </li>
+    `;
+  }
+}

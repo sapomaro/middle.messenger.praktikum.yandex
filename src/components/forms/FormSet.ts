@@ -5,10 +5,11 @@ import {StandardButton as Button} from '../buttons/StandardButton';
 import {StoreSynced} from '../../modules/Store';
 
 type FormSetProps = {
+  [key: string]: unknown;
   name: string;
   header: string;
   submitLabel: string;
-  inputs: string;
+  inputs?: string;
 };
 
 export class FormSet extends Form {
@@ -20,13 +21,14 @@ export class FormSet extends Form {
         name: 'submit',
         type: 'submit',
         label: props.submitLabel,
+        style: props.submitStyle || '',
         isLoading: false,
       }),
       formError: new (StoreSynced(FormError))({currentError: null}),
       fieldset: () => `
         <h1 class="container__header">${props.header}</h1>
         <br>
-        ${props.inputs}
+        ${props.inputs || ''}
         <br>
         %{formSubmitButton}%
         %{formError}%

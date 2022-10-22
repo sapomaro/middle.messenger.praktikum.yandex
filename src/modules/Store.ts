@@ -10,6 +10,8 @@ enum StoreEvents {
 
 const defaultState: State = {
   user: null,
+  chats: [],
+  activeChatId: 0,
   isLoading: false,
 };
 

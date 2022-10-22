@@ -1,9 +1,45 @@
 import {ajax} from '../modules/Ajax';
 import {chatsWebSocketUrl} from './base';
 
+export type AddChatDataType = {
+  title: string;
+};
+
+export type DeleteChatDataType = {
+  chatId: number;
+};
+
+export type AddUserDataType = {
+  users: Array<number>;
+  chatId: number;
+};
+
+export type ChatDataType = {
+  [key: string]: unknown;
+  id: number;
+  title: string;
+  avatar: null | string;
+  unread_count: number;
+  last_message: null | {
+    user: {
+      first_name: string;
+      second_name: string;
+      avatar: string;
+      email: string;
+      login: string;
+      phone: string;
+    }
+    time: string;
+    content: string;
+  };
+};
+
 export const chatsAPI = {
   getChats: () => ajax.get('/chats'),
-
+  addChat: (data: {title: string}) => ajax.post('/chats', data),
+  deleteChat: (data: DeleteChatDataType) => ajax.delete('/chats', data),
+  getUsersByLogin: (data: {login: string}) => ajax.post('/user/search', data),
+  addUsersToChat: (data: AddUserDataType) => ajax.put('/chats/users', data),
 };
 
 const chatsSocketAPI = ({userId, chatId, token}: Record<string, string>) => {

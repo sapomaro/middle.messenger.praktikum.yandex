@@ -2,6 +2,7 @@ import './Popup.scss';
 
 import {EventBus} from '../../modules/EventBus';
 import {Block} from '../../modules/Block';
+import {Store} from '../../modules/Store';
 
 export type PopupProps = {
   id: string;
@@ -24,6 +25,7 @@ export class Popup extends Block {
       }
     });
     EventBus.on('popupHide', () => {
+      Store.setState({currentError: null});
       const popups = document.querySelectorAll('.popup');
       if (popups) {
         for (const popup of popups) {

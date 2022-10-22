@@ -17,6 +17,9 @@
   &:enabled:active {
     transform: scale(0.98);
   }
+  &_danger {
+    background: $danger-color !important;
+  }
 }
 
 .form__button_standard {

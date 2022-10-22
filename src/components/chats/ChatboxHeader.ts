@@ -1,9 +1,12 @@
 import {Block} from '../../modules/Block';
 import {ChatBoxControl} from '../popups/ChatBoxControl';
+import {StandardButton as Button} from '../buttons/StandardButton';
+import {PopupControl} from '../popups/PopupControl';
 
 export class ChatBoxHeader extends Block {
   constructor() {
     super();
+    const deleteChatControl = new PopupControl({forId: 'DeleteChatPopup'});
     this.setProps({
       addUser: new ChatBoxControl({
         label: 'Добавить пользователя',
@@ -17,13 +20,21 @@ export class ChatBoxHeader extends Block {
         iconText: '×',
         forId: 'DeleteUserPopup',
       }),
+      deleteChat: new Button({
+        name: 'deleteChat',
+        label: 'Удалить чат',
+        style: 'form__button_danger',
+        onclick: () => {
+          deleteChatControl.showPopup();
+        },
+      }),
     });
   }
   render(): string {
     return `
       <div class="chatbox__header__avatar"></div>
 
-      <h2 class="chatbox__header__text">%{user}%</h2>
+      <h2 class="chatbox__header__text">%{title}%</h2>
 
       <label class="chatbox__header__control__wrapper">
         <input type="checkbox" 
@@ -33,6 +44,7 @@ export class ChatBoxHeader extends Block {
           <span class="chatbox__dropdown__menu">
             %{addUser}%
             %{remUser}%
+            %{deleteChat}%
           </span>
         </span>
       </label>

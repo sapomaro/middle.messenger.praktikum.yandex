@@ -1,18 +1,25 @@
 import './ChatList.scss';
 
 import {Block} from '../../modules/Block';
-import {JSONWrapper} from '../../modules/Utils';
-import {resolveResourceUrl} from '../../services/resources';
+import {ChatListItem} from './ChatListItem';
+//import {JSONWrapper} from '../../modules/Utils';
 
 type ChatListType = Record<string, unknown>;
 
 export class ChatList extends Block {
   constructor(props: ChatListType) {
     super(props);
-    this.setProps({ChatListItem});
+    this.setProps({
+      //ChatListItem,
+      reactivate: () => {
+        this.listDescendants((item: ChatListItem) => {
+          item.toggleInactive();
+        });
+      },
+    });
   }
   filterChats(searchValue: string) {
-    // this.props.allChats 
+    //this.props.allChats
     if (this.props.chats instanceof Array) {
       return this.props.chats.filter((chat: Record<string, unknown>) => {
          for (const chatValue of Object.values(chat)) {
@@ -28,11 +35,16 @@ export class ChatList extends Block {
     return [];
   }
   render(props: ChatListType) {
-    if (props.chats) {
-      const chats = JSONWrapper.stringify(props.chats);
+    if (typeof props.chats === 'object' && props.chats instanceof Array) {
+      //const chats = JSONWrapper.stringify(props.chats);
+      const chatList = [];
+      for (const chat of props.chats) {
+        chatList.push(new ChatListItem(chat));
+      }
+      this.props.chatList = chatList;
       return `
-        <ul>
-          %{ ChatListItem(${chats}...) }%
+        <ul onclick="%{reactivate}%">
+          %{chatList}%
         </ul>
       `;
     } else {
@@ -40,31 +52,3 @@ export class ChatList extends Block {
     }
   }
 }
-
-const ChatListItem = (props: Record<string, unknown>) => {
-  let avatar = '';
-  if (typeof props.avatar === 'string') {
-    avatar = resolveResourceUrl(props.avatar);
-  }
-  return `
-    <li class="chatlist__item ${props.active ? 'chatlist__item_active' : ''}">
-      <div class="chatlist__item__wrapper">
-        <div class="chatlist__item__avatar"
-        ${avatar? 'style="background-image: url('+avatar+')"' : ''}></div>
-        <div class="chatlist__item__text">
-          <div class="chatlist__item__name">${props.user}</div>
-          <div class="chatlist__item__message">
-            <span class="chatlist__item__message__quote">${props.quote}</span>
-          </div>
-        </div>
-        <div class="chatlist__item__info">
-          <div class="chatlist__item__time">${props.when}</div>
-          <div class="chatlist__item__unreads">
-            <span class="chatlist__item__unreads__count"
-              >${props.unreads||''}</span>
-          </div>
-        </div>
-      </div>
-    </li>
-  `;
-};

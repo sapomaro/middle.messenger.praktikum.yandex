@@ -3,7 +3,6 @@ export const getValidationMessage = ({
 }: Record<string, string>): string | null => {
   switch (name) {
     case 'login':
-    case 'user':
       if (value.length === 0) return `Поле не может быть пустым`;
       if (value.length < 3) return `${label} должен быть больше 3 символов`;
       if (value.length > 20) return `${label} не может быть больше 20 символов`;
@@ -86,6 +85,11 @@ export const getValidationMessage = ({
 
     case 'avatar':
       if (value.length === 0) return `Нужно выбрать файл`;
+      break;
+
+    case 'chat':
+      if (value.length === 0) return `Поле не может быть пустым`;
+      if (value.length > 40) return `Название не может быть больше 40 символов`;
       break;
 
     default:

@@ -86,6 +86,10 @@ export class Block extends EventBus {
     });
   }
 
+  destroy() {
+    this.fire(Block.EVENTS.UNMOUNT);
+  }
+
   makePropsProxy(props: Props): Props {
     // self = this;
     const forbiddenCheck = (prop: string): void => {
@@ -160,7 +164,7 @@ export class Block extends EventBus {
 
   build(): BlockNodes {
     this.fire(Block.EVENTS.UNMOUNT);
-    this.element = this.buildNode(this.render, this.props,
+    this.element = this.buildNode(this.render.bind(this), this.props,
         (node: HTMLElement) => {
           if (node.nodeType === 1) {
             node.setAttribute('data-blockuid', this.blockuid);

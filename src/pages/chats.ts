@@ -7,23 +7,26 @@ import {RoundButton} from '../components/buttons/RoundButton';
 import {SearchInput} from '../components/inputs/SearchInput';
 import {AddUserPopup} from '../components/popups/AddUserPopup';
 import {AddChatPopup} from '../components/popups/AddChatPopup';
+import {DeleteChatPopup} from '../components/popups/DeleteChatPopup';
+import {PopupControl} from '../components/popups/PopupControl';
 import {chatsLoadService} from '../services/chats';
 import {StoreSynced} from '../modules/Store';
 
-import {chats, messages} from '../services/_testStubData';
+//import {chats, messages} from '../services/_testStubData';
 
 const view = new ChatsLayout({
   title: 'Чаты',
   addUserPopup: new AddUserPopup({id: 'AddUserPopup'}),
-  addChatPopup: new AddChatPopup({id: 'AddUserPopup'}),
-  popup: '%{addUserPopup}% %{addChatPopup}%',
+  addChatPopup: new AddChatPopup({id: 'AddChatPopup'}),
+  deleteChatPopup: new DeleteChatPopup({id: 'DeleteChatPopup'}),
+  popup: '%{addUserPopup}% %{addChatPopup}% %{deleteChatPopup}%',
 });
 
 const searchInput = new SearchInput({name: 'search'});
 
-const chatList = new (StoreSynced(ChatList))({chats});
+const chatList = new (StoreSynced(ChatList))();
 
-searchInput.on('input', (event: Event) => {
+/*searchInput.on('input', (event: Event) => {
   let list: Array<Record<string, unknown>> = [];
   if (event && event.target) {
     const target = event.target as HTMLInputElement;
@@ -35,17 +38,21 @@ searchInput.on('input', (event: Event) => {
     }
   }
   chatList.setProps({chats: list});
-});
+});*/
 
-view.props.contents = new ChatBox({messages});
+view.props.contents = new ChatBox();
 
 view.props.profileLink = new Link({
   url: '/settings',
   label: 'Профиль&ensp;<small>❯</small>',
 });
+
+const addChatControl = new PopupControl({forId: 'AddChatPopup'});
 view.props.addChatButton = new RoundButton({
   label: '<b>＋</b> Добавить чат&nbsp;',
-  onclick: () => { console.log('addChatButton clicked'); },
+  onclick: () => {
+    addChatControl.showPopup();
+  },
 });
 view.props.searchInput = searchInput;
 view.props.chatList = chatList;
@@ -66,6 +73,6 @@ view.props.aside = () => `
   %{chatList}%
 `;
 
-//view.on(Block.EVENTS.MOUNT, chatsLoadService);
+view.on(Block.EVENTS.MOUNT, chatsLoadService);
 
 export {view};
