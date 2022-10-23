@@ -1,4 +1,5 @@
 import {NarrowLayout} from '../components/layouts/Narrow';
+import {Block} from '../modules/Block';
 import {Form} from '../components/forms/Form';
 import {FormError} from '../components/forms/FormError';
 import {StandardInput as Input} from '../components/inputs/StandardInput';
@@ -8,11 +9,14 @@ import {JSONWrapper} from '../modules/Utils';
 
 import {StoreSynced} from '../modules/Store';
 import {registerService} from '../services/register';
+import {profileRedirectService} from '../services/profile';
 import type {RequestT} from '../constants/types';
 
 const view = new NarrowLayout({
   title: 'Регистрация',
 });
+
+view.on(Block.EVENTS.BEFORERENDER, profileRedirectService);
 
 const inputs = JSONWrapper.stringify([
   {name: 'email', type: 'email', label: 'Почта'},

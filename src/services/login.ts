@@ -5,20 +5,26 @@ import {errorHandler} from './errorHandler';
 
 import type {UserT, RequestT} from '../constants/types';
 
+export const getUserDataService = () => {
+  return authAPI.getUserData()
+      .then(({responseJSON}) => {
+        const user: UserT = responseJSON;
+        Store.setState({
+          user,
+          currentError: null,
+        });
+      })
+      .catch(errorHandler);
+};
+
 export const loginService = async (data: RequestT['Login']) => {
   Store.setState({isLoading: true});
   authAPI.login(data)
       .then(() => {
-        authAPI.getUserData()
-            .then(({responseJSON}) => {
-              const user: UserT = responseJSON;
-              Store.setState({
-                user,
-                currentError: null,
-              });
+        getUserDataService()
+            .then(() => {
               Router.navigate('/messenger');
-            })
-            .catch(errorHandler);
+            });
       })
       .catch(errorHandler)
       .finally(() => {
@@ -31,7 +37,11 @@ export const logoutService = async () => {
   authAPI.logout()
       .catch(errorHandler)
       .finally(() => {
-        Store.setState({user: null, isLoading: false});
+        Store.setState({
+          user: null,
+          isLoading: false,
+          currentError: null,
+        });
         Router.navigate('/');
       });
 };

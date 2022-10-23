@@ -1,4 +1,5 @@
 import {NarrowLayout} from '../components/layouts/Narrow';
+import {Block} from '../modules/Block';
 import {Form} from '../components/forms/Form';
 import {FormError} from '../components/forms/FormError';
 import {StandardInput as Input} from '../components/inputs/StandardInput';
@@ -7,11 +8,15 @@ import {StandardLink as Link} from '../components/links/StandardLink';
 
 import {StoreSynced} from '../modules/Store';
 import {loginService} from '../services/login';
+import {profileRedirectService} from '../services/profile';
+
 import type {RequestT} from '../constants/types';
 
 const view = new NarrowLayout({
   title: 'Вход',
 });
+
+view.on(Block.EVENTS.BEFORERENDER, profileRedirectService);
 
 const authForm = new Form({
   name: 'auth',

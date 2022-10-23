@@ -3,26 +3,37 @@ import {Router} from '../modules/Router';
 import {EventBus} from '../modules/EventBus';
 import {authAPI} from '../api/auth';
 import {profileAPI} from '../api/profile';
+import {getUserDataService} from './login';
 import {errorHandler} from './errorHandler';
 
 import type {UserT, RequestT, ErrorT} from '../constants/types';
 
+export const profileRedirectService = () => {
+  if (Store.state && Store.state.user) {
+    setTimeout(() => {
+      Router.redirect('/settings');
+    }, 1);
+  } else {
+    getUserDataService()
+        .then(() => {
+          Router.redirect('/settings');
+        })
+        .catch(() => null);
+  }
+};
+
 export const profileLoadService = async () => {
   if (!Store.state || !Store.state.user) {
-    return new Promise((resolve, reject) => authAPI.getUserData()
-        .then(({responseJSON}) => {
-          const user: UserT = responseJSON;
-          Store.setState({
-            user,
-            currentError: null,
-          });
-          resolve(user);
-        })
-        .catch((error: ErrorT) => {
-          reject(errorHandler(error));
-          Store.setState({currentError: null});
-          Router.redirect('/');
-        }));
+    return new Promise((resolve, reject) =>
+      getUserDataService()
+          .then(() => {
+            resolve(user);
+          })
+          .catch((error: ErrorT) => {
+            reject(errorHandler(error));
+            Store.setState({currentError: null});
+            Router.redirect('/');
+          })).catch(() => null); // Класс Ajax надо переписать под промисы...
   }
 };
 
