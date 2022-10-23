@@ -8,8 +8,8 @@ const getTimeObj = (time?: string) => {
     month: months[date.getMonth()],
     day: date.getDate(),
     weekday: weekdays[date.getDay()],
-    hour: date.getHours(),
-    min: date.getMinutes(),
+    hour: ('0' + date.getHours()).slice(-2),
+    min: ('0' + date.getMinutes()).slice(-2),
   };
 };
 

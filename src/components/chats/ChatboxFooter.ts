@@ -39,9 +39,7 @@ export class ChatBoxFooter extends Block {
       }),
     });
 
-    msgForm.on(Form.EVENTS.SUBMIT_SUCCESS, (data: {message: string}) => {
-      sendMessageService(data);
-    });
+    msgForm.on(Form.EVENTS.SUBMIT_SUCCESS, sendMessageService);
   }
   render() {
     return `%{content}%`;

@@ -2,6 +2,7 @@ import './AvatarControl.scss';
 
 import {PopupControl} from './PopupControl';
 import {resolveResourceUrl} from '../../services/resources';
+import {sanitizeAll} from '../../services/sanitizer';
 
 export class AvatarControl extends PopupControl {
   constructor(props?: Record<string, unknown>) {
@@ -12,7 +13,7 @@ export class AvatarControl extends PopupControl {
     if (props && props.user) {
       const user = props.user as Record<string, string>;
       if (user.avatar) {
-        avatar = resolveResourceUrl(user.avatar);
+        avatar = resolveResourceUrl(sanitizeAll(user.avatar));
       }
     }
     if (props && props.unclickable) {

@@ -9,12 +9,20 @@ import type {UserT} from '../../constants/types';
 export class Messages extends Block {
   constructor(props?: Record<string, unknown>) {
     super(props);
-    //this.setProps({activeChatMessages: []});
   }
   render(props: Record<string, unknown>) {
     const messages = props.activeChatMessages;
-    if (typeof messages === 'object' &&
-        messages instanceof Array) {
+    if (typeof messages !== 'object' ||
+        !(messages instanceof Array)) {
+      return '';
+    }
+    if (props.isLoading && messages.length === 0) {
+      return `
+        <div class="chatbox__stub">
+          Загрузка...
+        </div>
+      `;
+    } else {
       const msgItems = [];
       const user: UserT = this.props.user as UserT;
       if (user && 'id' in user && typeof user.id === 'number') {
@@ -32,8 +40,6 @@ export class Messages extends Block {
           %{messages}%
         </ul>
       `;
-    } else {
-      return ``;
     }
   }
 }
@@ -44,18 +50,22 @@ export class Message extends Block {
   }
   render(props: Record<string, string>) {
     props = sanitizeAll(props);
-    return `
-      <li class="chatbox__message chatbox__message_${props.direction}">
-        <span class="chatbox__message__text">${props.content || ''}</span>
-        <span class="chatbox__message__info">
-          <span class="chatbox__message__status">
-            ${ props.status? '✓✓' : '' }&nbsp;
+    if (typeof props.content === 'string' && props.content !== '') {
+      return `
+        <li class="chatbox__message chatbox__message_${props.direction}">
+          <span class="chatbox__message__text">${props.content}</span>
+          <span class="chatbox__message__info">
+            <span class="chatbox__message__status">
+              ${ props.status? '✓✓' : '' }&nbsp;
+            </span>
+            <time class="chatbox__message__time">
+              ${timeConverter(props.time)}
+            </time>
           </span>
-          <time class="chatbox__message__time">
-            ${timeConverter(props.time)}
-          </time>
-        </span>
-      </li>
-    `;
+        </li>
+      `;
+    } else {
+      return '';
+    }
   }
 }

@@ -2,29 +2,48 @@ import {Store} from '../modules/Store';
 import {EventBus} from '../modules/EventBus';
 import {JSONWrapper} from '../modules/Utils';
 import {chatsAPI, chatsSocketAPI} from '../api/chats';
+import {chatsLoadService} from './chatChannels';
 import {profileLoadService} from './profile';
 import {errorHandler} from './errorHandler';
 
-import type {UserT} from '../constants/types';
+import type {UserT, RequestT} from '../constants/types';
 
-let chatSelectedTimer: ReturnType<typeof setTimeout> | null = null;
-EventBus.on('chatSelected', (chatId: number) => {
-  Store.setState({isLoading: true});
-  if (chatSelectedTimer) {
-    clearTimeout(chatSelectedTimer);
+const chatKeepAliveInterval = 30000;
+const chatSelectInterval = 1000;
+let chatReconnectInterval = 1000;
+
+const getNewReconnectInterval = () => {
+  chatReconnectInterval = chatReconnectInterval * 2;
+  return chatReconnectInterval;
+};
+
+let connectTimer: ReturnType<typeof setTimeout> | null = null;
+
+export const socketUnloadService = () => {
+  if (connectTimer) {
+    clearTimeout(connectTimer);
   }
-  chatSelectedTimer = setTimeout(() => {
-    if (chatId) {
-      connectToChatService();
-    }
-  }, 500);
+  if (chatKeepAlive) {
+    clearInterval(chatKeepAlive);
+  }
+};
+
+EventBus.on('chatSelected', (chatId: number) => {
+  const activeChatId = Store.getState().activeChatId as number;
+  if (!chatId || activeChatId === chatId) {
+    return;
+  }
+  Store.setState({activeChatMessages: [], isLoading: true});
+  socketUnloadService();
+  connectTimer = setTimeout(() => {
+    connectToChatService();
+  }, chatSelectInterval);
 });
 
 export const getChatTokenService = async (chatId: number) => {
   return new Promise((resolve) => chatsAPI.getChatToken(chatId)
   .then(({responseJSON}) => {
     const token = responseJSON.token;
-    Store.setState({activeChatToken: token});
     resolve(token);
   })
   .catch(errorHandler));
@@ -47,32 +66,76 @@ export const connectToChatService = async () => {
   }
   const userId = (user as UserT).id;
   const chatId = Store.getState().activeChatId as number;
-  let token = Store.getState().activeChatToken as string;
+  const token = await getChatTokenService(chatId) as string;
   if (!token) {
-    token = await getChatTokenService(chatId);
+    try {
+      throw new Error('Token error');
+    }
+    catch (error) {
+      errorHandler(error);
+    }
   }
   chatsSocketAPI.init({userId, chatId, token});
 }
 
-export const sendMessageService = async (data: {message: string}) => {
+export const getOldMessagesService = async () => {
+  const socket = chatsSocketAPI.socket;
+  if (socket && socket.readyState !== WebSocket.CLOSED) {
+    chatsSocketAPI.send({content: '0', type: 'get old'});
+  }
+};
+
+export const sendMessageService = async (data: RequestT['SendMessage']) => {
   const socket = chatsSocketAPI.socket;
   if (socket && socket.readyState !== WebSocket.CLOSED) {
     chatsSocketAPI.send({content: data.message, type: 'message'});
   }
 };
+
+let chatKeepAlive: ReturnType<typeof setInterval> | null = null;
+
 EventBus.on('webSocketInit', () => {
   Store.setState({activeChatMessages: [], isLoading: true});
 });
+
 EventBus.on('webSocketClose, webSocketError', () => {
   Store.setState({isLoading: true});
+  socketUnloadService();
+  connectTimer = setTimeout(() => {
+    connectToChatService();
+  }, getNewReconnectInterval());
 });
+
 EventBus.on('webSocketOpen', () => {
   Store.setState({isLoading: false});
+  getOldMessagesService();
+  chatsLoadService();
+  socketUnloadService();
+  const socket = chatsSocketAPI.socket;
+  chatKeepAlive = setInterval(() => {
+    if (socket && socket.readyState !== WebSocket.CLOSED) {
+      chatsSocketAPI.send({type: 'ping'});
+    }
+  }, chatKeepAliveInterval);
 });
+
 EventBus.on('webSocketMessage', (data: string) => {
-  const messages = Store.getState().activeChatMessages;
+  let messages = Store.getState().activeChatMessages;
   if (typeof messages === 'object' && messages instanceof Array) {
-    messages.push(JSONWrapper.parse(data));
+    const parsed = JSONWrapper.parse(data);
+    if (parsed instanceof Array) {
+      messages.push(...parsed);
+      messages = messages.sort((a, b) => {
+        if (a.time && b.time) {
+          const timeA = new Date(a.time).getTime();
+          const timeB = new Date(b.time).getTime();
+          return timeA - timeB;
+        }
+        return 0;
+      });
+    } else {
+      messages.push(parsed);
+    }
     Store.setState({activeChatMessages: messages});
   }
 });

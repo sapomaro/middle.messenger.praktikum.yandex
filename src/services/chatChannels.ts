@@ -3,8 +3,20 @@ import {Router} from '../modules/Router';
 import {EventBus} from '../modules/EventBus';
 import {chatsAPI} from '../api/chats';
 import {errorHandler} from './errorHandler';
+import {socketUnloadService} from './chatMessaging';
 
 import type {RequestT, ErrorT} from '../constants/types';
+
+let chatAutoloader: ReturnType<typeof setTimeout> | null = null;
+
+const chatsLoadInterval = 15000;
+
+export const chatsUnloadService = () => {
+  if (chatAutoloader) {
+    clearInterval(chatAutoloader);
+  }
+  socketUnloadService();
+};
 
 export const chatsLoadService = async (callback?: () => void) => {
   Store.setState({isLoading: true});
@@ -17,6 +29,12 @@ export const chatsLoadService = async (callback?: () => void) => {
     if (typeof callback === 'function') {
       callback();
     }
+    if (chatAutoloader) {
+      clearInterval(chatAutoloader);
+    }
+    chatAutoloader = setTimeout(() => {
+      chatsLoadService();
+    }, chatsLoadInterval);
   })
   .catch((error: ErrorT) => {
     errorHandler(error);

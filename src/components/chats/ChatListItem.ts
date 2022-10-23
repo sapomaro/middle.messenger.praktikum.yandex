@@ -19,8 +19,8 @@ export class ChatListItem extends Block {
         setTimeout(() => {
           this.toggleActive();
           const chatId = this.props.id ?? 0;
-          Store.setState({activeChatId: chatId});
           EventBus.fire('chatSelected', chatId);
+          Store.setState({activeChatId: chatId});
         }, 1);
       },
     });
@@ -45,7 +45,9 @@ export class ChatListItem extends Block {
         props.last_message !== null) {
       lastMsg = props.last_message as typeof lastMsg;
     }
-
+    const msgSlice = (str: string) => {
+      return str.slice(0, 40);
+    };
     return `
       <li class="chatlist__item ${props.active? 'chatlist__item_active' : ''}"
         onclick="%{activate}%">
@@ -56,7 +58,7 @@ export class ChatListItem extends Block {
             <div class="chatlist__item__name">${props.title||''}</div>
             <div class="chatlist__item__message">
               <span class="chatlist__item__message__quote">
-                ${lastMsg.content || 'В этом чате пока нет сообщений'}
+                ${msgSlice(lastMsg.content || 'В этом чате пока нет сообщений')}
               </span>
             </div>
           </div>

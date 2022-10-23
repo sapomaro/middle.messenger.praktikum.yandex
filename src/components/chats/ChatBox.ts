@@ -6,6 +6,7 @@ import {Block} from '../../modules/Block';
 import {ChatBoxHeader} from './ChatBoxHeader';
 import {ChatBoxFooter} from './ChatBoxFooter';
 import {Messages} from './Messages';
+import {sanitizeAll} from '../../services/sanitizer';
 
 import type {ChatT} from '../../constants/types';
 
@@ -31,7 +32,10 @@ export class ChatBox extends Block {
           (item.id === chatId)) as ChatT;
       }
       if (chat) {
-        this.setProps({id: chat.id, title: chat.title});
+        this.setProps({
+          id: chat.id,
+          title: sanitizeAll(chat.title),
+        });
       } else {
         this.setProps({id: 0});
       }

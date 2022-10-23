@@ -3,14 +3,13 @@
   "version": "1.0.0",
   "description": "sprint_2",
   "scripts": {
-    "dev": "parcel ./src/pages/*.html --no-cache",
+    "dev": "npm audit && parcel ./src/pages/*.html --no-cache",
     "build": "parcel build ./src/pages/*.html --dist-dir ./dist/",
-    "start": "npm run build && node ./server.js",
+    "start": "npm audit && npm run build && node ./server.js",
     "tscheck": "npx tsc --noEmit",
     "eslint": "npx eslint \"./src/**/*.ts\" --ext .ts",
     "csslint": "npx stylelint \"./src/**/*.scss\"",
-    "lint": "npm run tscheck && npm run eslint && npm run csslint",
-    "test": "npm audit"
+    "lint": "npm audit && npm run tscheck && npm run eslint && npm run csslint"
   },
   "targets": {
     "default": {

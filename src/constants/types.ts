@@ -37,8 +37,11 @@ export type ChatT = {
 };
 
 export type MessageT = {
-  content: string;
-  type: 'message';
+  content?: string;
+  type: 'message' | 'get old' | 'ping' | 'pong';
+  time?: string;
+  user_id?: number;
+  id?: number;
 };
 
 export type RequestT = {
@@ -75,6 +78,10 @@ export type RequestT = {
     chatId: number;
   };
   DeleteUser: RequestT['AddUser'];
+  SendMessage: {
+    message: string;
+    type?: string;
+  };
   SocketInit: {
     userId: number;
     chatId: number;

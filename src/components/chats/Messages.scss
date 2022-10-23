@@ -35,6 +35,8 @@
 
 .chatbox__message__text {
   white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
 .chatbox__message__info {

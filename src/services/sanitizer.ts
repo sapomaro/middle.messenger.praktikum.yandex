@@ -15,5 +15,6 @@ export const sanitize = (str: string) => {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
+    .replace(/'/g, '&apos;')
+    .replace(/\\/g, '&#8726;');
 };

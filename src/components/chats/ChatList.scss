@@ -52,6 +52,8 @@
 }
 
 .chatlist__item__message__quote {
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
   color: $note-color;
 }
 

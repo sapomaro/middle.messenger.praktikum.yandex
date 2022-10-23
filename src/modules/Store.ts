@@ -60,8 +60,8 @@ const StoreSynced = (CustomBlock: typeof Block) => {
   return class extends CustomBlock {
     constructor(props?: State) {
       super({...props, ...Store.getState()});
-      Store.on(Store.EVENTS.UPDATE, () => {
-        this.setProps(Store.getState());
+      Store.on(Store.EVENTS.UPDATE, (newState: State) => {
+        this.setProps(newState);
       });
     }
   } 
