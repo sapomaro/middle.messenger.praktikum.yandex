@@ -13,5 +13,6 @@ export const profileAPI = {
     const formData = new FormData();
     formData.append('avatar', data.avatar);
     return ajax.put('/user/profile/avatar', formData);
+    // Почему-то выдаёт ошибку 500...
   },
 };
