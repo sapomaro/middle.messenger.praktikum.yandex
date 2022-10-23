@@ -15,6 +15,8 @@ const view = new WideLayoutWithSidebar({
   aside: new RoundButton({url: '/settings', label: '⬅'}),
 });
 
+view.on(Block.EVENTS.MOUNT, profileLoadService);
+
 const profileForm = new Form({
   name: 'changepassword',
   Input,
@@ -51,7 +53,5 @@ const profileForm = new Form({
 profileForm.on(Form.EVENTS.SUBMIT_SUCCESS, profilePasswordService);
 
 view.props.contents = profileForm;
-
-view.on(Block.EVENTS.MOUNT, profileLoadService);
 
 export {view};

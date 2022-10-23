@@ -40,6 +40,7 @@ export class Block extends EventBus {
   public static EVENTS: Record<string, string> = {
     INIT: 'INIT',
     UNMOUNT: 'unmounting',
+    BEFORERENDER: 'beforerendered',
     RENDER: 'rendered',
     MOUNT: 'mounted',
     REMOUNT: 'remounted',
@@ -71,7 +72,7 @@ export class Block extends EventBus {
     this.on('eventAttached', (data: EventAttachment) => {
       this.nativeEventsList.push(data);
     });
-    this.on(Block.EVENTS.UNMOUNT, () => {
+    this.on(`${Block.EVENTS.BEFORERENDER}, ${Block.EVENTS.UNMOUNT}`, () => {
       for (const {node, eventType, callback} of this.nativeEventsList) {
         if (typeof node === 'object' && node instanceof HTMLElement) {
           node.removeEventListener(eventType as string,
@@ -165,7 +166,7 @@ export class Block extends EventBus {
   }
 
   build(): BlockNodes {
-    this.fire(Block.EVENTS.UNMOUNT);
+    this.fire(Block.EVENTS.BEFORERENDER);
     this.element = this.buildNode(this.render.bind(this), this.props,
         (node: HTMLElement) => {
           if (node.nodeType === 1) {

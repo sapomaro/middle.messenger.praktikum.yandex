@@ -3,6 +3,8 @@ import './ChatList.scss';
 import {Block} from '../../modules/Block';
 import {ChatListItem} from './ChatListItem';
 
+import type {ChatT} from '../../constants/types';
+
 type ChatListType = Record<string, unknown>;
 
 export class ChatList extends Block {
@@ -17,19 +19,29 @@ export class ChatList extends Block {
     });
   }
   filterChats(searchValue: string) {
-    if (this.props.chats instanceof Array) {
-      return this.props.chats.filter((chat: Record<string, unknown>) => {
-        for (const chatValue of Object.values(chat)) {
-          if (typeof chatValue === 'string' &&
-            chatValue.toLowerCase()
-                .indexOf(searchValue.toLowerCase()) !== -1) {
-            return true;
-          }
-        }
-        return false;
-      });
-    }
-    return [];
+    this.listDescendants((item: ChatListItem) => {
+      if (!item.toggleShow || !item.toggleHide) {
+        return;
+      }
+      if (searchValue === '') {
+        item.toggleShow();
+        return;
+      }
+      let chatValue = '';
+      if (item.props.title) {
+        chatValue += item.props.title;
+      }
+      const chat = item.props as ChatT;
+      if (chat.last_message !== null &&
+          typeof chat.last_message?.content === 'string') {
+        chatValue += chat.last_message.content;
+      }
+      if (chatValue.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1) {
+        item.toggleShow();
+      } else {
+        item.toggleHide();
+      }
+    });
   }
   render(props: ChatListType) {
     if (typeof props.chats === 'object' && props.chats instanceof Array) {

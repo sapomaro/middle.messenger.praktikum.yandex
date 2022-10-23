@@ -23,9 +23,23 @@ const view = new ChatsLayout({
     %{addChatPopup}% %{deleteChatPopup}%`,
 });
 
-const searchInput = new SearchInput({name: 'search'});
+view.on(Block.EVENTS.BEFORERENDER, chatsLoadService);
+
+view.on(Block.EVENTS.UNMOUNT, chatsUnloadService);
 
 const chatList = new (StoreSynced(ChatList))();
+
+const searchInput = new SearchInput({name: 'search'});
+
+searchInput.on('input', () => {
+  chatList.filterChats(searchInput.props.value ?? '');
+});
+
+chatList.on(Block.EVENTS.UPDATE, () => {
+  setTimeout(() => {
+    chatList.filterChats(searchInput.props.value ?? '');
+  }, 10);
+});
 
 view.props.contents = new ChatBox();
 
@@ -59,9 +73,5 @@ view.props.aside = () => `
   </nav>
   %{chatList}%
 `;
-
-view.on(Block.EVENTS.MOUNT, chatsLoadService);
-
-view.on(Block.EVENTS.UNMOUNT, chatsUnloadService);
 
 export {view};

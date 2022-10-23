@@ -18,6 +18,8 @@ const view = new WideLayoutWithSidebar({
   aside: new RoundButton({url: '/settings', label: '⬅'}),
 });
 
+view.on(Block.EVENTS.MOUNT, profileLoadService);
+
 const profileForm = new (StoreSynced(Form))({
   name: 'profile',
   Input,
@@ -46,7 +48,7 @@ const profileForm = new (StoreSynced(Form))({
   },
 });
 
-profileForm.on(Block.EVENTS.UNMOUNT, () => {
+profileForm.on(Block.EVENTS.BEFORERENDER, () => {
   const user = profileForm.props.user;
   if (user) {
     for (const input of profileInputs) {
@@ -60,7 +62,5 @@ profileForm.on(Block.EVENTS.UNMOUNT, () => {
 profileForm.on(Form.EVENTS.SUBMIT_SUCCESS, profileEditService);
 
 view.props.contents = profileForm;
-
-view.on(Block.EVENTS.MOUNT, profileLoadService);
 
 export {view};

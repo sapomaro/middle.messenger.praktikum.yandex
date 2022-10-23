@@ -8,6 +8,10 @@
 
 .chatlist__item {
   cursor: pointer;
+
+  &_hidden {
+    display: none;
+  }
 }
 
 .chatlist__item:hover,

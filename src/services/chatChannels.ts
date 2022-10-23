@@ -5,7 +5,7 @@ import {chatsAPI} from '../api/chats';
 import {errorHandler} from './errorHandler';
 import {socketUnloadService} from './chatMessaging';
 
-import type {RequestT, ErrorT} from '../constants/types';
+import type {RequestT, ChatT, ErrorT} from '../constants/types';
 
 let chatAutoloader: ReturnType<typeof setTimeout> | null = null;
 
@@ -22,8 +22,24 @@ export const chatsLoadService = async (callback?: () => void) => {
   Store.setState({isLoading: true});
   chatsAPI.getChats()
       .then(({responseJSON}) => {
+        let chats: Array<ChatT> = responseJSON;
+        chats = chats.sort((a, b) => {
+          let timeA = 0;
+          let timeB = 0;
+          if (a.last_message === null || !a.last_message?.time) {
+            timeA = new Date().getTime();
+          } else {
+            timeA = new Date(a.last_message.time).getTime();
+          }
+          if (b.last_message === null || !b.last_message?.time) {
+            timeB = new Date().getTime();
+          } else {
+            timeB = new Date(b.last_message.time).getTime();
+          }
+          return timeB - timeA;
+        });
         Store.setState({
-          chats: responseJSON,
+          chats,
           currentError: null,
         });
         if (typeof callback === 'function') {

@@ -19,6 +19,8 @@ const view = new WideLayoutWithSidebar({
   aside: new RoundButton({url: '/messenger', label: '⬅'}),
 });
 
+view.on(Block.EVENTS.MOUNT, profileLoadService);
+
 export const profileInputs: Array<{
   name: string;
   type?: string;
@@ -65,7 +67,7 @@ const profileForm = new (StoreSynced(Form))({
   },
 });
 
-profileForm.on(Block.EVENTS.UNMOUNT, () => {
+profileForm.on(Block.EVENTS.BEFORERENDER, () => {
   const user = profileForm.props.user;
   if (user) {
     for (const input of profileInputs) {
@@ -77,7 +79,5 @@ profileForm.on(Block.EVENTS.UNMOUNT, () => {
 });
 
 view.props.contents = profileForm;
-
-view.on(Block.EVENTS.MOUNT, profileLoadService);
 
 export {view};

@@ -31,6 +31,12 @@ export class ChatListItem extends Block {
   toggleInactive() {
     this.setProps({active: false});
   }
+  toggleShow() {
+    this.setProps({hidden: false});
+  }
+  toggleHide() {
+    this.setProps({hidden: true});
+  }
   render(props: ChatT) {
     props = sanitizeAll(props);
     let avatar = '';
@@ -49,7 +55,9 @@ export class ChatListItem extends Block {
       return str.slice(0, 40);
     };
     return `
-      <li class="chatlist__item ${props.active? 'chatlist__item_active' : ''}"
+      <li class="chatlist__item 
+        ${props.active? 'chatlist__item_active' : ''}
+        ${props.hidden? 'chatlist__item_hidden' : ''}"
         onclick="%{activate}%">
         <div class="chatlist__item__wrapper">
           <div class="chatlist__item__avatar"
