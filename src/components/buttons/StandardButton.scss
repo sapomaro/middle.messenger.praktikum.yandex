@@ -1,0 +1,39 @@
+@import "../../constants/colors.scss";
+
+.form__button {
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 1rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  text-decoration: none;
+
+  &:disabled {
+    cursor: not-allowed;
+    background: $disabled-color !important;
+  }
+
+  &:enabled:active {
+    transform: scale(0.98);
+  }
+
+  &_danger {
+    background: $danger-color !important;
+  }
+}
+
+.form__button_standard {
+  display: inline-block;
+  width: 100%;
+  max-width: 23rem;
+  font-size: 1.2rem;
+  color: $plain-color;
+  background: $main-color;
+  border-radius: 0.8rem;
+
+  &:enabled:hover {
+    filter: brightness(1.3);
+  }
+}

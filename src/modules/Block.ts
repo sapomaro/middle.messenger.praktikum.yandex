@@ -16,6 +16,9 @@ const generateUid = () => {
   uids[uid] = true;
   return uid;
 };
+const clearUid = (uid: string) => {
+  delete uids[uid];
+};
 
 const instancesOfBlock: Record<string, Block> = {};
 
@@ -33,10 +36,11 @@ type EventAttachment = {
 
 type Props = Record<string, unknown>;
 
-export class Block {
-  static EVENTS = {
+export class Block extends EventBus {
+  public static EVENTS: Record<string, string> = {
     INIT: 'INIT',
-    PREPARE: 'preparing',
+    UNMOUNT: 'unmounting',
+    BEFORERENDER: 'beforerendered',
     RENDER: 'rendered',
     MOUNT: 'mounted',
     REMOUNT: 'remounted',
@@ -45,16 +49,13 @@ export class Block {
 
   private blockuid: string;
   private templator: Templator;
-  public listeners: Record<string, unknown>;
   private nativeEventsList: Array<Record<string, unknown>>;
   private element: BlockNodes;
-  public listEvents: Fn;
-  public on: Fn;
-  public off: Fn;
-  public fire: Fn;
   public props: Props;
+  public propsCurrentUpdate: Props = {};
 
   constructor(props: Props = {}) {
+    super();
     this.props = this.makePropsProxy(props);
     this.blockuid = generateUid();
     instancesOfBlock[this.blockuid] = this;
@@ -64,12 +65,6 @@ export class Block {
   }
 
   registerEvents(): void {
-    this.on = EventBus.on;
-    this.off = EventBus.off;
-    this.fire = EventBus.fire;
-    this.listEvents = EventBus.listEvents;
-    this.listeners = {};
-
     this.nativeEventsList = [];
     this.on(Block.EVENTS.UPDATE, () => {
       this.replaceMultipleNodes(`[data-blockuid=${this.blockuid}]`, [this]);
@@ -77,7 +72,7 @@ export class Block {
     this.on('eventAttached', (data: EventAttachment) => {
       this.nativeEventsList.push(data);
     });
-    this.on(Block.EVENTS.PREPARE, () => {
+    this.on(`${Block.EVENTS.BEFORERENDER}, ${Block.EVENTS.UNMOUNT}`, () => {
       for (const {node, eventType, callback} of this.nativeEventsList) {
         if (typeof node === 'object' && node instanceof HTMLElement) {
           node.removeEventListener(eventType as string,
@@ -86,9 +81,15 @@ export class Block {
       }
       this.nativeEventsList = [];
       this.listDescendants((block: Block) => {
-        block.fire(Block.EVENTS.PREPARE);
+        block.fire(Block.EVENTS.UNMOUNT);
+        delete instancesOfBlock[block.blockuid];
+        clearUid(block.blockuid);
       });
     });
+  }
+
+  destroy() {
+    this.fire(Block.EVENTS.UNMOUNT);
   }
 
   makePropsProxy(props: Props): Props {
@@ -121,9 +122,10 @@ export class Block {
     });
   }
 
-  setProps(obj: Record<string, unknown>): void {
-    if (!objIntersect(this.props, obj)) {
-      Object.assign(this.props, obj);
+  setProps(newProps: Record<string, unknown>): void {
+    if (!objIntersect(this.props, newProps)) {
+      this.propsCurrentUpdate = newProps;
+      Object.assign(this.props, newProps);
       this.fire(Block.EVENTS.UPDATE);
     }
   }
@@ -164,8 +166,8 @@ export class Block {
   }
 
   build(): BlockNodes {
-    this.fire(Block.EVENTS.PREPARE);
-    this.element = this.buildNode(this.render, this.props,
+    this.fire(Block.EVENTS.BEFORERENDER);
+    this.element = this.buildNode(this.render.bind(this), this.props,
         (node: HTMLElement) => {
           if (node.nodeType === 1) {
             node.setAttribute('data-blockuid', this.blockuid);

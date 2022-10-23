@@ -1,0 +1,16 @@
+@import "../../constants/colors.scss";
+
+.form__row__label {
+  font-size: 1.2rem;
+}
+
+.form__input__field_right {
+  text-align: right;
+  color: $note-color;
+  font-size: 1.2rem;
+  border: none;
+}
+
+.form__text_right {
+  text-align: right;
+}

@@ -9,10 +9,12 @@ export class WideLayoutWithSidebar extends Layout {
   }
   render(): string {
     return `
-      %{Popup}%
+      %{popup}%
       <div class="root">
         <aside class="sidebar sidebar_nav">
-          %{BackButtonLink}%
+          <div class="sidebar__control">
+            %{aside}%
+          </div>
         </aside>
         <main class="container container_wide">
           %{contents}%

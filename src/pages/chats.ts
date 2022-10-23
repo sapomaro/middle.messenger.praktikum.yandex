@@ -1,68 +1,77 @@
 import {ChatsLayout} from '../components/layouts/Chats';
-import {ChatlistItem} from '../components/chats/ChatlistItem';
-import {ChatlistControls} from '../components/chats/ChatlistControls';
-import {ChatboxMessage} from '../components/chats/ChatboxMessage';
-import {ChatboxHeader} from '../components/chats/ChatboxHeader';
-import {ChatboxFooter} from '../components/chats/ChatboxFooter';
-import {AddUserPopup as Popup} from '../components/chats/AddUserPopup';
-import {JSONWrapper} from '../modules/Utils';
+import {Block} from '../modules/Block';
+import {ChatList} from '../components/chats/ChatList';
+import {ChatBox} from '../components/chats/ChatBox';
+import {Link} from '../components/links/Link';
+import {RoundButton} from '../components/buttons/RoundButton';
+import {SearchInput} from '../components/inputs/SearchInput';
+import {AddUserPopup} from '../components/popups/AddUserPopup';
+import {DeleteUserPopup} from '../components/popups/DeleteUserPopup';
+import {AddChatPopup} from '../components/popups/AddChatPopup';
+import {DeleteChatPopup} from '../components/popups/DeleteChatPopup';
+import {PopupControl} from '../components/popups/PopupControl';
+import {chatsLoadService, chatsUnloadService} from '../services/chatChannels';
+import {StoreSynced} from '../modules/Store';
 
 const view = new ChatsLayout({
   title: 'Чаты',
-  user: 'Собеседник',
-  Popup,
-  ChatlistControls, ChatlistItem,
-  ChatboxHeader, ChatboxFooter, ChatboxMessage,
+  addUserPopup: new AddUserPopup({id: 'AddUserPopup'}),
+  deleteUserPopup: new DeleteUserPopup({id: 'DeleteUserPopup'}),
+  addChatPopup: new AddChatPopup({id: 'AddChatPopup'}),
+  deleteChatPopup: new DeleteChatPopup({id: 'DeleteChatPopup'}),
+  popup: `%{addUserPopup}% %{deleteUserPopup}%
+    %{addChatPopup}% %{deleteChatPopup}%`,
 });
 
-const chats = JSONWrapper.stringify([
-  {
-    user: 'Андрей',
-    quote: 'Изображение',
-    when: '10:49',
-    unreads: 2,
-    active: true,
+view.on(Block.EVENTS.BEFORERENDER, chatsLoadService);
+
+view.on(Block.EVENTS.UNMOUNT, chatsUnloadService);
+
+const chatList = new (StoreSynced(ChatList))();
+
+const searchInput = new SearchInput({name: 'search'});
+
+searchInput.on('input', () => {
+  (chatList as ChatList).filterChats(searchInput.props.value as string ?? '');
+});
+
+chatList.on(Block.EVENTS.UPDATE, () => {
+  setTimeout(() => {
+    (chatList as ChatList).filterChats(searchInput.props.value as string ?? '');
+  }, 10);
+});
+
+view.props.contents = new ChatBox();
+
+view.props.profileLink = new Link({
+  url: '/settings',
+  label: 'Профиль&ensp;<small>❯</small>',
+});
+
+const addChatControl = new PopupControl({forId: 'AddChatPopup'});
+view.props.addChatButton = new RoundButton({
+  label: '<b>＋</b> Добавить чат&nbsp;',
+  onclick: () => {
+    addChatControl.showPopup();
   },
-  {
-    user: 'Илья',
-    quote: 'Друзья, у меня для вас особенный выпуск новостей!...',
-    when: '15:12',
-    unreads: 4222,
-  },
-  {
-    user: 'Design Destroyer',
-    quote: 'В 2008 году художник Jon Rafman  начал собирать...',
-    when: 'Пн', unreads: 0,
-  },
-]);
-
-const longText = 'Привет! Смотри, тут всплыл интересный кусок лунной ' +
-  'космической истории — НАСА в какой-то момент попросила Хассельблад ' +
-  'адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что ' +
-  'астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих ' +
-  'камер все еще находятся на поверхности Луны, так как астронавты с собой ' +
-  'забрали только кассеты с пленкой.' +
-  '\n\n' +
-  'Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так ' +
-  'и на ракету они так никогда и не попали. Всего их было произведено 25 ' +
-  'штук, одну из них недавно продали на аукционе за 45000 евро.';
-
-const messages = JSONWrapper.stringify([
-  {type: 'inc', when: '11:56', text: longText},
-  {type: 'out', when: '12:00', status: 1, text: 'Круто!'},
-]);
-
-view.props.Chatlist = () => `
-  %{ ChatlistControls }%
-  <ul>
-    %{ ChatlistItem(${chats}...) }%
-  </ul>
-`;
-
-view.props.ChatboxBody = () => `
-  <div class="chatbox__date">19 июня (вс)</div>
-
-  %{ ChatboxMessage(${messages}...) }%
+});
+view.props.searchInput = searchInput;
+view.props.chatList = chatList;
+view.props.aside = () => `
+  <nav>
+    <div class="container__element chatlist__controls">
+      <span>
+        %{addChatButton}%
+      </span>
+      <span class="container__link container__link_secondary">
+        %{profileLink}%
+      </span>
+    </div>
+    <div class="container__element">
+      %{searchInput}%
+    </div>
+  </nav>
+  %{chatList}%
 `;
 
 export {view};
