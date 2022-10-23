@@ -10,12 +10,12 @@ import type {UserT, RequestT, ErrorT} from '../constants/types';
 export const profileRedirectService = () => {
   if (Store.state && Store.state.user) {
     setTimeout(() => {
-      Router.redirect('/settings');
+      Router.redirect('/messenger');
     }, 1);
   } else {
     getUserDataService()
         .then(() => {
-          Router.redirect('/settings');
+          Router.redirect('/messenger');
         })
         .catch(() => null);
   }
