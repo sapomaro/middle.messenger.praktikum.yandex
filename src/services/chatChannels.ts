@@ -54,9 +54,46 @@ export const chatsLoadService = async (callback?: () => void) => {
       })
       .catch((error: ErrorT) => {
         errorHandler(error);
-        Store.setState({currentError: null});
+        Store.setState({user: null, currentError: null});
         Router.redirect('/');
       })
+      .finally(() => {
+        Store.setState({isLoading: false});
+      });
+};
+
+export const addChatService = async (data: RequestT['AddChat']) => {
+  Store.setState({isLoading: true});
+  chatsAPI.addChat(data)
+      .then(({responseJSON}) => {
+        const chatId = responseJSON.id ?? 0;
+        EventBus.fire('popupHide');
+        Store.setState({currentError: null, activeChatId: chatId});
+        addUserToChatService({login: data.title}, true);
+        chatsLoadService(() => {
+          Store.state.activeChatId = 0;
+          EventBus.fire('chatSelected', chatId);
+          Store.state.activeChatId = chatId;
+        });
+      })
+      .catch(errorHandler)
+      .finally(() => {
+        Store.setState({isLoading: false});
+      });
+};
+
+export const deleteChatService = async () => {
+  Store.setState({isLoading: true});
+  chatsUnloadService();
+  const chatId = Store.getState().activeChatId as number;
+  chatsAPI.deleteChat({chatId})
+      .then(() => {
+        EventBus.fire('popupHide');
+        EventBus.fire('chatSelected', 0);
+        Store.setState({activeChatId: 0});
+        chatsLoadService();
+      })
+      .catch(errorHandler)
       .finally(() => {
         Store.setState({isLoading: false});
       });
@@ -102,41 +139,6 @@ export const deleteUserFromChatService = async (data: {login: string}) => {
           });
         }
         EventBus.fire('popupHide');
-      })
-      .catch(errorHandler)
-      .finally(() => {
-        Store.setState({isLoading: false});
-      });
-};
-
-export const addChatService = async (data: RequestT['AddChat']) => {
-  Store.setState({isLoading: true});
-  chatsAPI.addChat(data)
-      .then(({responseJSON}) => {
-        const chatId = responseJSON.id ?? 0;
-        EventBus.fire('popupHide');
-        Store.setState({currentError: null, activeChatId: chatId});
-        addUserToChatService({login: data.title}, true);
-        chatsLoadService(() => {
-          EventBus.fire('chatSelected', chatId);
-        });
-      })
-      .catch(errorHandler)
-      .finally(() => {
-        Store.setState({isLoading: false});
-      });
-};
-
-export const deleteChatService = async () => {
-  Store.setState({isLoading: true});
-  chatsUnloadService();
-  const chatId = Store.getState().activeChatId as number;
-  chatsAPI.deleteChat({chatId})
-      .then(() => {
-        EventBus.fire('popupHide');
-        EventBus.fire('chatSelected', 0);
-        Store.setState({activeChatId: 0});
-        chatsLoadService();
       })
       .catch(errorHandler)
       .finally(() => {

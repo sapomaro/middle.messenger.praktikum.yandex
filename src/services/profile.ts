@@ -31,7 +31,7 @@ export const profileLoadService = async () => {
           })
           .catch((error: ErrorT) => {
             reject(errorHandler(error));
-            Store.setState({currentError: null});
+            Store.setState({user: null, currentError: null});
             Router.redirect('/');
           })).catch(() => null); // Класс Ajax надо переписать под промисы...
   }
