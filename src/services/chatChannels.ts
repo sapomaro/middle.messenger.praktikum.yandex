@@ -54,7 +54,7 @@ export const chatsLoadService = async (callback?: () => void) => {
       })
       .catch((error: ErrorT) => {
         errorHandler(error);
-        Store.setState({currentError: null});
+        Store.setState({user: null, currentError: null});
         Router.redirect('/');
       })
       .finally(() => {
