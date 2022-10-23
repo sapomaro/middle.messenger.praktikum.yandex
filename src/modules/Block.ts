@@ -51,6 +51,7 @@ export class Block extends EventBus {
   private nativeEventsList: Array<Record<string, unknown>>;
   private element: BlockNodes;
   public props: Props;
+  public propsCurrentUpdate: Props = {};
 
   constructor(props: Props = {}) {
     super();
@@ -122,6 +123,7 @@ export class Block extends EventBus {
 
   setProps(newProps: Record<string, unknown>): void {
     if (!objIntersect(this.props, newProps)) {
+      this.propsCurrentUpdate = newProps;
       Object.assign(this.props, newProps);
       this.fire(Block.EVENTS.UPDATE);
     }

@@ -19,14 +19,14 @@ export class ChatList extends Block {
   filterChats(searchValue: string) {
     if (this.props.chats instanceof Array) {
       return this.props.chats.filter((chat: Record<string, unknown>) => {
-         for (const chatValue of Object.values(chat)) {
-           if (typeof chatValue === 'string' &&
-              chatValue.toLowerCase()
+        for (const chatValue of Object.values(chat)) {
+          if (typeof chatValue === 'string' &&
+            chatValue.toLowerCase()
                 .indexOf(searchValue.toLowerCase()) !== -1) {
-             return true;
-           }
-         }
-         return false;
+            return true;
+          }
+        }
+        return false;
       });
     }
     return [];

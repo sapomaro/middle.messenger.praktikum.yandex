@@ -13,8 +13,6 @@ import {PopupControl} from '../components/popups/PopupControl';
 import {chatsLoadService, chatsUnloadService} from '../services/chatChannels';
 import {StoreSynced} from '../modules/Store';
 
-//import {chats, messages} from '../services/_testStubData';
-
 const view = new ChatsLayout({
   title: 'Чаты',
   addUserPopup: new AddUserPopup({id: 'AddUserPopup'}),
@@ -28,20 +26,6 @@ const view = new ChatsLayout({
 const searchInput = new SearchInput({name: 'search'});
 
 const chatList = new (StoreSynced(ChatList))();
-
-/*searchInput.on('input', (event: Event) => {
-  let list: Array<Record<string, unknown>> = [];
-  if (event && event.target) {
-    const target = event.target as HTMLInputElement;
-    if (target.value && target.value !== '') {
-      list = (chatList as ChatList).filterChats(target.value);
-    } else {
-      //ПЕРЕДЕЛАТЬ!!!
-      list = chats;
-    }
-  }
-  chatList.setProps({chats: list});
-});*/
 
 view.props.contents = new ChatBox();
 

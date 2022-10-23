@@ -14,9 +14,11 @@
     cursor: not-allowed;
     background: $disabled-color !important;
   }
+
   &:enabled:active {
     transform: scale(0.98);
   }
+
   &_danger {
     background: $danger-color !important;
   }

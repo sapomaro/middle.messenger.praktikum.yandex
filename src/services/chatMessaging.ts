@@ -42,11 +42,11 @@ EventBus.on('chatSelected', (chatId: number) => {
 
 export const getChatTokenService = async (chatId: number) => {
   return new Promise((resolve) => chatsAPI.getChatToken(chatId)
-  .then(({responseJSON}) => {
-    const token = responseJSON.token;
-    resolve(token);
-  })
-  .catch(errorHandler));
+      .then(({responseJSON}) => {
+        const token = responseJSON.token;
+        resolve(token);
+      })
+      .catch(errorHandler));
 };
 
 export const connectToChatService = async () => {
@@ -58,8 +58,7 @@ export const connectToChatService = async () => {
       typeof (user as UserT).id !== 'number') {
     try {
       throw new Error('No user ID');
-    }
-    catch (error) {
+    } catch (error) {
       errorHandler(error);
     }
     return;
@@ -70,13 +69,12 @@ export const connectToChatService = async () => {
   if (!token) {
     try {
       throw new Error('Token error');
-    }
-    catch (error) {
+    } catch (error) {
       errorHandler(error);
     }
   }
   chatsSocketAPI.init({userId, chatId, token});
-}
+};
 
 export const getOldMessagesService = async () => {
   const socket = chatsSocketAPI.socket;
@@ -104,6 +102,17 @@ EventBus.on('webSocketClose, webSocketError', () => {
   connectTimer = setTimeout(() => {
     connectToChatService();
   }, getNewReconnectInterval());
+});
+
+
+EventBus.on('webSocketClose', (event: CloseEvent) => {
+  if (!event.wasClean) {
+    console.warn('webSocketClose',
+        `Code: ${event.code||''} | Reason: ${event.reason||''}`);
+  }
+});
+EventBus.on('webSocketError', (event: ErrorEvent) => {
+  console.warn('webSocketError', event.message);
 });
 
 EventBus.on('webSocketOpen', () => {

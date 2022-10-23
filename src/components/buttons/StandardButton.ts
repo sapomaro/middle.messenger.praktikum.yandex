@@ -16,7 +16,7 @@ export class StandardButton extends Block {
   constructor(props: IncomingProps) {
     super(props);
     if (!props.onclick) {
-      this.props.onclick = () => {};
+      this.props.onclick = () => null;
     }
   }
   render(props: IncomingProps) {

@@ -8,19 +8,19 @@ import type {RequestT} from '../constants/types';
 export const registerService = async (data: RequestT['Register']) => {
   Store.setState({isLoading: true});
   authAPI.signup(data)
-  .then(() => {
-    authAPI.getUserData()
-    .then(({responseJSON}) => {
-      Store.setState({
-        user: responseJSON.user,
-        currentFormError: null,
+      .then(() => {
+        authAPI.getUserData()
+            .then(({responseJSON}) => {
+              Store.setState({
+                user: responseJSON.user,
+                currentFormError: null,
+              });
+              Router.navigate('/messenger');
+            })
+            .catch(errorHandler);
+      })
+      .catch(errorHandler)
+      .finally(() => {
+        Store.setState({isLoading: false});
       });
-      Router.navigate('/messenger');
-    })
-    .catch(errorHandler);
-  })
-  .catch(errorHandler)
-  .finally(() => {
-    Store.setState({isLoading: false});
-  });
 };

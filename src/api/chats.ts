@@ -39,27 +39,18 @@ export const chatsSocketAPI: {
 
     socket.addEventListener('open', () => {
       EventBus.fire('webSocketOpen');
-      console.log('Соединение установлено');
     });
 
     socket.addEventListener('close', (event: CloseEvent) => {
       EventBus.fire('webSocketClose', event);
-      if (event.wasClean) {
-        console.log('Соединение закрыто чисто');
-      } else {
-        console.log('Обрыв соединения');
-      }
-      console.log(`Код: ${event.code} | Причина: ${event.reason}`);
     });
 
     socket.addEventListener('message', (event: MessageEvent) => {
       EventBus.fire('webSocketMessage', event.data);
-      console.log('Получены данные', event.data);
     });
 
     socket.addEventListener('error', (event: ErrorEvent) => {
       EventBus.fire('webSocketError', event);
-      console.log('Ошибка', event.message);
     });
   },
   send: (data) => {

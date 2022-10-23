@@ -20,7 +20,6 @@ type InitOptionsT = {
 }
 
 type OptionsT = InitOptionsT & {
-  //data?: unknown;
   successCallback: Fn;
   errorHandler: Fn;
 };
@@ -252,10 +251,11 @@ const getResponseHeaders = (xhr: XMLHttpRequest) => {
 
 const getKey = (key: string, parentKey?: string) => {
   return parentKey ? `${parentKey}[${key}]` : key;
-}
+};
+
 const getParams = (data: PlainObject | [], parentKey?: string) => {
   const result: [string, string][] = [];
-  for(const [key, value] of Object.entries(data)) {
+  for (const [key, value] of Object.entries(data)) {
     if (isArrayOrObject(value)) {
       result.push(...getParams(value, getKey(key, parentKey)));
     } else {
@@ -263,12 +263,13 @@ const getParams = (data: PlainObject | [], parentKey?: string) => {
     }
   }
   return result;
-}
+};
+
 const getUrlParams = (data: PlainObject) => {
   if (!isPlainObject(data)) {
     throw new Error('input must be an object');
   }
   return getParams(data).map((arr) => arr.join('=')).join('&');
-}
+};
 
 export {ajax};

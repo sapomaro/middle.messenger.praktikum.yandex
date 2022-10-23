@@ -7,14 +7,14 @@ export const sanitizeAll = <T>(props: T): T => {
     }
     return value;
   });
-}
+};
 
 export const sanitize = (str: string) => {
   return str.trim()
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
-    .replace(/\\/g, '&#8726;');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;')
+      .replace(/\\/g, '&#8726;');
 };

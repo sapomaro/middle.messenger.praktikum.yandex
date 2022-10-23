@@ -27,7 +27,7 @@ export class Input extends Block {
       onFocus: function(event: Event): void {
         if (!this.getAttribute('readonly')) {
           // if (self.hasActualValue) {
-            // self.validate.call(self, event);
+          //  self.validate.call(self, event);
           // }
           self.togglePlaceholder.call(self, event);
           self.fire('focus', event);

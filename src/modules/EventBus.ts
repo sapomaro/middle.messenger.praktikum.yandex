@@ -19,7 +19,7 @@ type Listeners = Record<string, Array<Fn>>;
 class EventBus {
   static listeners: Listeners = {};
   public listeners: Listeners = {};
-  constructor() {}
+
   static listEvents(events: string, action: Fn) {
     events.split(/[, ]+/).forEach((eventType: string): void => {
       if (!this.listeners[eventType]) {

@@ -21,6 +21,7 @@
     ],
     "rules": {
       "require-jsdoc": 0,
+      "new-cap": 0,
       "@typescript-eslint/no-this-alias": 0,
       "@typescript-eslint/ban-ts-comment": 1
     }

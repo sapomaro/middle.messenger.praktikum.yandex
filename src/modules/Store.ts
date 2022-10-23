@@ -4,12 +4,6 @@ import type {Block} from './Block';
 
 type State = {
   [key: string]: unknown;
-  /*user: null,
-  chats: Array<unknown>;
-  activeChatId: number;
-  activeChatToken: string;
-  activeChatMessages: Array<unknown>;
-  isLoading: boolean;*/
 };
 
 enum StoreEvents {
@@ -64,7 +58,7 @@ const StoreSynced = (CustomBlock: typeof Block) => {
         this.setProps(newState);
       });
     }
-  } 
+  };
 };
 
 export {Store, StoreSynced};

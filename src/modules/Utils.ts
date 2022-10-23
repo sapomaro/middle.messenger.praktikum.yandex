@@ -1,5 +1,5 @@
 type AnyArr = Array<unknown>;
-type AnyObj = AnyArr | Record<string, unknown> | {};
+type AnyObj = AnyArr | Record<string, unknown>;
 
 export type PlainObject<T = unknown> = {
   [k in string]: T;
@@ -9,16 +9,15 @@ export const isPlainObject = (value: unknown): value is PlainObject => {
   return (typeof value === 'object' &&
     value !== null &&
     value.constructor === Object);
-    // && Object.prototype.toString.call(value) === '[object Object])';
-}
+};
 
 export const isArray = (value: unknown): value is [] => {
   return Array.isArray(value);
-}
+};
 
 export const isArrayOrObject = (value: unknown): value is [] | PlainObject => {
   return (isPlainObject(value) || isArray(value));
-}
+};
 
 export function cloneDeep<T>(entity: T,
     callback = <TT>(value: TT): TT => value) {
@@ -27,14 +26,14 @@ export function cloneDeep<T>(entity: T,
       return callback(item);
     }
     if (item instanceof Array) {
-      let copy = [];
+      const copy = [];
       for (const value of item) {
         copy.push(cloneDeepRecursive(value));
       }
       return copy as T;
     }
     if (item instanceof Object) {
-      let copy: Record<string, unknown> = {};
+      const copy: Record<string, unknown> = {};
       for (const [key, value] of Object.entries(item)) {
         copy[key] = cloneDeepRecursive(value);
       }
@@ -72,7 +71,7 @@ export const rand = (min: number, max: number): number => {
 function arrEqual(baseArr: Array<unknown>, secondArr: Array<unknown>) {
   if (baseArr === secondArr) return true;
   if (baseArr.length !== secondArr.length) return false;
-  for (var i = 0; i < baseArr.length; ++i) {
+  for (let i = 0; i < baseArr.length; ++i) {
     if (baseArr[i] !== secondArr[i]) return false;
   }
   return true;
