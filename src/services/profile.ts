@@ -1,7 +1,6 @@
 import {Store} from '../modules/Store';
 import {Router} from '../modules/Router';
 import {EventBus} from '../modules/EventBus';
-import {authAPI} from '../api/auth';
 import {profileAPI} from '../api/profile';
 import {getUserDataService} from './login';
 import {errorHandler} from './errorHandler';
@@ -26,7 +25,8 @@ export const profileLoadService = async () => {
   if (!Store.state || !Store.state.user) {
     return new Promise((resolve, reject) =>
       getUserDataService()
-          .then(() => {
+          .then(({responseJSON}) => {
+            const user: UserT = responseJSON;
             resolve(user);
           })
           .catch((error: ErrorT) => {
