@@ -1,7 +1,7 @@
 import {Popup, PopupProps} from './Popup';
 import {Form} from '../forms/Form';
 import {FormSet} from '../forms/FormSet';
-import {deleteChatService} from '../../services/chats';
+import {deleteChatService} from '../../services/chatChannels';
 
 export class DeleteChatPopup extends Popup {
   constructor(props: PopupProps) {
@@ -13,8 +13,6 @@ export class DeleteChatPopup extends Popup {
       submitStyle: 'form__button_danger',
     });
     this.setProps({popupContent: deleteChatForm});
-    deleteChatForm.on(Form.EVENTS.SUBMIT_SUCCESS, () => {
-      deleteChatService();
-    });
+    deleteChatForm.on(Form.EVENTS.SUBMIT_SUCCESS, deleteChatService);
   }
 }

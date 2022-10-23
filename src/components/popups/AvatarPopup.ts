@@ -2,7 +2,7 @@ import {Popup, PopupProps} from './Popup';
 import {FormSet} from '../forms/FormSet';
 import {Form} from '../forms/Form';
 import {FileInput} from '../inputs/FileInput';
-import {avatarChangeService, AvatarDataType} from '../../services/profile';
+import {avatarChangeService} from '../../services/profile';
 
 export class AvatarPopup extends Popup {
   constructor(props: PopupProps) {
@@ -20,8 +20,6 @@ export class AvatarPopup extends Popup {
     this.setProps({
       popupContent: avatarForm,
     });
-    avatarForm.on(Form.EVENTS.SUBMIT_SUCCESS, (data: AvatarDataType) => {
-      avatarChangeService(data);
-    });
+    avatarForm.on(Form.EVENTS.SUBMIT_SUCCESS, avatarChangeService);
   }
 }

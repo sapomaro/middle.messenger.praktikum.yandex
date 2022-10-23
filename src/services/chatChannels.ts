@@ -1,13 +1,10 @@
 import {Store} from '../modules/Store';
 import {Router} from '../modules/Router';
 import {EventBus} from '../modules/EventBus';
-import {JSONWrapper} from '../modules/Utils';
-import {chatsAPI, chatsSocketAPI,
-  AddChatDataType, ChatDataType} from '../api/chats';
-import {profileLoadService, ProfileDataType} from './profile';
-import {errorHandler, ErrorType} from './errorHandler';
+import {chatsAPI} from '../api/chats';
+import {errorHandler} from './errorHandler';
 
-export {AddChatDataType, ChatDataType};
+import type {RequestT, ErrorT} from '../constants/types';
 
 export const chatsLoadService = async (callback?: () => void) => {
   Store.setState({isLoading: true});
@@ -21,7 +18,7 @@ export const chatsLoadService = async (callback?: () => void) => {
       callback();
     }
   })
-  .catch((error: ErrorType) => {
+  .catch((error: ErrorT) => {
     errorHandler(error);
     Store.setState({currentError: null});
     Router.redirect('/');
@@ -30,65 +27,6 @@ export const chatsLoadService = async (callback?: () => void) => {
     Store.setState({isLoading: false});
   });
 };
-
-let chatSelectedTimer: ReturnType<typeof setTimeout> | null = null;
-EventBus.on('chatSelected', (chatId: number) => {
-  Store.setState({isLoading: true});
-  if (chatSelectedTimer) {
-    clearTimeout(chatSelectedTimer);
-  }
-  chatSelectedTimer = setTimeout(() => {
-    if (chatId) {
-      connectToChatService();
-    }
-  }, 500);
-});
-
-export const connectToChatService = async () => {
-  let user: ProfileDataType | null | unknown = Store.getState().user;
-  if (!user) {
-    user = await profileLoadService();
-  }
-  if (!user || !('id' in user) ||
-      typeof (user as ProfileDataType).id !== 'number') {
-    try {
-      throw new Error('No user ID');
-    }
-    catch (error) {
-      errorHandler(error);
-    }
-    return;
-  }
-  const userId = (user as ProfileDataType).id;
-  const chatId = Store.getState().activeChatId as number;
-  chatsAPI.getChatToken(chatId)
-  .then(({responseJSON}) => {
-    const token = responseJSON.token;
-    Store.setState({activeChatToken: token});
-    chatsSocketAPI.init({userId, chatId, token});
-  })
-  .catch(errorHandler)
-  .finally(() => {
-    Store.setState({isLoading: false});
-  });
-}
-
-export const sendMessageService = async (data: {message: string}) => {
-  const socket = chatsSocketAPI.socket;
-  if (socket && socket.readyState !== WebSocket.CLOSED) {
-    chatsSocketAPI.send({content: data.message, type: 'message'});
-  }
-};
-EventBus.on('webSocketInit', () => {
-  Store.setState({activeChatMessages: []});
-});
-EventBus.on('webSocketMessage', (data: string) => {
-  const messages = Store.getState().activeChatMessages;
-  if (typeof messages === 'object' && messages instanceof Array) {
-    messages.push(JSONWrapper.parse(data));
-    Store.setState({activeChatMessages: messages});
-  }
-});
 
 export const addUserToChatService = async (data: {login: string},
     silent = false) => {
@@ -137,7 +75,7 @@ export const deleteUserFromChatService = async (data: {login: string}) => {
   });
 };
 
-export const addChatService = async (data: AddChatDataType) => {
+export const addChatService = async (data: RequestT['AddChat']) => {
   Store.setState({isLoading: true});
   chatsAPI.addChat(data)
   .then(({responseJSON}) => {

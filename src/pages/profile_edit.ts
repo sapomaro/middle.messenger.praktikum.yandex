@@ -10,9 +10,7 @@ import {RoundButton} from '../components/buttons/RoundButton';
 import {JSONWrapper} from '../modules/Utils';
 import {profileInputs} from './profile';
 import {StoreSynced} from '../modules/Store';
-import {profileLoadService, profileEditService,
-  ProfileDataType} from '../services/profile';
-//import {user} from '../services/_testStubData';
+import {profileLoadService, profileEditService} from '../services/profile';
 
 const view = new WideLayoutWithSidebar({
   title: 'Изменить данные',
@@ -59,9 +57,7 @@ profileForm.on(Block.EVENTS.UNMOUNT, () => {
   }
 });
 
-profileForm.on(Form.EVENTS.SUBMIT_SUCCESS, (data: ProfileDataType) => {
-  profileEditService(data);
-});
+profileForm.on(Form.EVENTS.SUBMIT_SUCCESS, profileEditService);
 
 view.props.contents = profileForm;
 

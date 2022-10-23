@@ -7,10 +7,11 @@ import {AvatarControl} from '../components/popups/AvatarControl';
 import {AvatarPopup} from '../components/popups/AvatarPopup';
 import {RoundButton} from '../components/buttons/RoundButton';
 import {StoreSynced} from '../modules/Store';
-import {profileLoadService, ProfileDataType} from '../services/profile';
+import {profileLoadService} from '../services/profile';
 import {logoutService} from '../services/login';
+import {sanitizeAll} from '../services/sanitizer';
 import {JSONWrapper} from '../modules/Utils';
-//import {user} from '../services/_testStubData';
+import type {UserT} from '../constants/types';
 
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
@@ -48,7 +49,9 @@ const profileForm = new (StoreSynced(Form))({
     if (user && profileForm.props.inputs) {
       return `
         %{ avatarControl }%
-        <h1 class="container__header">${(<ProfileDataType>user).first_name ?? ''}</h1>
+        <h1 class="container__header">
+          ${sanitizeAll((<UserT>user).first_name) ?? ''}
+        </h1>
         %{ RowInput(${profileForm.props.inputs}...) }%
         <br><br><br>
         %{ RowLink({"url": "/settings/edit", "label": "Изменить данные"}) }%

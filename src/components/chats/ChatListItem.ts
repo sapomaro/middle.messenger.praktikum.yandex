@@ -5,9 +5,12 @@ import {Store} from '../../modules/Store';
 import {Block} from '../../modules/Block';
 import {resolveResourceUrl} from '../../services/resources';
 import {timeConverter} from '../../services/timeConverter';
+import {sanitizeAll} from '../../services/sanitizer';
+
+import type {ChatT} from '../../constants/types';
 
 export class ChatListItem extends Block {
-  constructor(props: Record<string, unknown>) {
+  constructor(props: ChatT) {
     super(props);
     const activeChatId = Store.getState().activeChatId;
     this.setProps({
@@ -28,7 +31,8 @@ export class ChatListItem extends Block {
   toggleInactive() {
     this.setProps({active: false});
   }
-  render(props: Record<string, unknown>) {
+  render(props: ChatT) {
+    props = sanitizeAll(props);
     let avatar = '';
     if (typeof props.avatar === 'string') {
       avatar = resolveResourceUrl(props.avatar);

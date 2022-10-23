@@ -10,7 +10,7 @@ import {DeleteUserPopup} from '../components/popups/DeleteUserPopup';
 import {AddChatPopup} from '../components/popups/AddChatPopup';
 import {DeleteChatPopup} from '../components/popups/DeleteChatPopup';
 import {PopupControl} from '../components/popups/PopupControl';
-import {chatsLoadService} from '../services/chats';
+import {chatsLoadService} from '../services/chatChannels';
 import {StoreSynced} from '../modules/Store';
 
 //import {chats, messages} from '../services/_testStubData';

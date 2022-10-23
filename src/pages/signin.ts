@@ -6,7 +6,8 @@ import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {StandardLink as Link} from '../components/links/StandardLink';
 
 import {StoreSynced} from '../modules/Store';
-import {loginService, LoginDataType} from '../services/login';
+import {loginService} from '../services/login';
+import type {RequestT} from '../constants/types';
 
 const view = new NarrowLayout({
   title: 'Вход',
@@ -33,7 +34,7 @@ const authForm = new Form({
   `,
 });
 
-authForm.on(Form.EVENTS.SUBMIT_SUCCESS, (data: LoginDataType) => {
+authForm.on(Form.EVENTS.SUBMIT_SUCCESS, (data: RequestT['Login']) => {
   loginService(data);
 });
 

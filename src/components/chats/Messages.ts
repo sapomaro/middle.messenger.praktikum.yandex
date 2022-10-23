@@ -2,7 +2,9 @@ import './Messages.scss';
 
 import {Block} from '../../modules/Block';
 import {timeConverter} from '../../services/timeConverter';
-import type {ProfileDataType} from '../../services/profile';
+import {sanitizeAll} from '../../services/sanitizer';
+
+import type {UserT} from '../../constants/types';
 
 export class Messages extends Block {
   constructor(props?: Record<string, unknown>) {
@@ -14,7 +16,7 @@ export class Messages extends Block {
     if (typeof messages === 'object' &&
         messages instanceof Array) {
       const msgItems = [];
-      const user: ProfileDataType = this.props.user as ProfileDataType;
+      const user: UserT = this.props.user as UserT;
       if (user && 'id' in user && typeof user.id === 'number') {
         for (const msg of messages) {
           if (msg.type !== 'message') {
@@ -41,6 +43,7 @@ export class Message extends Block {
     super(props);
   }
   render(props: Record<string, string>) {
+    props = sanitizeAll(props);
     return `
       <li class="chatbox__message chatbox__message_${props.direction}">
         <span class="chatbox__message__text">${props.content || ''}</span>

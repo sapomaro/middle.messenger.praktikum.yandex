@@ -10,7 +10,7 @@ enum METHOD {
 
 type Fn = (...args: Array<unknown>) => void;
 
-type InitOptions = {
+type InitOptionsT = {
   url?: string;
   method?: METHOD;
   tries?: number;
@@ -19,22 +19,22 @@ type InitOptions = {
   data?: unknown;
 }
 
-type Options = InitOptions & {
+type OptionsT = InitOptionsT & {
   //data?: unknown;
   successCallback: Fn;
   errorHandler: Fn;
 };
 
-type Handler = {
-  (callback: Fn): AjaxState;
+type HandlerT = {
+  (callback: Fn): AjaxStateT;
   trigger: () => void;
   callbacks: Array<Fn>;
 }
 
-export type AjaxState = InitOptions & {
-  then: Handler;
-  catch: Handler;
-  finally: Handler;
+export type AjaxStateT = InitOptionsT & {
+  then: HandlerT;
+  catch: HandlerT;
+  finally: HandlerT;
   xhr?: XMLHttpRequest;
   options?: Record<string, unknown>;
   responseText?: string;
@@ -44,12 +44,12 @@ export type AjaxState = InitOptions & {
   error?: Error;
 };
 
-const ajax = function(options: InitOptions): AjaxState {
-  const request: AjaxState = {
+const ajax = function(options: InitOptionsT): AjaxStateT {
+  const request: AjaxStateT = {
     url: options.url,
     options,
     then: (() => {
-      const handler: Handler = (callback: Fn): AjaxState => {
+      const handler: HandlerT = (callback: Fn): AjaxStateT => {
         handler.callbacks.push(callback);
         return request;
       };
@@ -70,7 +70,7 @@ const ajax = function(options: InitOptions): AjaxState {
     })(),
 
     catch: (() => {
-      const handler: Handler = (callback: Fn): AjaxState => {
+      const handler: HandlerT = (callback: Fn): AjaxStateT => {
         handler.callbacks = [callback];
         return request;
       };
@@ -83,7 +83,7 @@ const ajax = function(options: InitOptions): AjaxState {
     })(),
 
     finally: (() => {
-      const handler: Handler = (callback: Fn): AjaxState => {
+      const handler: HandlerT = (callback: Fn): AjaxStateT => {
         handler.callbacks = [callback];
         return request;
       };
@@ -110,7 +110,7 @@ const ajax = function(options: InitOptions): AjaxState {
         request.status = status;
         request.then.trigger();
       },
-      errorHandler: (error: Error | AjaxState): void => {
+      errorHandler: (error: Error | AjaxStateT): void => {
         if (error instanceof Error) {
           request.error = error;
         } else {
@@ -132,21 +132,21 @@ const ajax = function(options: InitOptions): AjaxState {
 
 ajax.baseUrl = '';
 
-ajax.get = (url: string, data?: unknown): AjaxState => {
+ajax.get = (url: string, data?: unknown): AjaxStateT => {
   return ajax({url, method: METHOD.GET, data});
 };
-ajax.post = (url: string, data?: unknown): AjaxState => {
+ajax.post = (url: string, data?: unknown): AjaxStateT => {
   return ajax({url, method: METHOD.POST, data});
 };
-ajax.put = (url: string, data?: unknown): AjaxState => {
+ajax.put = (url: string, data?: unknown): AjaxStateT => {
   return ajax({url, method: METHOD.PUT, data});
 };
-ajax.delete = (url: string, data?: unknown): AjaxState => {
+ajax.delete = (url: string, data?: unknown): AjaxStateT => {
   return ajax({url, method: METHOD.DELETE, data});
 };
 
 const ajaxRequest = function ajaxRequest(url: string,
-    options: Options) {
+    options: OptionsT) {
   const xhr = new XMLHttpRequest();
   const method = (options.method ? options.method : METHOD.GET);
   const tries = (options.tries ? --options.tries : 0);

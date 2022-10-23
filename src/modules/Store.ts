@@ -2,25 +2,31 @@ import {EventBus} from './EventBus';
 import {objIntersect} from './Utils';
 import type {Block} from './Block';
 
-type State = Record<string, unknown>;
+type State = {
+  [key: string]: unknown;
+  /*user: null,
+  chats: Array<unknown>;
+  activeChatId: number;
+  activeChatToken: string;
+  activeChatMessages: Array<unknown>;
+  isLoading: boolean;*/
+};
 
 enum StoreEvents {
   UPDATE = 'updated',
 }
 
-const defaultState: State = {
-  user: null,
-  chats: [],
-  activeChatId: 0,
-  activeChatToken: '',
-  activeChatMessages: [],
-  isLoading: false,
-};
-
 class StoreService extends EventBus {
   static __instance: StoreService;
   public EVENTS = StoreEvents;
-  public state: State = defaultState;
+  public state: State = {
+    user: null,
+    chats: [],
+    activeChatId: 0,
+    activeChatToken: '',
+    activeChatMessages: [],
+    isLoading: false,
+  };
 
   constructor() {
     super();

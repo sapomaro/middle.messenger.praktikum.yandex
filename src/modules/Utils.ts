@@ -20,6 +20,53 @@ export const isArrayOrObject = (value: unknown): value is [] | PlainObject => {
   return (isPlainObject(value) || isArray(value));
 }
 
+export function cloneDeep<T>(entity: T,
+    callback = <TT>(value: TT): TT => value) {
+  return (function cloneDeepRecursive(item: T): T { //| Record<string, T> | T[]
+    if (item === null || typeof item !== 'object') {
+      return callback(item);
+    }
+    if (item instanceof Array) {
+      let copy = []; //as Array<T>
+      for (const value of item) {
+        copy.push(cloneDeepRecursive(value)); //as T
+      }
+      return copy as T;
+    }
+    if (item instanceof Object) {
+      let copy: Record<string, unknown> = {}; //Record<string, T>
+      for (const [key, value] of Object.entries(item)) {
+        copy[key] = value;
+      }
+      return copy as T;
+    }
+    throw new Error(`Unable to copy object: ${item}`);
+  })(entity);
+}
+
+/*
+export function cloneDeep<T extends unknown = unknown>(item: T,
+    callback = <TT>(value: TT): TT => value): T {
+  let result: T = value;
+  const type = (isArray(item)) ? 'array' :
+    (isPlainObject(item)) ? 'object' : 'other';
+  if (type === 'other') {
+    return callback(item);
+  } else if (type === 'object') {
+    result = {} as Record<string, T>;
+  } else if (type === 'array') {
+    result = [] as Array<T>;
+  }
+  for (const [key, value] of Object.entries(item as AnyObj)) {
+    if (type === 'object') {
+      (result as PlainObject)[key] = cloneDeep<T>(value, callback);
+    } else if (type === 'array') {
+      (result as Array<T>).push(cloneDeep<T>(value, callback));
+    }
+  }
+  return result;
+}*/
+
 export const JSONWrapper = {
   parse: (data: string): AnyObj => {
     try {

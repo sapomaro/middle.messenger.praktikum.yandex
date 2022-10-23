@@ -1,10 +1,9 @@
-import type {AjaxState} from '../modules/Ajax';
 import {Store} from '../modules/Store';
 import {Router} from '../modules/Router';
 
-export type ErrorType = AjaxState | Error;
+import type {ErrorT} from '../constants/types';
 
-export const errorHandler = (error: ErrorType) => {
+export const errorHandler = (error: ErrorT) => {
   let currentError = 'Что-то пошло не так...';
   if ('responseJSON' in error && error.responseJSON &&
       typeof error.responseJSON.reason === 'string') {

@@ -7,7 +7,8 @@ import {StandardLink as Link} from '../components/links/StandardLink';
 import {JSONWrapper} from '../modules/Utils';
 
 import {StoreSynced} from '../modules/Store';
-import {registerService, RegDataType} from '../services/register';
+import {registerService} from '../services/register';
+import type {RequestT} from '../constants/types';
 
 const view = new NarrowLayout({
   title: 'Регистрация',
@@ -43,7 +44,7 @@ const regForm = new Form({
   `,
 });
 
-regForm.on(Form.EVENTS.SUBMIT_SUCCESS, (data: RegDataType) => {
+regForm.on(Form.EVENTS.SUBMIT_SUCCESS, (data: RequestT['Register']) => {
   registerService(data);
 });
 

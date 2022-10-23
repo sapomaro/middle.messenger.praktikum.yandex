@@ -1,7 +1,7 @@
 import {Popup, PopupProps} from './Popup';
 import {Form} from '../forms/Form';
 import {FormSet} from '../forms/FormSet';
-import {deleteUserFromChatService} from '../../services/chats';
+import {deleteUserFromChatService} from '../../services/chatChannels';
 
 export class DeleteUserPopup extends Popup {
   constructor(props: PopupProps) {
@@ -13,8 +13,6 @@ export class DeleteUserPopup extends Popup {
       inputs: '%{ Input({"name": "login", "label": "Логин"}) }%',
     });
     this.setProps({popupContent: deleteUserForm});
-    deleteUserForm.on(Form.EVENTS.SUBMIT_SUCCESS, (data: {login: string}) => {
-      deleteUserFromChatService(data);
-    });
+    deleteUserForm.on(Form.EVENTS.SUBMIT_SUCCESS, deleteUserFromChatService);
   }
 }

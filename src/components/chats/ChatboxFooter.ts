@@ -4,7 +4,7 @@ import {Form} from '../forms/Form';
 import {RoundButton} from '../buttons/RoundButton';
 import {MessageTextarea} from '../inputs/MessageTextarea';
 import {ChatBoxControl} from '../popups/ChatBoxControl';
-import {sendMessageService} from '../../services/chats';
+import {sendMessageService} from '../../services/chatMessaging';
 
 export class ChatBoxFooter extends Block {
   constructor() {

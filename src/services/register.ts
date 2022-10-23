@@ -1,11 +1,11 @@
 import {Store} from '../modules/Store';
 import {Router} from '../modules/Router';
-import {authAPI, RegDataType} from '../api/auth';
+import {authAPI} from '../api/auth';
 import {errorHandler} from './errorHandler';
 
-export {RegDataType};
+import type {RequestT} from '../constants/types';
 
-export const registerService = async (data: RegDataType) => {
+export const registerService = async (data: RequestT['Register']) => {
   Store.setState({isLoading: true});
   authAPI.signup(data)
   .then(() => {

@@ -9,7 +9,6 @@ export class ChatList extends Block {
   constructor(props: ChatListType) {
     super(props);
     this.setProps({
-      //ChatListItem,
       reactivate: () => {
         this.listDescendants((item: ChatListItem) => {
           item.toggleInactive();
@@ -18,7 +17,6 @@ export class ChatList extends Block {
     });
   }
   filterChats(searchValue: string) {
-    //this.props.allChats
     if (this.props.chats instanceof Array) {
       return this.props.chats.filter((chat: Record<string, unknown>) => {
          for (const chatValue of Object.values(chat)) {
@@ -35,7 +33,6 @@ export class ChatList extends Block {
   }
   render(props: ChatListType) {
     if (typeof props.chats === 'object' && props.chats instanceof Array) {
-      //const chats = JSONWrapper.stringify(props.chats);
       const chatList = [];
       for (const chat of props.chats) {
         chatList.push(new ChatListItem(chat));

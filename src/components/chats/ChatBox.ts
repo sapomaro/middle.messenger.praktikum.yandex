@@ -6,7 +6,8 @@ import {Block} from '../../modules/Block';
 import {ChatBoxHeader} from './ChatBoxHeader';
 import {ChatBoxFooter} from './ChatBoxFooter';
 import {Messages} from './Messages';
-import {ChatDataType} from '../../services/chats';
+
+import type {ChatT} from '../../constants/types';
 
 type ChatBoxType = Record<string, unknown>;
 
@@ -26,8 +27,8 @@ export class ChatBox extends Block {
       let chat: Record<string, unknown> | null = null;
       const chats = Store.getState().chats;
       if (typeof chats === 'object' && chats instanceof Array) {
-        chat = chats.find((item: ChatDataType) =>
-          (item.id === chatId)) as ChatDataType;
+        chat = chats.find((item: ChatT) =>
+          (item.id === chatId)) as ChatT;
       }
       if (chat) {
         this.setProps({id: chat.id, title: chat.title});

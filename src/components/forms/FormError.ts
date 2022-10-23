@@ -1,4 +1,5 @@
 import {Block} from '../../modules/Block';
+import {sanitizeAll} from '../../services/sanitizer';
 
 type IncomingProps = {
   currentError: string | null;
@@ -9,6 +10,7 @@ export class FormError extends Block {
     super(props);
   }
   render(props: IncomingProps) {
+    props = sanitizeAll(props);
     return `
       <div class="container__element container__element_centered
           container__element_adjacent">

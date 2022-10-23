@@ -1,7 +1,7 @@
 import {Popup, PopupProps} from './Popup';
 import {Form} from '../forms/Form';
 import {FormSet} from '../forms/FormSet';
-import {addUserToChatService} from '../../services/chats';
+import {addUserToChatService} from '../../services/chatChannels';
 
 export class AddUserPopup extends Popup {
   constructor(props: PopupProps) {
@@ -13,8 +13,6 @@ export class AddUserPopup extends Popup {
       inputs: '%{ Input({"name": "login", "label": "Логин"}) }%',
     });
     this.setProps({popupContent: addUserForm});
-    addUserForm.on(Form.EVENTS.SUBMIT_SUCCESS, (data: {login: string}) => {
-      addUserToChatService(data);
-    });
+    addUserForm.on(Form.EVENTS.SUBMIT_SUCCESS, addUserToChatService);
   }
 }
