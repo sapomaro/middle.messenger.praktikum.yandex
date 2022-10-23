@@ -32,12 +32,12 @@ const chatList = new (StoreSynced(ChatList))();
 const searchInput = new SearchInput({name: 'search'});
 
 searchInput.on('input', () => {
-  chatList.filterChats(searchInput.props.value ?? '');
+  (chatList as ChatList).filterChats(searchInput.props.value as string ?? '');
 });
 
 chatList.on(Block.EVENTS.UPDATE, () => {
   setTimeout(() => {
-    chatList.filterChats(searchInput.props.value ?? '');
+    (chatList as ChatList).filterChats(searchInput.props.value as string ?? '');
   }, 10);
 });
 
