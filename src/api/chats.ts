@@ -35,22 +35,22 @@ export const chatsSocketAPI: {
       new WebSocket(`${chatsWebSocketUrl}/${userId}/${chatId}/${token}`);
     const socket = chatsSocketAPI.socket;
 
-    EventBus.fire('webSocketInit');
+    EventBus.emit('webSocketInit');
 
     socket.addEventListener('open', () => {
-      EventBus.fire('webSocketOpen');
+      EventBus.emit('webSocketOpen');
     });
 
     socket.addEventListener('close', (event: CloseEvent) => {
-      EventBus.fire('webSocketClose', event);
+      EventBus.emit('webSocketClose', event);
     });
 
     socket.addEventListener('message', (event: MessageEvent) => {
-      EventBus.fire('webSocketMessage', event.data);
+      EventBus.emit('webSocketMessage', event.data);
     });
 
     socket.addEventListener('error', (event: ErrorEvent) => {
-      EventBus.fire('webSocketError', event);
+      EventBus.emit('webSocketError', event);
     });
   },
   send: (data) => {

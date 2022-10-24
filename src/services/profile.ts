@@ -71,7 +71,7 @@ export const avatarChangeService = async (data: RequestT['ChangeAvatar']) => {
           user,
           currentError: null,
         });
-        EventBus.fire('popupHide');
+        EventBus.emit('popupHide');
       })
       .catch(errorHandler);
 };

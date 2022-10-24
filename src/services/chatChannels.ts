@@ -67,12 +67,12 @@ export const addChatService = async (data: RequestT['AddChat']) => {
   chatsAPI.addChat(data)
       .then(({responseJSON}) => {
         const chatId = responseJSON.id ?? 0;
-        EventBus.fire('popupHide');
+        EventBus.emit('popupHide');
         Store.setState({currentError: null, activeChatId: chatId});
         addUserToChatService({login: data.title}, true);
         chatsLoadService(() => {
           Store.state.activeChatId = 0;
-          EventBus.fire('chatSelected', chatId);
+          EventBus.emit('chatSelected', chatId);
           Store.state.activeChatId = chatId;
         });
       })
@@ -88,8 +88,8 @@ export const deleteChatService = async () => {
   const chatId = Store.getState().activeChatId as number;
   chatsAPI.deleteChat({chatId})
       .then(() => {
-        EventBus.fire('popupHide');
-        EventBus.fire('chatSelected', 0);
+        EventBus.emit('popupHide');
+        EventBus.emit('chatSelected', 0);
         Store.setState({activeChatId: 0});
         chatsLoadService();
       })
@@ -116,7 +116,7 @@ export const addUserToChatService = async (data: {login: string},
             users: [users[0].id ?? 0],
           });
         }
-        EventBus.fire('popupHide');
+        EventBus.emit('popupHide');
       })
       .catch(errorHandler)
       .finally(() => {
@@ -138,7 +138,7 @@ export const deleteUserFromChatService = async (data: {login: string}) => {
             users: [users[0].id ?? 0],
           });
         }
-        EventBus.fire('popupHide');
+        EventBus.emit('popupHide');
       })
       .catch(errorHandler)
       .finally(() => {

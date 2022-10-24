@@ -29,17 +29,17 @@ class StoreService extends EventBus {
     }
     StoreService.__instance = this;
     EventBus.on('init', () => {
-      this.fire('init');
+      this.emit('init');
     });
     EventBus.on('load', () => {
-      this.fire('load');
+      this.emit('load');
     });
   }
 
   setState(newState: State) {
     if (!objIntersect(this.state, newState)) {
       Object.assign(this.state, newState);
-      this.fire(this.EVENTS.UPDATE, newState);
+      this.emit(this.EVENTS.UPDATE, newState);
     }
   }
 

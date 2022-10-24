@@ -33,22 +33,22 @@ export class Form extends Block {
         }
         const state: EventState = {errorMsgs: {}};
         this.listDescendants((block: Block) => {
-          block.fire('submit', event, state); // для валидации инпутов формы
+          block.emit('submit', event, state); // для валидации инпутов формы
         });
 
         if (Object.keys(state.errorMsgs).length === 0) {
           // console.log('Form successfully submitted: ');
           // console.log(data);
-          this.fire(Form.EVENTS.SUBMIT_SUCCESS, data);
+          this.emit(Form.EVENTS.SUBMIT_SUCCESS, data);
           this.listDescendants((block: Block) => {
-            block.fire(Form.EVENTS.SUBMIT_SUCCESS, event, data);
+            block.emit(Form.EVENTS.SUBMIT_SUCCESS, event, data);
           });
         } else {
           // console.warn('Form validation failed: ');
           // console.warn(state.errorMsgs);
-          this.fire(Form.EVENTS.SUBMIT_FAIL, state.errorMsgs);
+          this.emit(Form.EVENTS.SUBMIT_FAIL, state.errorMsgs);
           this.listDescendants((block: Block) => {
-            block.fire(Form.EVENTS.SUBMIT_FAIL, event, state.errorMsgs);
+            block.emit(Form.EVENTS.SUBMIT_FAIL, event, state.errorMsgs);
           });
         }
         return false;

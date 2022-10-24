@@ -6,7 +6,7 @@ export class FileInput extends Input {
   constructor(props: InputPropsType) {
     super(props);
     this.on('change', () => {
-      this.fire('updated');
+      this.emit('updated');
     });
   }
   render(props: InputPropsType): string {

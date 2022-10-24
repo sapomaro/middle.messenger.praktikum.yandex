@@ -1,76 +1,76 @@
-let isDOMLoaded = false;
-
-const isDOMReady = (): boolean => {
-  if (document.readyState === 'interactive' &&
-      typeof document.body !== 'undefined' &&
-      typeof document.head !== 'undefined') {
-    return true;
-  } else if (document.readyState === 'complete') {
-    return true;
-  } else {
-    return false;
-  }
-};
-
 type Fn = (...args: Array<unknown>) => void;
 
 type Listeners = Record<string, Array<Fn>>;
 
 class EventBus {
+  static isDOMLoaded = false;
   static listeners: Listeners = {};
   public listeners: Listeners = {};
 
-  static listEvents(events: string, action: Fn) {
-    events.split(/[, ]+/).forEach((eventType: string): void => {
-      if (!this.listeners[eventType]) {
-        this.listeners[eventType] = [];
+  static get isDOMReady(): boolean {
+    if (document.readyState === 'interactive' &&
+        typeof document.body !== 'undefined' &&
+        typeof document.head !== 'undefined') {
+      return true;
+    } else if (document.readyState === 'complete') {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  static listEvents(eventNames: string, action: Fn) {
+    eventNames.split(/[, ]+/).forEach((eventName: string): void => {
+      if (!this.listeners[eventName]) {
+        this.listeners[eventName] = [];
       }
-      action(eventType);
+      action(eventName);
     });
   }
   listEvents = EventBus.listEvents;
-  static on(events: string, callback: Fn): void {
-    this.listEvents(events, (eventType: string): void => {
-      this.listeners[eventType].push(callback);
-      if (eventType === 'init' || eventType === 'load') {
-        if (isDOMReady()) {
+  static on(eventNames: string, callback: Fn): void {
+    this.listEvents(eventNames, (eventName: string): void => {
+      this.listeners[eventName].push(callback);
+      if (eventName === 'init' || eventName === 'load') {
+        if (EventBus.isDOMReady) {
           callback();
-          isDOMLoaded = true;
+          EventBus.isDOMLoaded = true;
         }
       }
     });
   }
   on = EventBus.on;
-  static fire(events: string, ...args: Array<unknown>): void {
-    this.listEvents(events, (eventType: string): void => {
-      this.listeners[eventType].forEach((listener: Fn): void => {
+  static emit(eventNames: string, ...args: Array<unknown>): void {
+    this.listEvents(eventNames, (eventName: string): void => {
+      this.listeners[eventName].forEach((listener: Fn): void => {
         listener.apply(this, args);
       });
     });
   }
-  fire = EventBus.fire;
+  emit = EventBus.emit;
   static off(events: string, callback: Fn): void {
-    this.listEvents(events, (eventType: string): void => {
-      this.listeners[eventType] = this.listeners[eventType]
+    this.listEvents(events, (eventName: string): void => {
+      this.listeners[eventName] = this.listeners[eventName]
           .filter((listener: Fn) => (listener !== callback));
     });
   }
   off = EventBus.off;
+
+  static load(): void {
+    this.emit('init, load');
+    this.isDOMLoaded = true;
+  }
   static init(): void {
-    if (isDOMReady()) {
-      this.fire('init, load');
-      isDOMLoaded = true;
+    if (this.isDOMReady) {
+      this.load();
     } else {
       window.addEventListener('DOMContentLoaded', (): void => {
-        if (isDOMReady()) {
-          this.fire('init, load');
-          isDOMLoaded = true;
+        if (this.isDOMReady) {
+          this.load();
         }
       });
       window.addEventListener('load', (): void => {
-        if (!isDOMLoaded) {
-          this.fire('init, load');
-          isDOMLoaded = true;
+        if (!this.isDOMLoaded) {
+          this.load();
         }
       });
     }

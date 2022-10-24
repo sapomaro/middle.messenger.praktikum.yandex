@@ -1,7 +1,8 @@
 import {Store} from '../modules/Store';
 import {EventBus} from '../modules/EventBus';
 import {JSONWrapper} from '../modules/Utils';
-import {chatsAPI, chatsSocketAPI} from '../api/chats';
+import {chatsAPI} from '../api/chats';
+import {ChatSocket} from '../api/ChatSocket';
 import {chatsLoadService} from './chatChannels';
 import {profileLoadService} from './profile';
 import {errorHandler} from './errorHandler';
@@ -16,6 +17,8 @@ const getNewReconnectInterval = () => {
   chatReconnectInterval = chatReconnectInterval * 2;
   return chatReconnectInterval;
 };
+
+const chatSocket = new ChatSocket();
 
 let connectTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -73,21 +76,15 @@ export const connectToChatService = async () => {
       errorHandler(error);
     }
   }
-  chatsSocketAPI.init({userId, chatId, token});
+  chatSocket.init({userId, chatId, token});
 };
 
 export const getOldMessagesService = async () => {
-  const socket = chatsSocketAPI.socket;
-  if (socket && socket.readyState !== WebSocket.CLOSED) {
-    chatsSocketAPI.send({content: '0', type: 'get old'});
-  }
+  chatSocket.send({content: '0', type: 'get old'});
 };
 
 export const sendMessageService = async (data: RequestT['SendMessage']) => {
-  const socket = chatsSocketAPI.socket;
-  if (socket && socket.readyState !== WebSocket.CLOSED) {
-    chatsSocketAPI.send({content: data.message, type: 'message'});
-  }
+  chatSocket.send({content: data.message, type: 'message'});
 };
 
 let chatKeepAlive: ReturnType<typeof setInterval> | null = null;
@@ -120,11 +117,8 @@ EventBus.on('webSocketOpen', () => {
   getOldMessagesService();
   chatsLoadService();
   socketUnloadService();
-  const socket = chatsSocketAPI.socket;
   chatKeepAlive = setInterval(() => {
-    if (socket && socket.readyState !== WebSocket.CLOSED) {
-      chatsSocketAPI.send({type: 'ping'});
-    }
+    chatSocket.send({type: 'ping'});
   }, chatKeepAliveInterval);
 });
 

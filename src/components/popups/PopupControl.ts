@@ -10,7 +10,7 @@ export class PopupControl extends Block {
   }
   showPopup() {
     if (typeof this.props.forId === 'string') {
-      EventBus.fire('popupShow', this.props.forId);
+      EventBus.emit('popupShow', this.props.forId);
     }
   }
 }

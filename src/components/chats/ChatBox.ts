@@ -22,7 +22,7 @@ export class ChatBox extends Block {
       msgArea,
     });
     msgArea.on(`${Block.EVENTS.MOUNT}, ${Block.EVENTS.REMOUNT}`, () => {
-      EventBus.fire('updateLayoutScrollPosition');
+      EventBus.emit('updateLayoutScrollPosition');
     });
     EventBus.on('chatSelected', (chatId: number) => {
       let chat: Record<string, unknown> | null = null;

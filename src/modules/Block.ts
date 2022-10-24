@@ -61,7 +61,7 @@ export class Block extends EventBus {
     instancesOfBlock[this.blockuid] = this;
     this.templator = new Templator(this.props);
     this.registerEvents();
-    this.fire(Block.EVENTS.INIT);
+    this.emit(Block.EVENTS.INIT);
   }
 
   registerEvents(): void {
@@ -81,7 +81,7 @@ export class Block extends EventBus {
       }
       this.nativeEventsList = [];
       this.listDescendants((block: Block) => {
-        block.fire(Block.EVENTS.UNMOUNT);
+        block.emit(Block.EVENTS.UNMOUNT);
         delete instancesOfBlock[block.blockuid];
         clearUid(block.blockuid);
       });
@@ -89,7 +89,7 @@ export class Block extends EventBus {
   }
 
   destroy() {
-    this.fire(Block.EVENTS.UNMOUNT);
+    this.emit(Block.EVENTS.UNMOUNT);
   }
 
   makePropsProxy(props: Props): Props {
@@ -108,7 +108,7 @@ export class Block extends EventBus {
         forbiddenCheck(prop);
         if (target[prop] !== value) {
           target[prop] = value;
-          // self.fire(Block.EVENTS.UPDATE);
+          // self.emit(Block.EVENTS.UPDATE);
           // Для реактивности используется метод setProps(),
           // чтобы избежать слишком частых перерисовок
         }
@@ -126,12 +126,12 @@ export class Block extends EventBus {
     if (!objIntersect(this.props, newProps)) {
       this.propsCurrentUpdate = newProps;
       Object.assign(this.props, newProps);
-      this.fire(Block.EVENTS.UPDATE);
+      this.emit(Block.EVENTS.UPDATE);
     }
   }
 
   refresh(): void {
-    this.fire(Block.EVENTS.UPDATE);
+    this.emit(Block.EVENTS.UPDATE);
   }
 
   isInDOM(): boolean {
@@ -166,7 +166,7 @@ export class Block extends EventBus {
   }
 
   build(): BlockNodes {
-    this.fire(Block.EVENTS.BEFORERENDER);
+    this.emit(Block.EVENTS.BEFORERENDER);
     this.element = this.buildNode(this.render.bind(this), this.props,
         (node: HTMLElement) => {
           if (node.nodeType === 1) {
@@ -175,7 +175,7 @@ export class Block extends EventBus {
         });
     // поиск шаблонов для замены на локальные пропсы
     this.traverseChildren(this.element);
-    this.fire(Block.EVENTS.RENDER);
+    this.emit(Block.EVENTS.RENDER);
     return this.element;
   }
 
@@ -251,7 +251,7 @@ export class Block extends EventBus {
     node.parentNode?.replaceChild(fragment, node);
     for (const block of blocksList) {
       if (block.isInDOM()) {
-        block.fire(Block.EVENTS.REMOUNT);
+        block.emit(Block.EVENTS.REMOUNT);
       }
     }
   }
@@ -292,7 +292,7 @@ export class Block extends EventBus {
           const eventType: string = attrName.slice(2);
           node.addEventListener(eventType, callback as EventListener);
           node.removeAttribute(attrName);
-          this.fire('eventAttached', {node, eventType, callback});
+          this.emit('eventAttached', {node, eventType, callback});
         }
       } else {
         const [asset]: Array<unknown> = this.templator.resolve(attrValue);
@@ -310,9 +310,9 @@ export class Block extends EventBus {
       // поиск шаблонов для замены на глобальрные пропсы
       this.traverseChildren(elem);
       document.body.appendChild(elem);
-      this.fire(Block.EVENTS.MOUNT);
+      this.emit(Block.EVENTS.MOUNT);
       this.listDescendants((block: Block) => {
-        block.fire(Block.EVENTS.MOUNT);
+        block.emit(Block.EVENTS.MOUNT);
       });
     });
   }

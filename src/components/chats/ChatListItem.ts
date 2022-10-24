@@ -19,7 +19,7 @@ export class ChatListItem extends Block {
         setTimeout(() => {
           this.toggleActive();
           const chatId = this.props.id ?? 0;
-          EventBus.fire('chatSelected', chatId);
+          EventBus.emit('chatSelected', chatId);
           Store.setState({activeChatId: chatId});
         }, 1);
       },

@@ -14,7 +14,7 @@ export class Popup extends Block {
     this.setProps({
       onClick: function(event: Event): void {
         if (event.target === this) {
-          EventBus.fire('popupHide');
+          EventBus.emit('popupHide');
         }
       },
     });
