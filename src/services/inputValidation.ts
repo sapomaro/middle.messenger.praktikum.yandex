@@ -87,7 +87,7 @@ export const getValidationMessage = ({
       if (value.length === 0) return `Нужно выбрать файл`;
       break;
 
-    case 'chat':
+    case 'title':
       if (value.length === 0) return `Поле не может быть пустым`;
       if (value.length > 40) return `Название не может быть больше 40 символов`;
       break;

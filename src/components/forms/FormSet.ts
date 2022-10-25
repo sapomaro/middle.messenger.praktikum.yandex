@@ -27,9 +27,7 @@ export class FormSet extends Form {
       formError: new (StoreSynced(FormError))({currentError: null}),
       fieldset: () => `
         <h1 class="container__header">${props.header}</h1>
-        <br>
         ${props.inputs || ''}
-        <br>
         %{formSubmitButton}%
         %{formError}%
       `,

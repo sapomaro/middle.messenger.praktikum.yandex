@@ -43,10 +43,9 @@ const profileForm = new Form({
       "type": "password",
       "placeholder": "********"
     }) }%
-    <br><br><br>
+    <br class="form__section-break">
     %{formSubmitButton}%
     %{formError}%
-    <br><br>
   `,
 });
 

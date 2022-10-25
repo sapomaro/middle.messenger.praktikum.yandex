@@ -32,7 +32,6 @@ const authForm = new Form({
     <h1 class="container__header">%{title}%</h1>
     %{ Input({"name": "login", "type": "text", "label": "Логин"}) }%
     %{ Input({"name": "password", "type": "password", "label": "Пароль"}) }%
-    <br><br><br>
     %{formSubmitButton}%
     %{formError}%
     %{ Link({"url": "/sing-up", "label": "Нет аккаунта?"}) }%

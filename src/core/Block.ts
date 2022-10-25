@@ -1,4 +1,4 @@
-import {EventBus, EventBusService} from './EventBus';
+import {EventBus} from './EventBus';
 import {Templator} from './Templator';
 import {rand, objIntersect} from './Utils';
 
@@ -122,7 +122,7 @@ export class Block extends EventBus.Model {
     });
   }
 
-  setProps(newProps: Record<string, unknown>): void {
+  setProps(newProps: Props): void {
     if (!objIntersect(this.props, newProps)) {
       this.propsCurrentUpdate = newProps;
       Object.assign(this.props, newProps);
@@ -179,7 +179,7 @@ export class Block extends EventBus.Model {
     return this.element;
   }
 
-  public render(props?: Record<string, unknown>): string {
+  public render(props?: Props): string {
     return `${props?.value}`;
   }
 

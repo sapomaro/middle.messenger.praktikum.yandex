@@ -37,10 +37,9 @@ const profileForm = new (StoreSynced(Form))({
       return `
         %{avatarControl}%
         %{ Input(${profileForm.props.inputs}...) }%
-        <br><br><br>
+        <br class="form__section-break">
         %{formSubmitButton}%
         %{formError}%
-        <br><br>
       `;
     } else {
       return `<h1 class="container__header">Загружаю...</h1>`;

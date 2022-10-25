@@ -1,27 +1,10 @@
 type Fn = (...args: Array<unknown>) => void;
 
-type Listeners = Record<string, Array<Fn>>;
-
 class EventBusService {
   static __instance: EventBusService;
   public Model: typeof EventBusService;
   public isDOMLoaded = false;
-  public listeners: Listeners = {};
-  constructor() {
-    this.Model = EventBusService;
-  }
-
-  get isDOMReady(): boolean {
-    if (document.readyState === 'interactive' &&
-        typeof document.body !== 'undefined' &&
-        typeof document.head !== 'undefined') {
-      return true;
-    } else if (document.readyState === 'complete') {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  public listeners: Record<string, Array<Fn>> = {};
 
   listEvents(eventNames: string, action: Fn) {
     eventNames.split(/[, ]+/).forEach((eventName: string): void => {
@@ -59,6 +42,18 @@ class EventBusService {
     });
   }
 
+  get isDOMReady(): boolean {
+    if (document.readyState === 'interactive' &&
+        typeof document.body !== 'undefined' &&
+        typeof document.head !== 'undefined') {
+      return true;
+    } else if (document.readyState === 'complete') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   load(): void {
     this.emit('init, load');
     this.isDOMLoaded = true;
@@ -85,5 +80,7 @@ class EventBusService {
 const EventBus = new EventBusService();
 
 EventBus.init();
+
+EventBus.Model = EventBusService;
 
 export {EventBus};

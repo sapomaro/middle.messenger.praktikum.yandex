@@ -8,6 +8,9 @@ export type PopupProps = {
   id: string;
 };
 
+// Ответ на комментарий в код-ревью:
+// в случае использования здесь generic class не совсем понятно,
+// какую практическую пользу это принесет.
 export class Popup extends Block {
   constructor(props: PopupProps) {
     super(props);

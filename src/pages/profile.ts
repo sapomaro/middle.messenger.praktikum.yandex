@@ -55,11 +55,10 @@ const profileForm = new (StoreSynced(Form))({
           ${sanitizeAll((<UserT>user).first_name) ?? ''}
         </h1>
         %{ RowInput(${profileForm.props.inputs}...) }%
-        <br><br><br>
+        <br class="form__section-break">
         %{ RowLink({"url": "/settings/edit", "label": "Изменить данные"}) }%
         %{ RowLink({"url": "/settings/password", "label": "Изменить пароль"}) }%
         %{logoutLink}%
-        <br><br>
       `;
     } else {
       return `<h1 class="container__header">Загружаю...</h1>`;

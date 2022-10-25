@@ -41,7 +41,6 @@ const regForm = new Form({
   fieldset: () => `
     <h1 class="container__header">%{title}%</h1>
     %{ Input(${inputs}...) }%
-    <br><br>
     %{formSubmitButton}%
     %{formError}%
     %{ Link({"url": "/", "label": "Войти"}) }%
