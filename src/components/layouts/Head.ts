@@ -1,4 +1,4 @@
-import {EventBus} from '../../modules/EventBus';
+import {EventBus} from '../../core/EventBus';
 
 const favicon = new URL('../../../public/favicon.ico', import.meta.url);
 

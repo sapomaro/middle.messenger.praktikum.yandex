@@ -1,5 +1,5 @@
-import {Store} from '../modules/Store';
-import {Router} from '../modules/Router';
+import {Store} from '../core/Store';
+import {Router} from '../core/Router';
 import {authAPI} from '../api/auth';
 import {errorHandler} from './errorHandler';
 

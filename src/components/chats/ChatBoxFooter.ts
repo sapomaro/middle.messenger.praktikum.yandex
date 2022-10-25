@@ -1,5 +1,5 @@
-import {Block} from '../../modules/Block';
-import {StoreSynced} from '../../modules/Store';
+import {Block} from '../../core/Block';
+import {StoreSynced} from '../../core/Store';
 import {Form} from '../forms/Form';
 import {RoundButton} from '../buttons/RoundButton';
 import {MessageTextarea} from '../inputs/MessageTextarea';
@@ -22,7 +22,7 @@ export class ChatBoxFooter extends Block {
       sendButton: new (StoreSynced(RoundButton))({
         label: '➜',
         type: 'submit',
-        style: 'chatbox__send__button',
+        style: 'chatbox__send-button',
         isLoading: true,
       }),
       attachPhoto: new ChatBoxControl({
@@ -47,12 +47,12 @@ export class ChatBoxFooter extends Block {
 }
 
 const ChatboxFooterChildren = () => `
-  <label class="chatbox__footer__control__wrapper">
+  <label class="chatbox__footer-control-wrapper">
     <input type="checkbox" 
-      class="chatbox__dropdown__toggle chatbox__element_hidden">
-    <a class="chatbox__attach__control chatbox__dropdown__control"></a>
+      class="chatbox__dropdown-toggle chatbox__element_hidden">
+    <a class="chatbox__attach-control chatbox__dropdown-control"></a>
     <span class="chatbox__dropdown chatbox__dropdown_bottom">
-      <span class="chatbox__dropdown__menu">
+      <span class="chatbox__dropdown-menu">
         %{attachPhoto}%
         %{attachFile}%
         %{attachLocation}%

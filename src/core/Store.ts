@@ -10,7 +10,7 @@ enum StoreEvents {
   UPDATE = 'updated',
 }
 
-class StoreService extends EventBus {
+class StoreService extends EventBus.Model {
   static __instance: StoreService;
   public EVENTS = StoreEvents;
   public state: State = {

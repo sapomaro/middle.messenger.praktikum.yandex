@@ -48,8 +48,7 @@ export const JSONWrapper = {
     try {
       return JSON.parse(data.replace(/^\"|\"$/g, ''));
     } catch (error) {
-      console.warn(data);
-      console.warn(error);
+      console.warn('JSON.parse failed', data, error);
       return {};
     }
   },
@@ -57,8 +56,7 @@ export const JSONWrapper = {
     try {
       return JSON.stringify(data);
     } catch (error) {
-      console.error(data);
-      console.error(error);
+      console.warn('JSON.stringify failed', data, error);
       return '{}';
     }
   },

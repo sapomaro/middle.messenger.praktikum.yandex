@@ -2,12 +2,16 @@ type Fn = (...args: Array<unknown>) => void;
 
 type Listeners = Record<string, Array<Fn>>;
 
-class EventBus {
-  static isDOMLoaded = false;
-  static listeners: Listeners = {};
+class EventBusService {
+  static __instance: EventBusService;
+  public Model: typeof EventBusService;
+  public isDOMLoaded = false;
   public listeners: Listeners = {};
+  constructor() {
+    this.Model = EventBusService;
+  }
 
-  static get isDOMReady(): boolean {
+  get isDOMReady(): boolean {
     if (document.readyState === 'interactive' &&
         typeof document.body !== 'undefined' &&
         typeof document.head !== 'undefined') {
@@ -17,8 +21,9 @@ class EventBus {
     } else {
       return false;
     }
-  };
-  static listEvents(eventNames: string, action: Fn) {
+  }
+
+  listEvents(eventNames: string, action: Fn) {
     eventNames.split(/[, ]+/).forEach((eventName: string): void => {
       if (!this.listeners[eventName]) {
         this.listeners[eventName] = [];
@@ -26,8 +31,8 @@ class EventBus {
       action(eventName);
     });
   }
-  listEvents = EventBus.listEvents;
-  static on(eventNames: string, callback: Fn): void {
+
+  on(eventNames: string, callback: Fn): void {
     this.listEvents(eventNames, (eventName: string): void => {
       this.listeners[eventName].push(callback);
       if (eventName === 'init' || eventName === 'load') {
@@ -38,28 +43,28 @@ class EventBus {
       }
     });
   }
-  on = EventBus.on;
-  static emit(eventNames: string, ...args: Array<unknown>): void {
+
+  emit(eventNames: string, ...args: Array<unknown>): void {
     this.listEvents(eventNames, (eventName: string): void => {
       this.listeners[eventName].forEach((listener: Fn): void => {
         listener.apply(this, args);
       });
     });
   }
-  emit = EventBus.emit;
-  static off(events: string, callback: Fn): void {
+
+  off(events: string, callback: Fn): void {
     this.listEvents(events, (eventName: string): void => {
       this.listeners[eventName] = this.listeners[eventName]
           .filter((listener: Fn) => (listener !== callback));
     });
   }
-  off = EventBus.off;
 
-  static load(): void {
+  load(): void {
     this.emit('init, load');
     this.isDOMLoaded = true;
   }
-  static init(): void {
+
+  init(): void {
     if (this.isDOMReady) {
       this.load();
     } else {
@@ -76,6 +81,8 @@ class EventBus {
     }
   }
 }
+
+const EventBus = new EventBusService();
 
 EventBus.init();
 

@@ -1,4 +1,4 @@
-import type {Block} from '../modules/Block';
+import type {Block} from '../core/Block';
 
 class RouterService {
   static __instance: RouterService;

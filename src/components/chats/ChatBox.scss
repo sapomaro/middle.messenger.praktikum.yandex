@@ -43,7 +43,7 @@
   color: $note-color;
 }
 
-.chatbox__header__avatar {
+.chatbox__header-avatar {
   flex: 0 0 3rem;
   height: 3rem;
   width: 3rem;
@@ -51,28 +51,28 @@
   background: $elem-bg;
 }
 
-.chatbox__header__text {
+.chatbox__header-text {
   flex: 1;
   margin: 0 1rem;
   font-size: 1rem;
   padding: 1rem 0;
 }
 
-.chatbox__header__control__wrapper,
-.chatbox__footer__control__wrapper {
+.chatbox__header-control-wrapper,
+.chatbox__footer-control-wrapper {
   display: block;
   flex: 0;
 }
 
-.chatbox__attach__control {
+.chatbox__attach-control {
   background: url("/public/fileclip_icon.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
 }
 
-.chatbox__header__control,
-.chatbox__attach__control {
+.chatbox__header-control,
+.chatbox__attach-control {
   display: inline-block;
   box-sizing: border-box;
   width: 3rem;
@@ -91,13 +91,13 @@
   }
 }
 
-.chatbox__header__control:hover,
-.chatbox__dropdown__toggle:checked + .chatbox__header__control {
+.chatbox__header-control:hover,
+.chatbox__dropdown-toggle:checked + .chatbox__header-control {
   color: $main-color;
   background: $elem-bg;
 }
 
-.chatbox__send__button {
+.chatbox__send-button {
   height: 3rem;
   width: 3rem;
   align-self: flex-end;
@@ -126,7 +126,7 @@
   background-size: contain;
 }
 
-.chatbox__icon__circle {
+.chatbox__icon-circle {
   display: inline-block;
   box-sizing: border-box;
   margin-right: 0.5rem;
@@ -151,7 +151,7 @@
   position: absolute;
 }
 
-.chatbox__dropdown__element {
+.chatbox__dropdown-element {
   position: relative;
   display: block;
   margin: 1.5rem;
@@ -171,11 +171,11 @@
   width: 22rem;
 }
 
-.chatbox__dropdown__toggle:checked + .chatbox__dropdown__control + .chatbox__dropdown {
+.chatbox__dropdown-toggle:checked + .chatbox__dropdown-control + .chatbox__dropdown {
   display: block;
 }
 
-.chatbox__dropdown__menu {
+.chatbox__dropdown-menu {
   display: block;
   padding: 1rem;
   margin: 2rem;

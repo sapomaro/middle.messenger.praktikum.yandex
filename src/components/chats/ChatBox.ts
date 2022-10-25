@@ -1,8 +1,8 @@
 import './ChatBox.scss';
 
-import {EventBus} from '../../modules/EventBus';
-import {Store, StoreSynced} from '../../modules/Store';
-import {Block} from '../../modules/Block';
+import {EventBus} from '../../core/EventBus';
+import {Store, StoreSynced} from '../../core/Store';
+import {Block} from '../../core/Block';
 import {ChatBoxHeader} from './ChatBoxHeader';
 import {ChatBoxFooter} from './ChatBoxFooter';
 import {Messages} from './Messages';

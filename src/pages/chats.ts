@@ -1,5 +1,5 @@
 import {ChatsLayout} from '../components/layouts/Chats';
-import {Block} from '../modules/Block';
+import {Block} from '../core/Block';
 import {ChatList} from '../components/chats/ChatList';
 import {ChatBox} from '../components/chats/ChatBox';
 import {Link} from '../components/links/Link';
@@ -11,7 +11,7 @@ import {AddChatPopup} from '../components/popups/AddChatPopup';
 import {DeleteChatPopup} from '../components/popups/DeleteChatPopup';
 import {PopupControl} from '../components/popups/PopupControl';
 import {chatsLoadService, chatsUnloadService} from '../services/chatChannels';
-import {StoreSynced} from '../modules/Store';
+import {StoreSynced} from '../core/Store';
 
 const view = new ChatsLayout({
   title: 'Чаты',

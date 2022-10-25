@@ -1,7 +1,7 @@
-import {ajax} from '../modules/Ajax';
+import {ajax} from '../core/Ajax';
 import {chatsWebSocketUrl} from './base';
-import {EventBus} from '../modules/EventBus';
-import {JSONWrapper} from '../modules/Utils';
+import {EventBus} from '../core/EventBus';
+import {JSONWrapper} from '../core/Utils';
 import type {RequestT, MessageT} from '../constants/types';
 
 export const chatsAPI = {

@@ -1,16 +1,16 @@
 import {WideLayoutWithSidebar} from '../components/layouts/Wide+Side';
-import {Block} from '../modules/Block';
+import {Block} from '../core/Block';
 import {Form} from '../components/forms/Form';
 import {RowInput} from '../components/inputs/RowInput';
 import {RowLink} from '../components/links/RowLink';
 import {AvatarControl} from '../components/popups/AvatarControl';
 import {AvatarPopup} from '../components/popups/AvatarPopup';
 import {RoundButton} from '../components/buttons/RoundButton';
-import {StoreSynced} from '../modules/Store';
+import {StoreSynced} from '../core/Store';
 import {profileLoadService} from '../services/profile';
 import {logoutService} from '../services/login';
 import {sanitizeAll} from '../services/sanitizer';
-import {JSONWrapper} from '../modules/Utils';
+import {JSONWrapper} from '../core/Utils';
 import type {UserT} from '../constants/types';
 
 const view = new WideLayoutWithSidebar({

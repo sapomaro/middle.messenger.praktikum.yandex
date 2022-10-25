@@ -13,7 +13,7 @@ export class ChatBoxControl extends PopupControl {
   }
   render(props: ChatBoxControlProps) {
     return `
-      <span class="chatbox__dropdown__element" onclick="%{showPopup}%">
+      <span class="chatbox__dropdown-element" onclick="%{showPopup}%">
         <span class="chatbox__icon ${props.iconStyle}">
           ${props.iconText? props.iconText : ''}
         </span>

@@ -1,8 +1,8 @@
 import './ChatList.scss';
 
-import {EventBus} from '../../modules/EventBus';
-import {Store} from '../../modules/Store';
-import {Block} from '../../modules/Block';
+import {EventBus} from '../../core/EventBus';
+import {Store} from '../../core/Store';
+import {Block} from '../../core/Block';
 import {resolveResourceUrl} from '../../services/resources';
 import {timeConverter} from '../../services/timeConverter';
 import {sanitizeAll} from '../../services/sanitizer';
@@ -51,31 +51,29 @@ export class ChatListItem extends Block {
         props.last_message !== null) {
       lastMsg = props.last_message as typeof lastMsg;
     }
-    const msgSlice = (str: string) => {
-      return str.slice(0, 40);
-    };
+    const msgSlice = (str: string) => str.slice(0, 40);
     return `
       <li class="chatlist__item 
         ${props.active? 'chatlist__item_active' : ''}
         ${props.hidden? 'chatlist__item_hidden' : ''}"
         onclick="%{activate}%">
-        <div class="chatlist__item__wrapper">
-          <div class="chatlist__item__avatar"
+        <div class="chatlist__item-wrapper">
+          <div class="chatlist__item-avatar"
           ${avatar? 'style="background-image: url('+avatar+')"' : ''}></div>
-          <div class="chatlist__item__text">
-            <div class="chatlist__item__name">${props.title||''}</div>
+          <div class="chatlist__item-text">
+            <div class="chatlist__item-name">${props.title||''}</div>
             <div class="chatlist__item__message">
-              <span class="chatlist__item__message__quote">
+              <span class="chatlist__item-message-quote">
                 ${msgSlice(lastMsg.content || 'В этом чате пока нет сообщений')}
               </span>
             </div>
           </div>
-          <div class="chatlist__item__info">
-            <div class="chatlist__item__time">
+          <div class="chatlist__item-info">
+            <div class="chatlist__item-time">
               ${timeConverter(lastMsg.time)}
             </div>
-            <div class="chatlist__item__unreads">
-              <span class="chatlist__item__unreads__count"
+            <div class="chatlist__item-unreads">
+              <span class="chatlist__item-unreads-count"
                 >${props.unread_count||''}</span>
             </div>
           </div>

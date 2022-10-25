@@ -1,4 +1,4 @@
-import {Block} from '../../modules/Block';
+import {Block} from '../../core/Block';
 import {sanitizeAll} from '../../services/sanitizer';
 
 type IncomingProps = {
@@ -14,7 +14,7 @@ export class FormError extends Block {
     return `
       <div class="container__element container__element_centered
           container__element_adjacent">
-        <span class="form__input__error">${props.currentError ?? ''}</span>
+        <span class="form__input-error">${props.currentError ?? ''}</span>
       </div>
     `;
   }

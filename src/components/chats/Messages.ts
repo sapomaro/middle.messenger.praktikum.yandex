@@ -1,6 +1,6 @@
 import './Messages.scss';
 
-import {Block} from '../../modules/Block';
+import {Block} from '../../core/Block';
 import {timeConverter} from '../../services/timeConverter';
 import {sanitizeAll} from '../../services/sanitizer';
 
@@ -36,7 +36,7 @@ export class Messages extends Block {
       }
       this.props.messages = msgItems;
       return `
-        <ul class="chatbox__messages__wrapper">
+        <ul class="chatbox__messages-wrapper">
           %{messages}%
         </ul>
       `;
@@ -53,9 +53,9 @@ export class Message extends Block {
     if (typeof props.content === 'string' && props.content !== '') {
       return `
         <li class="chatbox__message chatbox__message_${props.direction}">
-          <span class="chatbox__message__text">${props.content}</span>
-          <span class="chatbox__message__info">
-            <span class="chatbox__message__status">
+          <span class="chatbox__message-text">${props.content}</span>
+          <span class="chatbox__message-info">
+            <span class="chatbox__message-status">
               ${ props.status? '✓✓' : '' }&nbsp;
             </span>
             <time class="chatbox__message__time">

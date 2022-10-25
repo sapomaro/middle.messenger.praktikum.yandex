@@ -1,6 +1,6 @@
 import {NarrowLayout} from '../components/layouts/Narrow';
 import {MenuLink as Link} from '../components/links/MenuLink';
-import {JSONWrapper} from '../modules/Utils';
+import {JSONWrapper} from '../core/Utils';
 
 const view = new NarrowLayout({
   title: 'Карта экранов приложения',

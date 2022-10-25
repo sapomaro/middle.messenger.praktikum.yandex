@@ -15,7 +15,7 @@ export class RowLink extends Link {
     return `
       <div class="container__row">
         <a onclick="%{onclickHandler}%"
-          class="form__row__label container__link ${props.style}">
+          class="form__row-label container__link ${props.style}">
             ${props.label}
         </a>
       </div>

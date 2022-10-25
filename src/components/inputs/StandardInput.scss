@@ -1,30 +1,30 @@
 @import "../../constants/colors.scss";
 
-.form__input__field_standard {
+.form__input_field_standard {
   padding: 1rem 0 0.7rem;
   margin-bottom: 0.25rem;
   border: none;
   border-bottom: 1px solid $main-color;
 }
 
-.form__input__field_error {
+.form__input_field_error {
   border-bottom: 1px solid $danger-color;
 }
 
-.form__input__label {
+.form__input-label {
   position: absolute;
   z-index: 1;
   padding: 0.5rem 0;
   color: $note-color;
 }
 
-.form__input__field_standard + .form__input__label,
-.form__input__field_standard:focus + .form__input__label {
+.form__input_field_standard + .form__input-label,
+.form__input_field_standard:focus + .form__input-label {
   margin-top: -4.15rem;
   font-size: 0.75rem;
 }
 
-.form__input__field_standard[value=""]:not(:focus) + .form__input__label {
+.form__input_field_standard[value=""]:not(:focus) + .form__input-label {
   margin-top: -2.75rem;
   font-size: 1rem;
 }

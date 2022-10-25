@@ -1,8 +1,8 @@
 import './Popup.scss';
 
-import {EventBus} from '../../modules/EventBus';
-import {Block} from '../../modules/Block';
-import {Store} from '../../modules/Store';
+import {EventBus} from '../../core/EventBus';
+import {Block} from '../../core/Block';
+import {Store} from '../../core/Store';
 
 export type PopupProps = {
   id: string;

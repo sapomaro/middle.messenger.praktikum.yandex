@@ -1,6 +1,6 @@
 import './Form.scss';
 
-import {Block} from '../../modules/Block';
+import {Block} from '../../core/Block';
 
 type IncomingProps = {
   [key: string]: unknown;

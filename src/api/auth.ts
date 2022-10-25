@@ -1,4 +1,4 @@
-import {ajax} from '../modules/Ajax';
+import {ajax} from '../core/Ajax';
 import {baseAPIUrl} from './base';
 import type {RequestT} from '../constants/types';
 

@@ -1,7 +1,7 @@
 import './Input.scss';
 
-import {EventBus} from '../../modules/EventBus';
-import {Block} from '../../modules/Block';
+import {EventBus} from '../../core/EventBus';
+import {Block} from '../../core/Block';
 import {getValidationMessage} from '../../services/inputValidation';
 
 export type InputPropsType = {

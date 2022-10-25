@@ -1,11 +1,11 @@
-import {EventBus} from '../modules/EventBus';
-import {JSONWrapper} from '../modules/Utils';
+import {EventBus} from '../core/EventBus';
+import {JSONWrapper} from '../core/Utils';
 import {chatsWebSocketUrl} from './base';
 
 import type {RequestT, MessageT} from '../constants/types';
 
 export class ChatSocket {
-  static __instance: ChatSocket;
+  private static __instance: ChatSocket;
   private activeSocket: WebSocket | null = null;
   constructor() {
     if (ChatSocket.__instance) {
@@ -14,13 +14,16 @@ export class ChatSocket {
     ChatSocket.__instance = this;
   }
   init({userId, chatId, token}: RequestT['SocketInit']) {
+    this.close();
+    this.activeSocket =
+      new WebSocket(`${chatsWebSocketUrl}/${userId}/${chatId}/${token}`);
+    this.registerEvents();
+  }
+  close() {
     if (this.activeSocket) {
       this.activeSocket.close();
       this.activeSocket = null;
     }
-    this.activeSocket =
-      new WebSocket(`${chatsWebSocketUrl}/${userId}/${chatId}/${token}`);
-    this.registerEvents();
   }
   registerEvents() {
     if (this.activeSocket === null) {

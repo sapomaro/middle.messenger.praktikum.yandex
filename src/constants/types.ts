@@ -1,4 +1,4 @@
-import type {AjaxStateT} from '../modules/Ajax';
+import type {AjaxStateT} from '../core/Ajax';
 
 export type ErrorT = AjaxStateT | Error;
 

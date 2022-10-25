@@ -1,13 +1,13 @@
 import {NarrowLayout} from '../components/layouts/Narrow';
-import {Block} from '../modules/Block';
+import {Block} from '../core/Block';
 import {Form} from '../components/forms/Form';
 import {FormError} from '../components/forms/FormError';
 import {StandardInput as Input} from '../components/inputs/StandardInput';
 import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {StandardLink as Link} from '../components/links/StandardLink';
-import {JSONWrapper} from '../modules/Utils';
+import {JSONWrapper} from '../core/Utils';
 
-import {StoreSynced} from '../modules/Store';
+import {StoreSynced} from '../core/Store';
 import {registerService} from '../services/register';
 import {profileRedirectService} from '../services/profile';
 import type {RequestT} from '../constants/types';

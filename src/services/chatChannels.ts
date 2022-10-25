@@ -1,6 +1,6 @@
-import {Store} from '../modules/Store';
-import {Router} from '../modules/Router';
-import {EventBus} from '../modules/EventBus';
+import {Store} from '../core/Store';
+import {Router} from '../core/Router';
+import {EventBus} from '../core/EventBus';
 import {chatsAPI} from '../api/chats';
 import {errorHandler} from './errorHandler';
 import {socketUnloadService} from './chatMessaging';
@@ -13,7 +13,7 @@ const chatsLoadInterval = 15000;
 
 export const chatsUnloadService = () => {
   if (chatAutoloader) {
-    clearInterval(chatAutoloader);
+    clearTimeout(chatAutoloader);
   }
   socketUnloadService();
 };
@@ -46,7 +46,7 @@ export const chatsLoadService = async (callback?: () => void) => {
           callback();
         }
         if (chatAutoloader) {
-          clearInterval(chatAutoloader);
+          clearTimeout(chatAutoloader);
         }
         chatAutoloader = setTimeout(() => {
           chatsLoadService();

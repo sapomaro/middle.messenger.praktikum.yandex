@@ -1,4 +1,4 @@
-import {EventBus} from './EventBus';
+import {EventBus, EventBusService} from './EventBus';
 import {Templator} from './Templator';
 import {rand, objIntersect} from './Utils';
 
@@ -36,7 +36,7 @@ type EventAttachment = {
 
 type Props = Record<string, unknown>;
 
-export class Block extends EventBus {
+export class Block extends EventBus.Model {
   public static EVENTS: Record<string, string> = {
     INIT: 'INIT',
     UNMOUNT: 'unmounting',

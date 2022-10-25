@@ -12,7 +12,7 @@
   border-radius: 50%;
 }
 
-.form__avatar__control {
+.form__avatar-control {
   visibility: hidden;
   display: flex;
   flex: 1;
@@ -27,6 +27,6 @@
   cursor: pointer;
 }
 
-.form__avatar:hover .form__avatar__control {
+.form__avatar:hover .form__avatar-control {
   visibility: visible;
 }
