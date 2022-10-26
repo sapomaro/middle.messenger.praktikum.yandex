@@ -1,11 +1,11 @@
-import {Popup, PopupProps} from './Popup';
+import {Popup} from './Popup';
 import {Form} from '../forms/Form';
 import {FormSet} from '../forms/FormSet';
 import {addUserToChatService} from '../../services/chatChannels';
 
 export class AddUserPopup extends Popup {
-  constructor(props: PopupProps) {
-    super(props);
+  constructor() {
+    super({id: 'AddUserPopup'});
     const addUserForm = new FormSet({
       name: 'addUser',
       header: 'Добавить пользователя',

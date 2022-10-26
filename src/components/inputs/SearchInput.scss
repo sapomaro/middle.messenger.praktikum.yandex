@@ -1,7 +1,8 @@
 @import "../../constants/colors.scss";
 
-.chatlist__search__field__wrapper {
+.chatlist__search-field-wrapper {
   border-radius: 0.5rem;
+  margin: 2rem 0;
   background: $elem-bg;
   color: $note-color;
 
@@ -10,25 +11,25 @@
   }
 }
 
-.chatlist__search__field {
+.chatlist__search-field {
   display: block;
   font-size: 1rem;
   padding: 1rem 1rem 1rem 3rem;
   border: none;
 }
 
-.chatlist__search__label {
+.chatlist__search-label {
   position: absolute;
   z-index: 1;
   padding: 1rem;
   margin-top: -3.25rem;
 }
 
-.chatlist__search__label__text {
+.chatlist__search-label-text {
   display: none;
 }
 
-.chatlist__search__label__icon {
+.chatlist__search-label-icon {
   display: inline-block;
   width: 1.5rem;
   height: 1.5rem;
@@ -39,14 +40,14 @@
   background-size: contain;
 }
 
-.chatlist__search__field[value=""] + .chatlist__search__label .chatlist__search__label__text {
+.chatlist__search-field[value=""] + .chatlist__search-label .chatlist__search-label-text {
   display: inline;
 }
 
-.chatlist__search__field:focus + .chatlist__search__label .chatlist__search__label__text {
+.chatlist__search-field:focus + .chatlist__search-label .chatlist__search-label-text {
   display: none;
 }
 
-.chatlist__search__label > * {
+.chatlist__search-label > * {
   vertical-align: middle;
 }

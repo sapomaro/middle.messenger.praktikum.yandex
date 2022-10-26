@@ -1,19 +1,16 @@
 import {EventBus} from './EventBus';
 import {objIntersect} from './Utils';
 import type {Block} from './Block';
-
-type State = {
-  [key: string]: unknown;
-};
+import type {StateT} from '../constants/types';
 
 enum StoreEvents {
   UPDATE = 'updated',
 }
 
-class StoreService extends EventBus {
+class StoreService extends EventBus.Model {
   static __instance: StoreService;
   public EVENTS = StoreEvents;
-  public state: State = {
+  public state: StateT = {
     user: null,
     chats: [],
     activeChatId: 0,
@@ -29,17 +26,17 @@ class StoreService extends EventBus {
     }
     StoreService.__instance = this;
     EventBus.on('init', () => {
-      this.fire('init');
+      this.emit('init');
     });
     EventBus.on('load', () => {
-      this.fire('load');
+      this.emit('load');
     });
   }
 
-  setState(newState: State) {
+  setState(newState: StateT) {
     if (!objIntersect(this.state, newState)) {
       Object.assign(this.state, newState);
-      this.fire(this.EVENTS.UPDATE, newState);
+      this.emit(this.EVENTS.UPDATE, newState);
     }
   }
 
@@ -52,9 +49,9 @@ const Store = new StoreService();
 
 const StoreSynced = (CustomBlock: typeof Block) => {
   return class extends CustomBlock {
-    constructor(props?: State) {
+    constructor(props?: StateT) {
       super({...props, ...Store.getState()});
-      Store.on(Store.EVENTS.UPDATE, (newState: State) => {
+      Store.on(Store.EVENTS.UPDATE, (newState: StateT) => {
         this.setProps(newState);
       });
     }

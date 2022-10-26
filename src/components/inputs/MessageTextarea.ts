@@ -11,7 +11,7 @@ export class MessageTextarea extends Input {
   }
   render(props: InputPropsType): string {
     return `
-      <textarea name="${props.name}" class="chatbox__send__textarea" rows="1"
+      <textarea name="${props.name}" class="chatbox__send-textarea" rows="1"
         onblur="%{onBlur}%"
         onfocus="%{onFocus}%"
         oninput="%{onInput}%"

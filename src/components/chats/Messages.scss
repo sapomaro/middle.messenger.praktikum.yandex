@@ -6,7 +6,7 @@
   text-align: center;
 }
 
-.chatbox__messages__wrapper {
+.chatbox__messages-wrapper {
   display: inherit;
   flex: inherit;
   flex-flow: inherit;
@@ -33,27 +33,27 @@
   border-bottom-right-radius: 0;
 }
 
-.chatbox__message__text {
+.chatbox__message-text {
   white-space: pre-wrap;
   word-wrap: break-word;
   overflow-wrap: anywhere;
 }
 
-.chatbox__message__info {
+.chatbox__message-info {
   padding: 0.25rem 0 0 1rem;
   font-size: 0.75rem;
   float: right;
 }
 
-.chatbox__message_inc .chatbox__message__info {
+.chatbox__message_inc .chatbox__message-info {
   color: $note-color;
 }
 
-.chatbox__message_out .chatbox__message__info {
+.chatbox__message_out .chatbox__message-info {
   color: $main-color;
 }
 
-.chatbox__message__status {
+.chatbox__message-status {
   font-size: 0.6rem;
   letter-spacing: -3px;
   margin-left: -4px;

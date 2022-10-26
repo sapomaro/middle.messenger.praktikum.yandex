@@ -1,15 +1,17 @@
-import type {AjaxStateT} from '../modules/Ajax';
+export type PlainObject<T = unknown> = {
+  [k in string]: T;
+};
 
-export type ErrorT = AjaxStateT | Error;
+export type JSONable = PlainObject | Array<unknown>;
 
 export type StateT = {
   [key: string]: unknown;
-  user: null | UserT,
-  chats: Array<ChatT>;
-  activeChatId: number;
-  activeChatToken: string;
-  activeChatMessages: Array<unknown>;
-  isLoading: boolean;
+  user?: null | UserT,
+  chats?: Array<ChatT>;
+  activeChatId?: number;
+  activeChatToken?: string;
+  activeChatMessages?: Array<unknown>;
+  isLoading?: boolean;
 };
 
 export type UserT = {
@@ -43,6 +45,13 @@ export type MessageT = {
   user_id?: number;
   id?: number;
 };
+
+export type ResponseT = {
+  status?: number;
+  responseHeaders?: PlainObject;
+  responseText?: string;
+  responseJSON?: PlainObject;
+} | Error;
 
 export type RequestT = {
   Login: {

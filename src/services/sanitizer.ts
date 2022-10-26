@@ -1,4 +1,4 @@
-import {cloneDeep} from '../modules/Utils';
+import {cloneDeep} from '../core/Utils';
 
 export const sanitizeAll = <T>(props: T): T => {
   return cloneDeep(props, <TT>(value: TT): TT => {

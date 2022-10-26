@@ -1,7 +1,7 @@
 import './common.scss';
 
 import './Head';
-import {Block} from '../../modules/Block';
+import {Block} from '../../core/Block';
 
 export class Layout extends Block {
   constructor(props: Record<string, unknown>) {

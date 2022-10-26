@@ -2,7 +2,7 @@ import {Form} from '../forms/Form';
 import {FormError} from '../forms/FormError';
 import {StandardInput as Input} from '../inputs/StandardInput';
 import {StandardButton as Button} from '../buttons/StandardButton';
-import {StoreSynced} from '../../modules/Store';
+import {StoreSynced} from '../../core/Store';
 
 type FormSetProps = {
   [key: string]: unknown;
@@ -27,9 +27,7 @@ export class FormSet extends Form {
       formError: new (StoreSynced(FormError))({currentError: null}),
       fieldset: () => `
         <h1 class="container__header">${props.header}</h1>
-        <br>
         ${props.inputs || ''}
-        <br>
         %{formSubmitButton}%
         %{formError}%
       `,

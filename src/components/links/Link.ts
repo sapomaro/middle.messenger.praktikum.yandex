@@ -1,7 +1,7 @@
 import './Link.scss';
 
-import {Block} from '../../modules/Block';
-import {Router} from '../../modules/Router';
+import {Block} from '../../core/Block';
+import {Router} from '../../core/Router';
 
 export type LinkProps = {
   url?: string;

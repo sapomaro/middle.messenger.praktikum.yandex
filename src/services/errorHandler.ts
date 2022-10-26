@@ -1,17 +1,13 @@
-import {Store} from '../modules/Store';
-import {Router} from '../modules/Router';
+import {Store} from '../core/Store';
+import {Router} from '../core/Router';
 
-import type {ErrorT} from '../constants/types';
+import type {ResponseT} from '../constants/types';
 
-export const errorHandler = (error: ErrorT) => {
+export const errorHandler = (error: ResponseT) => {
   let currentError = 'Что-то пошло не так...';
   if ('responseJSON' in error && error.responseJSON &&
       typeof error.responseJSON.reason === 'string') {
     currentError = error.responseJSON.reason;
-  }
-  if ('error' in error && error.error &&
-      typeof error.error.message === 'string') {
-    currentError = error.error.message;
   }
   if (error instanceof Error) {
     currentError = error.message;

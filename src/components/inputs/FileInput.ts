@@ -6,7 +6,7 @@ export class FileInput extends Input {
   constructor(props: InputPropsType) {
     super(props);
     this.on('change', () => {
-      this.fire('updated');
+      this.emit('updated');
     });
   }
   render(props: InputPropsType): string {
@@ -16,19 +16,19 @@ export class FileInput extends Input {
     }
     return `
       <div class="container__element container__element_centered">
-        <p class="form__input__file__note">
+        <p class="form__input_file-note">
           ${fileName? 'Выбран файл: '+fileName : ''}
         </p>
-        <label class="form__input__file__wrapper">
+        <label class="form__input_file-wrapper">
           <a class="container__link container__link_underlined">
             Выбрать ${fileName? 'другой' : ''} файл <br>на компьютере
           </a>
           <input name="${props.name}" type="file"
             accept="${props.accept}" 
-            class="form__input__file"
+            class="form__input_file"
             onchange="%{onChange}%">
         </label>
-        <span class="form__input__error">${props.error || ''}</span>
+        <span class="form__input-error">${props.error || ''}</span>
       </div>
     `;
   }

@@ -23,7 +23,7 @@ export class AvatarControl extends PopupControl {
       return `
         <div class="form__avatar" onclick="%{showPopup}%"
         ${avatar? 'style="background-image: url('+avatar+')"' : ''}>
-          <div class="form__avatar__control">
+          <div class="form__avatar-control">
             <span>Поменять аватар</span>
           </div>
         </div>

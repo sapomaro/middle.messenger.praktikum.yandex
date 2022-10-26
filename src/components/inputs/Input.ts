@@ -1,7 +1,7 @@
 import './Input.scss';
 
-import {EventBus} from '../../modules/EventBus';
-import {Block} from '../../modules/Block';
+import {EventBus} from '../../core/EventBus';
+import {Block} from '../../core/Block';
 import {getValidationMessage} from '../../services/inputValidation';
 
 export type InputPropsType = {
@@ -30,14 +30,14 @@ export class Input extends Block {
           //  self.validate.call(self, event);
           // }
           self.togglePlaceholder.call(self, event);
-          self.fire('focus', event);
+          self.emit('focus', event);
         }
       },
       onBlur: function(event: Event): void {
         if (!this.getAttribute('readonly')) {
           self.validate.call(self, event);
           self.togglePlaceholder.call(self, event);
-          self.fire('blur', event);
+          self.emit('blur', event);
         }
       },
       onInput: function(event: Event): void {
@@ -45,13 +45,13 @@ export class Input extends Block {
                                                    лейблов на инпутах */
         self.props.value = this.value;
         self.autoResize(this);
-        self.fire('input', event);
+        self.emit('input', event);
       },
       onChange: function(event: Event): void {
         this.setAttribute('value', this.value);
         self.props.value = this.value;
         self.validate.call(self, event);
-        self.fire('change', event);
+        self.emit('change', event);
       },
     });
 
@@ -91,7 +91,7 @@ export class Input extends Block {
 
   validate(event: Event, state: EventState) {
     if (this.isPasswordInput && !this.isRepeatInput) {
-      EventBus.fire('passwordFieldChange', this.props.value);
+      EventBus.emit('passwordFieldChange', this.props.value);
     }
     let actualValue = '';
     if (this.hasActualValue && typeof this.props.value === 'string') {

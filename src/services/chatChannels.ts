@@ -1,26 +1,26 @@
-import {Store} from '../modules/Store';
-import {Router} from '../modules/Router';
-import {EventBus} from '../modules/EventBus';
-import {chatsAPI} from '../api/chats';
+import {Store} from '../core/Store';
+import {Router} from '../core/Router';
+import {EventBus} from '../core/EventBus';
+import {API} from '../api/GlobalAPI';
 import {errorHandler} from './errorHandler';
 import {socketUnloadService} from './chatMessaging';
 
-import type {RequestT, ChatT, ErrorT} from '../constants/types';
-
-let chatAutoloader: ReturnType<typeof setTimeout> | null = null;
+import type {RequestT, ChatT, ResponseT} from '../constants/types';
 
 const chatsLoadInterval = 15000;
 
+let chatAutoloader: ReturnType<typeof setTimeout> | null = null;
+
 export const chatsUnloadService = () => {
   if (chatAutoloader) {
-    clearInterval(chatAutoloader);
+    clearTimeout(chatAutoloader);
   }
   socketUnloadService();
 };
 
 export const chatsLoadService = async (callback?: () => void) => {
   Store.setState({isLoading: true});
-  chatsAPI.getChats()
+  API.getChats()
       .then(({responseJSON}) => {
         let chats: Array<ChatT> = responseJSON;
         chats = chats.sort((a, b) => {
@@ -46,13 +46,13 @@ export const chatsLoadService = async (callback?: () => void) => {
           callback();
         }
         if (chatAutoloader) {
-          clearInterval(chatAutoloader);
+          clearTimeout(chatAutoloader);
         }
         chatAutoloader = setTimeout(() => {
           chatsLoadService();
         }, chatsLoadInterval);
       })
-      .catch((error: ErrorT) => {
+      .catch((error: ResponseT) => {
         errorHandler(error);
         Store.setState({user: null, currentError: null});
         Router.redirect('/');
@@ -64,15 +64,15 @@ export const chatsLoadService = async (callback?: () => void) => {
 
 export const addChatService = async (data: RequestT['AddChat']) => {
   Store.setState({isLoading: true});
-  chatsAPI.addChat(data)
+  API.addChat(data)
       .then(({responseJSON}) => {
         const chatId = responseJSON.id ?? 0;
-        EventBus.fire('popupHide');
+        EventBus.emit('popupHide');
         Store.setState({currentError: null, activeChatId: chatId});
         addUserToChatService({login: data.title}, true);
         chatsLoadService(() => {
           Store.state.activeChatId = 0;
-          EventBus.fire('chatSelected', chatId);
+          EventBus.emit('chatSelected', chatId);
           Store.state.activeChatId = chatId;
         });
       })
@@ -86,10 +86,10 @@ export const deleteChatService = async () => {
   Store.setState({isLoading: true});
   chatsUnloadService();
   const chatId = Store.getState().activeChatId as number;
-  chatsAPI.deleteChat({chatId})
+  API.deleteChat({chatId})
       .then(() => {
-        EventBus.fire('popupHide');
-        EventBus.fire('chatSelected', 0);
+        EventBus.emit('popupHide');
+        EventBus.emit('chatSelected', 0);
         Store.setState({activeChatId: 0});
         chatsLoadService();
       })
@@ -103,7 +103,7 @@ export const addUserToChatService = async (data: {login: string},
     silent = false) => {
   Store.setState({isLoading: true});
   const chatId = Store.getState().activeChatId as number;
-  chatsAPI.getUsersByLogin(data)
+  API.getUsersByLogin(data)
       .then(({responseJSON}) => {
         const users = responseJSON;
         if (!(users instanceof Array) || users.length === 0) {
@@ -111,12 +111,12 @@ export const addUserToChatService = async (data: {login: string},
             throw new Error('Пользователь с таким логином не найден');
           }
         } else if (users[0].login === data.login) {
-          chatsAPI.addUsersToChat({
+          API.addUsersToChat({
             chatId,
             users: [users[0].id ?? 0],
           });
         }
-        EventBus.fire('popupHide');
+        EventBus.emit('popupHide');
       })
       .catch(errorHandler)
       .finally(() => {
@@ -127,18 +127,18 @@ export const addUserToChatService = async (data: {login: string},
 export const deleteUserFromChatService = async (data: {login: string}) => {
   Store.setState({isLoading: true});
   const chatId = Store.getState().activeChatId as number;
-  chatsAPI.getUsersByLogin(data)
+  API.getUsersByLogin(data)
       .then(({responseJSON}) => {
         const users = responseJSON;
         if (!(users instanceof Array) || users.length === 0) {
           throw new Error('Пользователь с таким логином не найден');
         } else if (users[0].login === data.login) {
-          chatsAPI.deleteUsersFromChat({
+          API.deleteUsersFromChat({
             chatId,
             users: [users[0].id ?? 0],
           });
         }
-        EventBus.fire('popupHide');
+        EventBus.emit('popupHide');
       })
       .catch(errorHandler)
       .finally(() => {

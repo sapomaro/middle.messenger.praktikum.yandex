@@ -1,20 +1,24 @@
 import './Popup.scss';
 
-import {EventBus} from '../../modules/EventBus';
-import {Block} from '../../modules/Block';
-import {Store} from '../../modules/Store';
+import {EventBus} from '../../core/EventBus';
+import {Block} from '../../core/Block';
+import {Store} from '../../core/Store';
 
 export type PopupProps = {
+  [key: string]: string;
   id: string;
 };
 
+// Ответ на комментарий в код-ревью:
+// в случае использования здесь generic class не совсем понятно,
+// какую практическую пользу это принесет.
 export class Popup extends Block {
   constructor(props: PopupProps) {
     super(props);
     this.setProps({
       onClick: function(event: Event): void {
         if (event.target === this) {
-          EventBus.fire('popupHide');
+          EventBus.emit('popupHide');
         }
       },
     });

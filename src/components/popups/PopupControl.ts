@@ -1,5 +1,5 @@
-import {EventBus} from '../../modules/EventBus';
-import {Block} from '../../modules/Block';
+import {EventBus} from '../../core/EventBus';
+import {Block} from '../../core/Block';
 
 export class PopupControl extends Block {
   constructor(props?: Record<string, unknown>) {
@@ -10,7 +10,7 @@ export class PopupControl extends Block {
   }
   showPopup() {
     if (typeof this.props.forId === 'string') {
-      EventBus.fire('popupShow', this.props.forId);
+      EventBus.emit('popupShow', this.props.forId);
     }
   }
 }

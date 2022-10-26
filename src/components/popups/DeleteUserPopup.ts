@@ -1,11 +1,11 @@
-import {Popup, PopupProps} from './Popup';
+import {Popup} from './Popup';
 import {Form} from '../forms/Form';
 import {FormSet} from '../forms/FormSet';
 import {deleteUserFromChatService} from '../../services/chatChannels';
 
 export class DeleteUserPopup extends Popup {
-  constructor(props: PopupProps) {
-    super(props);
+  constructor() {
+    super({id: 'DeleteUserPopup'});
     const deleteUserForm = new FormSet({
       name: 'deleteUser',
       header: 'Удалить пользователя из чата',

@@ -1,25 +1,28 @@
 import {WideLayoutWithSidebar} from '../components/layouts/Wide+Side';
-import {Block} from '../modules/Block';
+import {Block} from '../core/Block';
 import {Form} from '../components/forms/Form';
 import {RowInput} from '../components/inputs/RowInput';
 import {RowLink} from '../components/links/RowLink';
 import {AvatarControl} from '../components/popups/AvatarControl';
+import {LoadPopup} from '../components/popups/LoadPopup';
 import {AvatarPopup} from '../components/popups/AvatarPopup';
 import {RoundButton} from '../components/buttons/RoundButton';
-import {StoreSynced} from '../modules/Store';
-import {profileLoadService} from '../services/profile';
+import {StoreSynced} from '../core/Store';
+import {authControlService} from '../services/login';
 import {logoutService} from '../services/login';
 import {sanitizeAll} from '../services/sanitizer';
-import {JSONWrapper} from '../modules/Utils';
+import {JSONWrapper} from '../core/Utils';
 import type {UserT} from '../constants/types';
 
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
-  popup: new AvatarPopup({id: 'AvatarPopup'}),
+  loadPopup: new LoadPopup(),
+  avatarPopup: new AvatarPopup(),
+  popup: `%{loadPopup}% %{avatarPopup}%`,
   aside: new RoundButton({url: '/messenger', label: '⬅'}),
 });
 
-view.on(Block.EVENTS.MOUNT, profileLoadService);
+view.on(Block.EVENTS.BEFORERENDER, authControlService);
 
 export const profileInputs: Array<{
   name: string;
@@ -55,11 +58,10 @@ const profileForm = new (StoreSynced(Form))({
           ${sanitizeAll((<UserT>user).first_name) ?? ''}
         </h1>
         %{ RowInput(${profileForm.props.inputs}...) }%
-        <br><br><br>
+        <br class="form__section-break">
         %{ RowLink({"url": "/settings/edit", "label": "Изменить данные"}) }%
         %{ RowLink({"url": "/settings/password", "label": "Изменить пароль"}) }%
         %{logoutLink}%
-        <br><br>
       `;
     } else {
       return `<h1 class="container__header">Загружаю...</h1>`;

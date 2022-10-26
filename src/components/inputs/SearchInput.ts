@@ -8,16 +8,16 @@ export class SearchInput extends Input {
   }
   render(props: InputPropsType) {
     return `
-      <div class="chatlist__search__field__wrapper">
+      <div class="chatlist__search-field-wrapper">
         <input name="${props.name}" type="text"
-          class="form__input__field chatlist__search__field"
+          class="form__input_field chatlist__search-field"
           value="${props.value || ''}"
           oninput="%{onInput}%"
           onblur="%{onBlur}%"
           onfocus="%{onFocus}%">
-        <label class="chatlist__search__label">
-          <span class="chatlist__search__label__icon"></span>
-          <span class="chatlist__search__label__text">Поиск...</span>
+        <label class="chatlist__search-label">
+          <span class="chatlist__search-label-icon"></span>
+          <span class="chatlist__search-label-text">Поиск...</span>
         </label>
       </div>
     `;

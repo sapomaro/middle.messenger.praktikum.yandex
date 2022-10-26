@@ -19,14 +19,14 @@
   background: $secondary-color;
 }
 
-.chatlist__item__wrapper {
+.chatlist__item-wrapper {
   display: flex;
   padding: 1rem 0;
   margin: -2px 1.5rem 0;
   border-top: 2px solid $border-color;
 }
 
-.chatlist__item__avatar {
+.chatlist__item-avatar {
   flex: 0 0 4rem;
   height: 4rem;
   width: 4rem;
@@ -37,12 +37,12 @@
   background-size: cover;
 }
 
-.chatlist__item__text {
+.chatlist__item-text {
   flex: 1;
   margin: 0 1rem;
 }
 
-.chatlist__item__info {
+.chatlist__item-info {
   flex: 0;
   display: flex;
   flex-flow: column;
@@ -50,23 +50,23 @@
   align-items: flex-end;
 }
 
-.chatlist__item__name {
+.chatlist__item-name {
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
-.chatlist__item__message__quote {
+.chatlist__item-message-quote {
   word-wrap: break-word;
   overflow-wrap: anywhere;
   color: $note-color;
 }
 
-.chatlist__item__time {
+.chatlist__item-time {
   font-size: 0.75rem;
   color: $note-color;
 }
 
-.chatlist__item__unreads {
+.chatlist__item-unreads {
   font-size: 0.8rem;
   line-height: 2rem;
   border-radius: 50%;
@@ -78,7 +78,7 @@
   align-items: center;
 }
 
-.chatlist__item__unreads__count:not(:empty) {
+.chatlist__item-unreads-count:not(:empty) {
   height: 2rem;
   width: 2rem;
 }

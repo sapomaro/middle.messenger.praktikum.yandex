@@ -1,6 +1,6 @@
 import './StandardButton.scss';
 
-import {Block} from '../../modules/Block';
+import {Block} from '../../core/Block';
 
 type IncomingProps = {
   name: string;
@@ -29,7 +29,7 @@ export class StandardButton extends Block {
           ${props.isLoading? 'disabled="disabled"' : ''}>
             ${props.isLoading? 'Запрос обрабатывается...' : props.label}
         </button>
-        <span class="form__input__error">${props.error || ''}</span>
+        <span class="form__input-error">${props.error || ''}</span>
       </div>
     `;
   }

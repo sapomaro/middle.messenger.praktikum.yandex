@@ -1,22 +1,23 @@
 import {NarrowLayout} from '../components/layouts/Narrow';
-import {Block} from '../modules/Block';
+import {Block} from '../core/Block';
 import {Form} from '../components/forms/Form';
 import {FormError} from '../components/forms/FormError';
 import {StandardInput as Input} from '../components/inputs/StandardInput';
 import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {StandardLink as Link} from '../components/links/StandardLink';
-import {JSONWrapper} from '../modules/Utils';
-
-import {StoreSynced} from '../modules/Store';
+import {LoadPopup} from '../components/popups/LoadPopup';
+import {JSONWrapper} from '../core/Utils';
+import {StoreSynced} from '../core/Store';
+import {authControlService} from '../services/login';
 import {registerService} from '../services/register';
-import {profileRedirectService} from '../services/profile';
 import type {RequestT} from '../constants/types';
 
 const view = new NarrowLayout({
   title: 'Регистрация',
+  popup: new LoadPopup(),
 });
 
-view.on(Block.EVENTS.BEFORERENDER, profileRedirectService);
+view.on(Block.EVENTS.BEFORERENDER, authControlService);
 
 const inputs = JSONWrapper.stringify([
   {name: 'email', type: 'email', label: 'Почта'},
@@ -41,7 +42,6 @@ const regForm = new Form({
   fieldset: () => `
     <h1 class="container__header">%{title}%</h1>
     %{ Input(${inputs}...) }%
-    <br><br>
     %{formSubmitButton}%
     %{formError}%
     %{ Link({"url": "/", "label": "Войти"}) }%

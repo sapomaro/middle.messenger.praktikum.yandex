@@ -1,6 +1,6 @@
 import './Chats.scss';
 
-import {EventBus} from '../../modules/EventBus';
+import {EventBus} from '../../core/EventBus';
 import {Layout} from './Layout';
 
 export class ChatsLayout extends Layout {

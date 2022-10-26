@@ -1,12 +1,12 @@
-import {Store} from '../modules/Store';
-import {EventBus} from '../modules/EventBus';
-import {JSONWrapper} from '../modules/Utils';
-import {chatsAPI, chatsSocketAPI} from '../api/chats';
+import {Store} from '../core/Store';
+import {EventBus} from '../core/EventBus';
+import {JSONWrapper} from '../core/Utils';
+import {API} from '../api/GlobalAPI';
+import {ChatSocket} from '../api/ChatSocket';
 import {chatsLoadService} from './chatChannels';
-import {profileLoadService} from './profile';
 import {errorHandler} from './errorHandler';
 
-import type {UserT, RequestT} from '../constants/types';
+import type {UserT, RequestT, MessageT} from '../constants/types';
 
 const chatKeepAliveInterval = 30000;
 const chatSelectInterval = 1000;
@@ -16,6 +16,8 @@ const getNewReconnectInterval = () => {
   chatReconnectInterval = chatReconnectInterval * 2;
   return chatReconnectInterval;
 };
+
+const chatSocket = new ChatSocket();
 
 let connectTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -41,19 +43,16 @@ EventBus.on('chatSelected', (chatId: number) => {
 });
 
 export const getChatTokenService = async (chatId: number) => {
-  return new Promise((resolve) => chatsAPI.getChatToken(chatId)
+  return API.getChatToken(chatId)
       .then(({responseJSON}) => {
         const token = responseJSON.token;
-        resolve(token);
+        return token;
       })
-      .catch(errorHandler));
+      .catch(errorHandler);
 };
 
 export const connectToChatService = async () => {
-  let user: UserT | null | unknown = Store.getState().user;
-  if (!user) {
-    user = await profileLoadService();
-  }
+  const user: UserT | null | unknown = Store.getState().user;
   if (!user || !('id' in user) ||
       typeof (user as UserT).id !== 'number') {
     try {
@@ -73,21 +72,15 @@ export const connectToChatService = async () => {
       errorHandler(error);
     }
   }
-  chatsSocketAPI.init({userId, chatId, token});
+  chatSocket.init({userId, chatId, token});
 };
 
 export const getOldMessagesService = async () => {
-  const socket = chatsSocketAPI.socket;
-  if (socket && socket.readyState !== WebSocket.CLOSED) {
-    chatsSocketAPI.send({content: '0', type: 'get old'});
-  }
+  chatSocket.send({content: '0', type: 'get old'});
 };
 
 export const sendMessageService = async (data: RequestT['SendMessage']) => {
-  const socket = chatsSocketAPI.socket;
-  if (socket && socket.readyState !== WebSocket.CLOSED) {
-    chatsSocketAPI.send({content: data.message, type: 'message'});
-  }
+  chatSocket.send({content: data.message, type: 'message'});
 };
 
 let chatKeepAlive: ReturnType<typeof setInterval> | null = null;
@@ -120,20 +113,18 @@ EventBus.on('webSocketOpen', () => {
   getOldMessagesService();
   chatsLoadService();
   socketUnloadService();
-  const socket = chatsSocketAPI.socket;
   chatKeepAlive = setInterval(() => {
-    if (socket && socket.readyState !== WebSocket.CLOSED) {
-      chatsSocketAPI.send({type: 'ping'});
-    }
+    chatSocket.send({type: 'ping'});
   }, chatKeepAliveInterval);
 });
 
 EventBus.on('webSocketMessage', (data: string) => {
-  let messages = Store.getState().activeChatMessages;
+  let messages = Store.getState().activeChatMessages as Array<MessageT>;
   if (typeof messages === 'object' && messages instanceof Array) {
+    const count = messages.length;
     const parsed = JSONWrapper.parse(data);
     if (parsed instanceof Array) {
-      messages.push(...parsed);
+      messages.push(...parsed as Array<MessageT>);
       messages = messages.sort((a, b) => {
         if (a.time && b.time) {
           const timeA = new Date(a.time).getTime();
@@ -143,8 +134,15 @@ EventBus.on('webSocketMessage', (data: string) => {
         return 0;
       });
     } else {
-      messages.push(parsed);
+      if (parsed.type && parsed.type !== 'pong') {
+        messages.push(parsed as MessageT);
+      }
     }
-    Store.setState({activeChatMessages: messages});
+    if (count !== messages.length) {
+      Store.setState({
+        activeChatMessages: messages,
+        count: messages.length, // для принудительного обновления стейта
+      });
+    }
   }
 });

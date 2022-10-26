@@ -1,6 +1,6 @@
 import './ChatList.scss';
 
-import {Block} from '../../modules/Block';
+import {Block} from '../../core/Block';
 import {ChatListItem} from './ChatListItem';
 
 import type {ChatT} from '../../constants/types';

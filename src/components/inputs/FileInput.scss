@@ -1,13 +1,13 @@
 @import "../../constants/colors.scss";
 
-.form__input__file {
+.form__input_file {
   visibility: hidden;
 }
 
-.form__input__file__wrapper {
+.form__input_file-wrapper {
   display: block;
 }
 
-.form__input__file__note {
+.form__input_file-note {
   color: $note-color;
 }

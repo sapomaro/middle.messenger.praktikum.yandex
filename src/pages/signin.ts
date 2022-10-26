@@ -1,22 +1,22 @@
 import {NarrowLayout} from '../components/layouts/Narrow';
-import {Block} from '../modules/Block';
+import {Block} from '../core/Block';
 import {Form} from '../components/forms/Form';
 import {FormError} from '../components/forms/FormError';
 import {StandardInput as Input} from '../components/inputs/StandardInput';
 import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {StandardLink as Link} from '../components/links/StandardLink';
-
-import {StoreSynced} from '../modules/Store';
-import {loginService} from '../services/login';
-import {profileRedirectService} from '../services/profile';
+import {LoadPopup} from '../components/popups/LoadPopup';
+import {StoreSynced} from '../core/Store';
+import {loginService, authControlService} from '../services/login';
 
 import type {RequestT} from '../constants/types';
 
 const view = new NarrowLayout({
   title: 'Вход',
+  popup: new LoadPopup(),
 });
 
-view.on(Block.EVENTS.BEFORERENDER, profileRedirectService);
+view.on(Block.EVENTS.BEFORERENDER, authControlService);
 
 const authForm = new Form({
   name: 'auth',
@@ -32,7 +32,6 @@ const authForm = new Form({
     <h1 class="container__header">%{title}%</h1>
     %{ Input({"name": "login", "type": "text", "label": "Логин"}) }%
     %{ Input({"name": "password", "type": "password", "label": "Пароль"}) }%
-    <br><br><br>
     %{formSubmitButton}%
     %{formError}%
     %{ Link({"url": "/sing-up", "label": "Нет аккаунта?"}) }%

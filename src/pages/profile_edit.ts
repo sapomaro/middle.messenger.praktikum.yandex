@@ -1,24 +1,28 @@
 import {WideLayoutWithSidebar} from '../components/layouts/Wide+Side';
-import {Block} from '../modules/Block';
+import {Block} from '../core/Block';
 import {Form} from '../components/forms/Form';
 import {FormError} from '../components/forms/FormError';
 import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {RowInput as Input} from '../components/inputs/RowInput';
 import {AvatarControl} from '../components/popups/AvatarControl';
+import {LoadPopup} from '../components/popups/LoadPopup';
 import {AvatarPopup} from '../components/popups/AvatarPopup';
 import {RoundButton} from '../components/buttons/RoundButton';
-import {JSONWrapper} from '../modules/Utils';
+import {JSONWrapper} from '../core/Utils';
 import {profileInputs} from './profile';
-import {StoreSynced} from '../modules/Store';
-import {profileLoadService, profileEditService} from '../services/profile';
+import {StoreSynced} from '../core/Store';
+import {authControlService} from '../services/login';
+import {profileEditService} from '../services/profile';
 
 const view = new WideLayoutWithSidebar({
   title: 'Изменить данные',
-  popup: new AvatarPopup({id: 'AvatarPopup'}),
+  loadPopup: new LoadPopup(),
+  avatarPopup: new AvatarPopup(),
+  popup: `%{loadPopup}% %{avatarPopup}%`,
   aside: new RoundButton({url: '/settings', label: '⬅'}),
 });
 
-view.on(Block.EVENTS.MOUNT, profileLoadService);
+view.on(Block.EVENTS.BEFORERENDER, authControlService);
 
 const profileForm = new (StoreSynced(Form))({
   name: 'profile',
@@ -37,10 +41,9 @@ const profileForm = new (StoreSynced(Form))({
       return `
         %{avatarControl}%
         %{ Input(${profileForm.props.inputs}...) }%
-        <br><br><br>
+        <br class="form__section-break">
         %{formSubmitButton}%
         %{formError}%
-        <br><br>
       `;
     } else {
       return `<h1 class="container__header">Загружаю...</h1>`;

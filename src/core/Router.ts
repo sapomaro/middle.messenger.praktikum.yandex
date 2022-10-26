@@ -1,8 +1,9 @@
-import type {Block} from '../modules/Block';
+import type {Block} from '../core/Block';
 
 class RouterService {
   static __instance: RouterService;
   public routes: Record<string, Block> = {};
+  public currentRoute: string;
   public currentView: Block;
   private firstRender = true;
   private notFoundRoute = '';
@@ -45,6 +46,7 @@ class RouterService {
       this.currentView.destroy();
     }
     this.currentView = this.routes[route];
+    this.currentRoute = route;
     this.currentView.renderToBody();
   }
   redirect(pathname: string) {

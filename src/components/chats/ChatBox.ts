@@ -1,8 +1,8 @@
 import './ChatBox.scss';
 
-import {EventBus} from '../../modules/EventBus';
-import {Store, StoreSynced} from '../../modules/Store';
-import {Block} from '../../modules/Block';
+import {EventBus} from '../../core/EventBus';
+import {Store, StoreSynced} from '../../core/Store';
+import {Block} from '../../core/Block';
 import {ChatBoxHeader} from './ChatBoxHeader';
 import {ChatBoxFooter} from './ChatBoxFooter';
 import {Messages} from './Messages';
@@ -22,7 +22,7 @@ export class ChatBox extends Block {
       msgArea,
     });
     msgArea.on(`${Block.EVENTS.MOUNT}, ${Block.EVENTS.REMOUNT}`, () => {
-      EventBus.fire('updateLayoutScrollPosition');
+      EventBus.emit('updateLayoutScrollPosition');
     });
     EventBus.on('chatSelected', (chatId: number) => {
       let chat: Record<string, unknown> | null = null;
