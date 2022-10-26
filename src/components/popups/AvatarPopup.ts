@@ -1,12 +1,12 @@
-import {Popup, PopupProps} from './Popup';
+import {Popup} from './Popup';
 import {FormSet} from '../forms/FormSet';
 import {Form} from '../forms/Form';
 import {FileInput} from '../inputs/FileInput';
 import {avatarChangeService} from '../../services/profile';
 
 export class AvatarPopup extends Popup {
-  constructor(props: PopupProps) {
-    super(props);
+  constructor() {
+    super({id: 'AvatarPopup'});
     const avatarForm = new FormSet({
       name: 'avatar',
       header: 'Загрузите файл',

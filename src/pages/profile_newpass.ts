@@ -4,18 +4,20 @@ import {Form} from '../components/forms/Form';
 import {FormError} from '../components/forms/FormError';
 import {StandardButton as Button} from '../components/buttons/StandardButton';
 import {RowInput as Input} from '../components/inputs/RowInput';
+import {LoadPopup} from '../components/popups/LoadPopup';
 import {AvatarControl} from '../components/popups/AvatarControl';
 import {RoundButton} from '../components/buttons/RoundButton';
 import {StoreSynced} from '../core/Store';
-import {profileLoadService, profilePasswordService} from '../services/profile';
+import {authControlService} from '../services/login';
+import {profilePasswordService} from '../services/profile';
 
 const view = new WideLayoutWithSidebar({
   title: 'Изменить пароль',
-  popup: '',
+  popup: new LoadPopup(),
   aside: new RoundButton({url: '/settings', label: '⬅'}),
 });
 
-view.on(Block.EVENTS.MOUNT, profileLoadService);
+view.on(Block.EVENTS.BEFORERENDER, authControlService);
 
 const profileForm = new Form({
   name: 'changepassword',

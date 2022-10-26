@@ -1,23 +1,17 @@
 import {Store} from '../core/Store';
 import {Router} from '../core/Router';
-import {authAPI} from '../api/auth';
+import {API} from '../api/GlobalAPI';
 import {errorHandler} from './errorHandler';
+import {getUserDataService} from './login';
 
 import type {RequestT} from '../constants/types';
 
 export const registerService = async (data: RequestT['Register']) => {
   Store.setState({isLoading: true});
-  authAPI.signup(data)
-      .then(() => {
-        authAPI.getUserData()
-            .then(({responseJSON}) => {
-              Store.setState({
-                user: responseJSON.user,
-                currentFormError: null,
-              });
-              Router.navigate('/messenger');
-            })
-            .catch(errorHandler);
+  API.signup(data)
+      .then(async () => {
+        await getUserDataService();
+        Router.navigate('/messenger');
       })
       .catch(errorHandler)
       .finally(() => {

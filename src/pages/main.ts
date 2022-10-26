@@ -4,6 +4,7 @@ import {JSONWrapper} from '../core/Utils';
 
 const view = new NarrowLayout({
   title: 'Карта экранов приложения',
+  popup: '',
   Link,
 });
 

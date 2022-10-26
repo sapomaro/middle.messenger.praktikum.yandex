@@ -4,10 +4,11 @@ import {Form} from '../components/forms/Form';
 import {RowInput} from '../components/inputs/RowInput';
 import {RowLink} from '../components/links/RowLink';
 import {AvatarControl} from '../components/popups/AvatarControl';
+import {LoadPopup} from '../components/popups/LoadPopup';
 import {AvatarPopup} from '../components/popups/AvatarPopup';
 import {RoundButton} from '../components/buttons/RoundButton';
 import {StoreSynced} from '../core/Store';
-import {profileLoadService} from '../services/profile';
+import {authControlService} from '../services/login';
 import {logoutService} from '../services/login';
 import {sanitizeAll} from '../services/sanitizer';
 import {JSONWrapper} from '../core/Utils';
@@ -15,11 +16,13 @@ import type {UserT} from '../constants/types';
 
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
-  popup: new AvatarPopup({id: 'AvatarPopup'}),
+  loadPopup: new LoadPopup(),
+  avatarPopup: new AvatarPopup(),
+  popup: `%{loadPopup}% %{avatarPopup}%`,
   aside: new RoundButton({url: '/messenger', label: '⬅'}),
 });
 
-view.on(Block.EVENTS.MOUNT, profileLoadService);
+view.on(Block.EVENTS.BEFORERENDER, authControlService);
 
 export const profileInputs: Array<{
   name: string;

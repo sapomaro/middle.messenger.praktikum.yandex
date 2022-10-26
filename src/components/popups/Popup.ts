@@ -5,6 +5,7 @@ import {Block} from '../../core/Block';
 import {Store} from '../../core/Store';
 
 export type PopupProps = {
+  [key: string]: string;
   id: string;
 };
 

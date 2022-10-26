@@ -1,10 +1,10 @@
 import {Store} from '../core/Store';
 import {EventBus} from '../core/EventBus';
 import {JSONWrapper} from '../core/Utils';
-import {chatsAPI} from '../api/chats';
+import {API} from '../api/GlobalAPI';
 import {ChatSocket} from '../api/ChatSocket';
 import {chatsLoadService} from './chatChannels';
-import {profileLoadService} from './profile';
+//import {profileLoadService} from './profile';
 import {errorHandler} from './errorHandler';
 
 import type {UserT, RequestT} from '../constants/types';
@@ -44,19 +44,17 @@ EventBus.on('chatSelected', (chatId: number) => {
 });
 
 export const getChatTokenService = async (chatId: number) => {
-  return new Promise((resolve) => chatsAPI.getChatToken(chatId)
+  return API.getChatToken(chatId)
       .then(({responseJSON}) => {
         const token = responseJSON.token;
-        resolve(token);
+        return token;
       })
-      .catch(errorHandler));
+      .catch(errorHandler);
 };
 
 export const connectToChatService = async () => {
   let user: UserT | null | unknown = Store.getState().user;
-  if (!user) {
-    user = await profileLoadService();
-  }
+  //if (!user) { user = await profileLoadService(); }
   if (!user || !('id' in user) ||
       typeof (user as UserT).id !== 'number') {
     try {

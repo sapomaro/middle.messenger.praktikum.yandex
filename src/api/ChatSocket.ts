@@ -1,8 +1,9 @@
 import {EventBus} from '../core/EventBus';
 import {JSONWrapper} from '../core/Utils';
-import {chatsWebSocketUrl} from './base';
 
 import type {RequestT, MessageT} from '../constants/types';
+
+const API_CHATS_WEBSOCKET_URL = 'wss://ya-praktikum.tech/ws/chats';
 
 export class ChatSocket {
   private static __instance: ChatSocket;
@@ -16,7 +17,7 @@ export class ChatSocket {
   init({userId, chatId, token}: RequestT['SocketInit']) {
     this.close();
     this.activeSocket =
-      new WebSocket(`${chatsWebSocketUrl}/${userId}/${chatId}/${token}`);
+      new WebSocket(`${API_CHATS_WEBSOCKET_URL}/${userId}/${chatId}/${token}`);
     this.registerEvents();
   }
   close() {

@@ -18,10 +18,10 @@ export type OptionsT = {
 };
 
 export type ResponseT = {
-  responseText: string;
-  responseJSON: PlainObject
-  responseHeaders: PlainObject;
-  status: number;
+  status?: number;
+  responseHeaders?: PlainObject;
+  responseText?: string;
+  responseJSON?: PlainObject;
 } | Error;
 
 export class HTTPTransport {
@@ -111,7 +111,7 @@ export class HTTPTransport {
         xhr.onabort = handleError;
         xhr.onerror = handleError;
         xhr.ontimeout = handleError;
-      })(),
+      }.bind(this))(),
     );
   }
 
