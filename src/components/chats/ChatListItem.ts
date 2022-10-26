@@ -18,7 +18,7 @@ export class ChatListItem extends Block {
       activate: () => {
         setTimeout(() => {
           this.toggleActive();
-          const chatId = this.props.id ?? 0;
+          const chatId = this.props.id as number ?? 0;
           EventBus.emit('chatSelected', chatId);
           Store.setState({activeChatId: chatId});
         }, 1);

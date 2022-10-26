@@ -5,7 +5,7 @@ import {API} from '../api/GlobalAPI';
 import {errorHandler} from './errorHandler';
 import {socketUnloadService} from './chatMessaging';
 
-import type {RequestT, ChatT, ErrorT} from '../constants/types';
+import type {RequestT, ChatT, ResponseT} from '../constants/types';
 
 const chatsLoadInterval = 15000;
 
@@ -52,7 +52,7 @@ export const chatsLoadService = async (callback?: () => void) => {
           chatsLoadService();
         }, chatsLoadInterval);
       })
-      .catch((error: ErrorT) => {
+      .catch((error: ResponseT) => {
         errorHandler(error);
         Store.setState({user: null, currentError: null});
         Router.redirect('/');

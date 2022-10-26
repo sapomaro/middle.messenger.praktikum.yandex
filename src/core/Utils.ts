@@ -1,8 +1,4 @@
-export type PlainObject<T = unknown> = {
-  [k in string]: T;
-};
-
-export type JSONable = PlainObject | Array<unknown>;
+import type {PlainObject, JSONable} from '../constants/types';
 
 export function isPlainObject(value: unknown): value is PlainObject {
   return (typeof value === 'object' &&

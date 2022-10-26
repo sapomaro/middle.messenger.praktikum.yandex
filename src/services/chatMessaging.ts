@@ -4,10 +4,9 @@ import {JSONWrapper} from '../core/Utils';
 import {API} from '../api/GlobalAPI';
 import {ChatSocket} from '../api/ChatSocket';
 import {chatsLoadService} from './chatChannels';
-//import {profileLoadService} from './profile';
 import {errorHandler} from './errorHandler';
 
-import type {UserT, RequestT} from '../constants/types';
+import type {UserT, RequestT, MessageT} from '../constants/types';
 
 const chatKeepAliveInterval = 30000;
 const chatSelectInterval = 1000;
@@ -53,8 +52,7 @@ export const getChatTokenService = async (chatId: number) => {
 };
 
 export const connectToChatService = async () => {
-  let user: UserT | null | unknown = Store.getState().user;
-  //if (!user) { user = await profileLoadService(); }
+  const user: UserT | null | unknown = Store.getState().user;
   if (!user || !('id' in user) ||
       typeof (user as UserT).id !== 'number') {
     try {
@@ -121,11 +119,12 @@ EventBus.on('webSocketOpen', () => {
 });
 
 EventBus.on('webSocketMessage', (data: string) => {
-  let messages = Store.getState().activeChatMessages;
+  let messages = Store.getState().activeChatMessages as Array<MessageT>;
   if (typeof messages === 'object' && messages instanceof Array) {
+    const count = messages.length;
     const parsed = JSONWrapper.parse(data);
     if (parsed instanceof Array) {
-      messages.push(...parsed);
+      messages.push(...parsed as Array<MessageT>);
       messages = messages.sort((a, b) => {
         if (a.time && b.time) {
           const timeA = new Date(a.time).getTime();
@@ -135,8 +134,15 @@ EventBus.on('webSocketMessage', (data: string) => {
         return 0;
       });
     } else {
-      messages.push(parsed);
+      if (parsed.type && parsed.type !== 'pong') {
+        messages.push(parsed as MessageT);
+      }
     }
-    Store.setState({activeChatMessages: messages});
+    if (count !== messages.length) {
+      Store.setState({
+        activeChatMessages: messages,
+        count: messages.length, // для принудительного обновления стейта
+      });
+    }
   }
 });

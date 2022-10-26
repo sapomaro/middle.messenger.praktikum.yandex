@@ -1,4 +1,5 @@
-import {isPlainObject, isArrayOrObject, PlainObject} from './Utils';
+import {isPlainObject, isArrayOrObject} from './Utils';
+import type {PlainObject, ResponseT} from '../constants/types';
 
 enum METHOD {
   GET = 'GET',
@@ -17,28 +18,21 @@ export type OptionsT = {
   data?: unknown;
 };
 
-export type ResponseT = {
-  status?: number;
-  responseHeaders?: PlainObject;
-  responseText?: string;
-  responseJSON?: PlainObject;
-} | Error;
-
 export class HTTPTransport {
   public baseUrl = '';
-  get(url: string, data?: unknown): Promise<ResponseT> {
+  get(url: string, data?: unknown) {
     return this.request({url, method: METHOD.GET, data});
   }
-  post(url: string, data?: unknown): Promise<ResponseT> {
+  post(url: string, data?: unknown) {
     return this.request({url, method: METHOD.POST, data});
   }
-  put(url: string, data?: unknown): Promise<ResponseT> {
+  put(url: string, data?: unknown) {
     return this.request({url, method: METHOD.PUT, data});
   }
-  delete(url: string, data?: unknown): Promise<ResponseT> {
+  delete(url: string, data?: unknown) {
     return this.request({url, method: METHOD.DELETE, data});
   }
-  request(options: OptionsT): Promise<ResponseT> {
+  request(options: OptionsT) {
     let {
       url,
       method = METHOD.GET,
@@ -149,7 +143,10 @@ export class HTTPTransport {
       if (isArrayOrObject(value)) {
         result.push(...this.getParams(value, this.getKey(key, parentKey)));
       } else {
-        result.push([this.getKey(key, parentKey), encodeURIComponent(String(value))]);
+        result.push([
+          this.getKey(key, parentKey),
+          encodeURIComponent(String(value)),
+        ]);
       }
     }
     return result;
