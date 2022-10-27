@@ -111,7 +111,11 @@ export class HTTPTransport {
 
   setRequestHeaders(headers: PlainObject, dataType: string) {
     if (!headers['accept']) {
-      headers['accept'] = 'application/json';
+      if (dataType === 'json') {
+        headers['accept'] = 'application/json';
+      } else if (dataType === 'formdata') {
+        headers['accept'] = '*/*';
+      }
     }
     if (!headers['Content-Type']) {
       if (dataType === 'json') {
