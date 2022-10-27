@@ -33,6 +33,9 @@ class RouterService {
     return (pathname in this.routes);
   }
   getRealRoute(pathname: string) {
+    if (pathname.length > 1 && pathname.slice(-1) === '/') {
+      pathname = pathname.slice(0, -1);
+    }
     if (!this.routeExists(pathname)) {
       if (this.routeExists(this.notFoundRoute)) {
         return this.notFoundRoute;
