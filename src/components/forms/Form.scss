@@ -1,0 +1,21 @@
+@import "../../constants/colors.scss";
+
+.form {
+  width: inherit;
+  display: inherit;
+  justify-content: inherit;
+  align-items: inherit;
+}
+
+.form__input-error {
+  font-size: 0.75rem;
+  color: $danger-color;
+}
+
+.form__element_hidden {
+  display: none;
+}
+
+.form__section-break {
+  margin: 1rem 0;
+}

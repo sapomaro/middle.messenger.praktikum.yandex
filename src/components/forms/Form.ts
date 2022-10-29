@@ -1,8 +1,9 @@
-import './common.scss';
+import './Form.scss';
 
-import {Block} from '../../modules/Block';
+import {Block} from '../../core/Block';
 
 type IncomingProps = {
+  [key: string]: unknown;
   name: string;
   action?: string;
   method?: 'GET' | 'PUT' | 'POST' | 'DELETE';
@@ -12,6 +13,10 @@ type IncomingProps = {
 type EventState = Record<string, Record<string, string>>;
 
 export class Form extends Block {
+  public static EVENTS: Record<string, string> = {
+    SUBMIT_SUCCESS: 'submitSuccess',
+    SUBMIT_FAIL: 'submitFail',
+  };
   constructor(props: IncomingProps) {
     super(props);
     this.setProps({
@@ -28,15 +33,23 @@ export class Form extends Block {
         }
         const state: EventState = {errorMsgs: {}};
         this.listDescendants((block: Block) => {
-          block.fire('submit', event, state); // для валидации инпутов формы
+          block.emit('submit', event, state); // для валидации инпутов формы
         });
 
         if (Object.keys(state.errorMsgs).length === 0) {
-          console.log('Form successfully submitted: ');
-          console.log(data);
+          // console.log('Form successfully submitted: ');
+          // console.log(data);
+          this.emit(Form.EVENTS.SUBMIT_SUCCESS, data);
+          this.listDescendants((block: Block) => {
+            block.emit(Form.EVENTS.SUBMIT_SUCCESS, event, data);
+          });
         } else {
-          console.warn('Form validation failed: ');
-          console.warn(state.errorMsgs);
+          // console.warn('Form validation failed: ');
+          // console.warn(state.errorMsgs);
+          this.emit(Form.EVENTS.SUBMIT_FAIL, state.errorMsgs);
+          this.listDescendants((block: Block) => {
+            block.emit(Form.EVENTS.SUBMIT_FAIL, event, state.errorMsgs);
+          });
         }
         return false;
       },

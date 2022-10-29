@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <script type="module">
-  import {Router} from '../modules/Router';
+  import {Router} from '../core/Router';
   import {view as IndexPage} from './main';
-  import {view as AuthPage} from './auth';
-  import {view as RegisterPage} from './register';
+  import {view as SignInPage} from './signin';
+  import {view as SignUpPage} from './signup';
   import {view as ProfilePage} from './profile';
   import {view as ProfileEditPage} from './profile_edit';
   import {view as ProfilePassPage} from './profile_newpass';
   import {view as ChatsPage} from './chats';
   import {view as NotFoundPage} from './404';
   import {view as ServerErrorPage} from './500';
-  import {view as TestPage} from './test';
+  // import {view as TestPage} from './test';
 
-  Router.registerViews({
-    'index.html': IndexPage,
-    'auth.html': AuthPage,
-    'register.html': RegisterPage,
-    'profile.html': ProfilePage,
-    'profile_edit.html': ProfileEditPage,
-    'profile_newpass.html': ProfilePassPage,
-    'chats.html': ChatsPage,
-    '404.html': NotFoundPage,
-    '500.html': ServerErrorPage,
-    'test.html': TestPage,
+  Router.registerRoutes({
+    '/menu': IndexPage,
+    '/': SignInPage,
+    '/sing-up': SignUpPage,
+    '/settings': ProfilePage,
+    '/settings/edit': ProfileEditPage,
+    '/settings/password': ProfilePassPage,
+    '/messenger': ChatsPage,
+    '/500': ServerErrorPage,
   });
 
-  Router.renderView('index.html');
+  Router.registerNotFound({'/404': NotFoundPage});
+
+  Router.navigate(location.pathname);
 
 </script>

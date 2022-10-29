@@ -1,30 +1,30 @@
 import {WideLayoutWithSidebar} from '../components/layouts/Wide+Side';
+import {Block} from '../core/Block';
 import {Form} from '../components/forms/Form';
-import {StandardButton as Button} from '../components/forms/StandardButton';
-import {RowInput as Input} from '../components/forms/RowInput';
-import {RowLink} from '../components/forms/RowLink';
-import {AvatarControl} from '../components/forms/AvatarControl';
-import {AvatarPopup as Popup} from '../components/forms/AvatarPopup';
-import {RoundButtonLink} from '../components/RoundButtonLink';
-import {JSONWrapper} from '../modules/Utils';
+import {RowInput} from '../components/inputs/RowInput';
+import {RowLink} from '../components/links/RowLink';
+import {AvatarControl} from '../components/popups/AvatarControl';
+import {LoadPopup} from '../components/popups/LoadPopup';
+import {AvatarPopup} from '../components/popups/AvatarPopup';
+import {RoundButton} from '../components/buttons/RoundButton';
+import {StoreSynced} from '../core/Store';
+import {authControlService} from '../services/login';
+import {logoutService} from '../services/login';
+import {sanitizeAll} from '../services/sanitizer';
+import {JSONWrapper} from '../core/Utils';
+import type {UserT} from '../constants/types';
 
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
-  Popup, AvatarControl,
-  Form, Button, Input, RowLink,
-  BackButtonLink: new RoundButtonLink({url: 'chats.html'}),
+  loadPopup: new LoadPopup(),
+  avatarPopup: new AvatarPopup(),
+  popup: `%{loadPopup}% %{avatarPopup}%`,
+  aside: new RoundButton({url: '/messenger', label: '⬅'}),
 });
 
-const userData = {
-  email: 'pochta@yandex.ru',
-  login: 'ivanovivan',
-  first_name: 'Иван',
-  second_name: 'Иванов',
-  display_name: 'Ivan Ivanov',
-  phone: '+77777777777',
-};
+view.on(Block.EVENTS.BEFORERENDER, authControlService);
 
-const inputsData: Array<{
+export const profileInputs: Array<{
   name: string;
   type?: string;
   label: string;
@@ -39,27 +39,47 @@ const inputsData: Array<{
   {name: 'phone', type: 'tel', label: 'Телефон'},
 ];
 
-for (const input of inputsData) {
-  input.value = userData[input.name as keyof typeof userData];
-  input.readonly = true;
-}
-
-const inputs = JSONWrapper.stringify(inputsData);
-
-view.props.contents = new Form({
+const profileForm = new (StoreSynced(Form))({
   name: 'profile',
-  action: '',
-  fieldset: () => `
-    %{ AvatarControl }%
-    <h1 class="container__header">${userData.first_name}</h1>
-    %{ Input(${inputs}...) }%
-    <br><br><br>
-    %{ RowLink({"url": "profile_edit.html", "label": "Изменить данные"}) }%
-    %{ RowLink({"url": "profile_newpass.html", "label": "Изменить пароль"}) }%
-    %{ RowLink({"url": "auth.html", "label": "Выйти",
-                "style": "container__link_danger"}) }%
-    <br><br>
-  `,
+  RowInput, RowLink,
+  avatarControl: new (StoreSynced(AvatarControl))({forId: 'AvatarPopup'}),
+  logoutLink: new RowLink({
+    url: '/',
+    label: 'Выйти',
+    style: 'container__link_danger',
+    onclick: logoutService,
+  }),
+  fieldset: () => {
+    const user = profileForm.props.user;
+    if (user && profileForm.props.inputs) {
+      return `
+        %{ avatarControl }%
+        <h1 class="container__header">
+          ${sanitizeAll((<UserT>user).first_name) ?? ''}
+        </h1>
+        %{ RowInput(${profileForm.props.inputs}...) }%
+        <br class="form__section-break">
+        %{ RowLink({"url": "/settings/edit", "label": "Изменить данные"}) }%
+        %{ RowLink({"url": "/settings/password", "label": "Изменить пароль"}) }%
+        %{logoutLink}%
+      `;
+    } else {
+      return `<h1 class="container__header">Загружаю...</h1>`;
+    }
+  },
 });
+
+profileForm.on(Block.EVENTS.BEFORERENDER, () => {
+  const user = profileForm.props.user;
+  if (user) {
+    for (const input of profileInputs) {
+      input.value = user[input.name as keyof typeof user];
+      input.readonly = true;
+    }
+    profileForm.props.inputs = JSONWrapper.stringify(profileInputs);
+  }
+});
+
+view.props.contents = profileForm;
 
 export {view};

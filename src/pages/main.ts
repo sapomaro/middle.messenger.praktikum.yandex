@@ -1,22 +1,22 @@
 import {NarrowLayout} from '../components/layouts/Narrow';
-import {MenuLink as Link} from '../components/MenuLink';
-import {JSONWrapper} from '../modules/Utils';
+import {MenuLink as Link} from '../components/links/MenuLink';
+import {JSONWrapper} from '../core/Utils';
 
 const view = new NarrowLayout({
   title: 'Карта экранов приложения',
+  popup: '',
   Link,
 });
 
 const links = JSONWrapper.stringify([
-  {url: 'auth.html', label: 'Вход'},
-  {url: 'register.html', label: 'Регистрация'},
-  {url: 'profile.html', label: 'Профиль'},
-  {url: 'profile_edit.html', label: 'Редактирование профиля'},
-  {url: 'profile_newpass.html', label: 'Смена пароля'},
-  {url: 'chats.html', label: 'Чаты'},
-  {url: '404.html', label: 'Страница 404'},
-  {url: '500.html', label: 'Страница 500'},
-  {url: 'test.html', label: 'Тест XHR'},
+  {url: '/', label: 'Вход'},
+  {url: '/sing-up', label: 'Регистрация'},
+  {url: '/settings', label: 'Профиль'},
+  {url: '/settings/edit', label: 'Редактирование профиля'},
+  {url: '/settings/password', label: 'Смена пароля'},
+  {url: '/messenger', label: 'Чаты'},
+  {url: '/404', label: 'Страница 404'},
+  {url: '/500', label: 'Страница 500'},
 ]);
 
 view.props.contents = () => `

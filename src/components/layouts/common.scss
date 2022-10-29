@@ -23,25 +23,12 @@ body {
 
 .root {
   position: relative;
-  min-width: 100vw;
+  width: 100vw;
+  max-width: 100%;
   min-height: 100vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.popup {
-  position: fixed;
-  z-index: 100;
-  display: none;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  overflow: hidden;
-  background: rgba(0 0 0 / 50%);
-  justify-content: center;
-  flex-direction: row;
 }
 
 .container {
@@ -55,7 +42,7 @@ body {
   font-size: 1.5rem;
   line-height: 1.5rem;
   text-align: center;
-  margin: 1rem 0 2rem;
+  margin: 1rem 0 3rem;
 }
 
 .container__row {
@@ -73,7 +60,7 @@ body {
 .container__element {
   position: relative;
   display: block;
-  margin: 1.5rem;
+  margin: 1rem;
   box-sizing: border-box;
 
   &_centered {
@@ -81,38 +68,15 @@ body {
     justify-content: center;
   }
 
+  &_adjacent {
+    margin-top: -1rem;
+    min-height: 1px;
+  }
+
   &_right {
     text-align: right;
     justify-content: flex-end;
   }
-}
-
-.container__link {
-  color: $main-color;
-  text-decoration: none;
-  cursor: pointer;
-
-  &:hover {
-    filter: brightness(0.9);
-    text-decoration: underline;
-  }
-
-  &_danger {
-    color: $danger-color;
-  }
-
-  &_secondary {
-    color: $note-color;
-  }
-
-  &_underlined {
-    text-decoration: underline;
-  }
-}
-
-a {
-  color: inherit;
-  text-decoration: inherit;
 }
 
 ul,
