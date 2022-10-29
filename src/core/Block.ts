@@ -36,6 +36,9 @@ type EventAttachment = {
 
 type Props = Record<string, unknown>;
 
+// Ответ на комментарий в код-ревью:
+// Generic classes реализовать пока не удаётся из-за ошибок в типах
+// (в частности в HOC-функции StoreSynced - /src/core/Store.ts:50)
 export class Block extends EventBus.Model {
   public static EVENTS: Record<string, string> = {
     INIT: 'INIT',

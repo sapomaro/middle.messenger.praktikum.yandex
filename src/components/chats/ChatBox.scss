@@ -142,6 +142,11 @@
   text-align: center;
 }
 
+.chatbox__icon_danger {
+  color: $danger-color;
+  border-color: $danger-color;
+}
+
 .chatbox__element_hidden {
   display: none;
 }
