@@ -21,11 +21,11 @@ export const timeConverter = (time?: string) => {
   const past = getTimeObj(time);
 
   if (current.year !== past.year) {
-    return `${past.day} ${past.month} ${past.year} г.`;
+    return `${past.day}&nbsp;${past.month} ${past.year}&nbsp;г.`;
   }
   const difference = current.day - past.day;
   if (current.month !== past.month || difference > 6) {
-    return `${past.day} ${past.month}`;
+    return `${past.day}&nbsp;${past.month}`;
   }
   if (difference > 0) {
     return `${past.weekday}`;

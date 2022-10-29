@@ -50,12 +50,12 @@ view.props.contents = new ChatBox();
 
 view.props.profileLink = new Link({
   url: '/settings',
-  label: 'Профиль&ensp;<small>❯</small>',
+  label: 'Профиль&nbsp;&nbsp;<small>❯</small>',
 });
 
 const addChatControl = new PopupControl({forId: 'AddChatPopup'});
 view.props.addChatButton = new RoundButton({
-  label: '<b>＋</b> Добавить чат&nbsp;',
+  label: '<b>＋</b>&nbsp;Новый чат&nbsp;',
   onclick: () => {
     addChatControl.showPopup();
   },

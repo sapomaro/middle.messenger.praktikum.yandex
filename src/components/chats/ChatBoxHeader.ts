@@ -16,7 +16,7 @@ export class ChatBoxHeader extends Block {
       }),
       remUser: new ChatBoxControl({
         label: 'Удалить пользователя',
-        iconStyle: 'chatbox__icon-circle',
+        iconStyle: 'chatbox__icon-circle chatbox__icon_danger',
         iconText: '×',
         forId: 'DeleteUserPopup',
       }),
