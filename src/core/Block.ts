@@ -152,6 +152,10 @@ export class Block extends EventBus.Model {
       this.element;
   }
 
+  getElement() {
+    return this.getContent()?.[0];
+  }
+
   listDescendants(callback: Fn): void {
     const elementNodes = this.getContent();
     if (!elementNodes) {
