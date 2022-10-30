@@ -21,6 +21,8 @@ const chatSocket = new ChatSocket();
 
 let connectTimer: ReturnType<typeof setTimeout> | null = null;
 
+let chatKeepAlive: ReturnType<typeof setInterval> | null = null;
+
 export const socketUnloadService = () => {
   if (connectTimer) {
     clearTimeout(connectTimer);
@@ -63,6 +65,7 @@ export const connectToChatService = async () => {
   const token = await getChatTokenService(chatId) as string;
   if (!token) {
     errorHandler(new Error('Token error'));
+    return;
   }
   chatSocket.init({userId, chatId, token});
 };
@@ -74,8 +77,6 @@ export const getOldMessagesService = async () => {
 export const sendMessageService = async (data: RequestT['SendMessage']) => {
   chatSocket.send({content: data.message, type: 'message'});
 };
-
-let chatKeepAlive: ReturnType<typeof setInterval> | null = null;
 
 EventBus.on('webSocketInit', () => {
   Store.setState({activeChatMessages: [], isLoading: true});

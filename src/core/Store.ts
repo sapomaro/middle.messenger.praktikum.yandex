@@ -47,19 +47,21 @@ class StoreService extends EventBus.Model {
 
 const Store = new StoreService();
 
-function StoreSynced(CustomBlock: typeof Block) {
+function StoreSynced(CustomBlock: typeof Block): typeof CustomBlock {
   return class extends CustomBlock {
     public ignoreSyncProps: Array<keyof StateT> = [];
     constructor(props?: StateT) {
       super({...props, ...Store.getState()});
       Store.on(Store.EVENTS.UPDATE, (newState: StateT) => {
-        const newStateCopy = {...newState};
         if (this.ignoreSyncProps.length > 0) {
+          const newStateCopy = {...newState};
           this.ignoreSyncProps.forEach((key) => {
             delete newStateCopy[key];
           });
+          this.setProps(newStateCopy);
+        } else {
+          this.setProps(newState);
         }
-        this.setProps(newStateCopy);
       });
     }
     ignoreSync(props: Array<keyof StateT>) {
