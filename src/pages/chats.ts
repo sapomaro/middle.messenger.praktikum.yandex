@@ -33,6 +33,7 @@ view.on(Block.EVENTS.BEFORERENDER, chatsLoadService);
 view.on(Block.EVENTS.UNMOUNT, chatsUnloadService);
 
 const chatList = new (StoreSynced(ChatList))();
+chatList.ignoreSync(['isLoading']);
 
 const searchInput = new SearchInput({name: 'search'});
 

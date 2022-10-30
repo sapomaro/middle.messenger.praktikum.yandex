@@ -22,7 +22,7 @@ export class Input extends Block {
     super(props);
     const self = this; /* потому что в событийных коллбэках ниже
                           this = элементу, на который они вешаются */
-    this.setProps({
+    this.setPropsWithoutRerender({
       value: props.value || props.placeholder || '',
       onFocus: function(event: Event): void {
         if (!this.getAttribute('readonly')) {

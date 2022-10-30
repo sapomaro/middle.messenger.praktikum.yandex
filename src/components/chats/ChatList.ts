@@ -10,13 +10,11 @@ type ChatListType = Record<string, unknown>;
 export class ChatList extends Block {
   constructor(props: ChatListType) {
     super(props);
-    this.setProps({
-      reactivate: () => {
-        this.listDescendants((item: ChatListItem) => {
-          item.toggleInactive();
-        });
-      },
-    });
+    this.props.reactivate = () => {
+      this.listDescendants((item: ChatListItem) => {
+        item.toggleInactive();
+      });
+    };
   }
   filterChats(searchValue: string) {
     this.listDescendants((item: ChatListItem) => {

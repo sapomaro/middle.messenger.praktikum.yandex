@@ -6,6 +6,14 @@ export function isPlainObject(value: unknown): value is PlainObject {
     value.constructor === Object);
 }
 
+export function isKeyOfObject(key: unknown,
+    obj: unknown): key is keyof typeof obj {
+  if (!isPlainObject(obj)) return false;
+  if (typeof key !== 'string') return false;
+  if (key in obj && typeof obj[key] !== 'undefined') return true;
+  return false;
+}
+
 export function isArray(value: unknown): value is [] {
   return Array.isArray(value);
 }
@@ -63,9 +71,7 @@ export function objIntersect<T extends object>(base: T, chunk: T): boolean {
     if (base instanceof Object) {
       if (!(chunk instanceof Object)) return false;
       for (const [key, value] of Object.entries(chunk)) {
-        if (!(key in base)) return false;
-        // @ts-ignore: TS не воспринимает какую-либо типизацию base[key],
-        // выдавая ошибку TS2345 или TS7053 (as keyof typeof base не помогает)
+        if (!isKeyOfObject(key, base)) return false;
         if (!compareDeepRecursive(base[key], value)) {
           return false;
         }

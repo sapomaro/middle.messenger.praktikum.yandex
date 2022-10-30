@@ -19,7 +19,7 @@ export class Form extends Block {
   };
   constructor(props: IncomingProps) {
     super(props);
-    this.setProps({
+    this.setPropsWithoutRerender({
       onSubmit: (event: Event) => {
         event.preventDefault();
         const form = document.forms.namedItem(props.name);

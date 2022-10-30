@@ -67,7 +67,7 @@ export class Block extends EventBus.Model {
     this.emit(Block.EVENTS.INIT);
   }
 
-  registerEvents(): void {
+  registerEvents() {
     this.nativeEventsList = [];
     this.on(Block.EVENTS.UPDATE, () => {
       this.replaceMultipleNodes(`[data-blockuid=${this.blockuid}]`, [this]);
@@ -97,7 +97,7 @@ export class Block extends EventBus.Model {
 
   makePropsProxy(props: Props): Props {
     // self = this;
-    const forbiddenCheck = (prop: string): void => {
+    const forbiddenCheck = (prop: string) => {
       if (prop.indexOf('_') === 0) {
         throw new Error('Нельзя использовать _');
       }
@@ -125,15 +125,21 @@ export class Block extends EventBus.Model {
     });
   }
 
-  setProps(newProps: Props): void {
+  setPropsWithoutRerender(newProps: Props) {
+    this.setProps(newProps, false);
+  }
+
+  setProps(newProps: Props, withRerender = true) {
     if (!objIntersect(this.props, newProps)) {
       this.propsCurrentUpdate = newProps;
       Object.assign(this.props, newProps);
-      this.emit(Block.EVENTS.UPDATE);
+      if (withRerender) {
+        this.emit(Block.EVENTS.UPDATE);
+      }
     }
   }
 
-  refresh(): void {
+  refresh() {
     this.emit(Block.EVENTS.UPDATE);
   }
 
@@ -240,7 +246,7 @@ export class Block extends EventBus.Model {
     return elem;
   }
 
-  replaceNode(node: BlockNodes, assets: Array<unknown>): void {
+  replaceNode(node: BlockNodes, assets: Array<unknown>) {
     const fragment: DocumentFragment = document.createDocumentFragment();
     const blocksList: Array<Block> = [];
     for (const asset of assets) {
@@ -259,14 +265,14 @@ export class Block extends EventBus.Model {
     }
   }
 
-  traverseText(node: BlockNodes): void {
+  traverseText(node: BlockNodes) {
     const assets: Array<unknown> = this.templator.resolve(node.textContent);
     if (!(assets.length === 1 && assets[0] === node.textContent)) {
       this.replaceNode(node, assets);
     }
   }
 
-  traverseChildren(node: BlockNodes): void {
+  traverseChildren(node: BlockNodes) {
     if (!(node instanceof Node) || !node.childNodes) {
       return;
     }

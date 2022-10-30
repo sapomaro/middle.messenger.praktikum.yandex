@@ -12,7 +12,7 @@ export class DeleteUserPopup extends Popup {
       submitLabel: 'Удалить',
       inputs: '%{ Input({"name": "login", "label": "Логин"}) }%',
     });
-    this.setProps({popupContent: deleteUserForm});
+    this.setPropsWithoutRerender({popupContent: deleteUserForm});
     deleteUserForm.on(Form.EVENTS.SUBMIT_SUCCESS, deleteUserFromChatService);
   }
 }

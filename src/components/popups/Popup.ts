@@ -15,13 +15,11 @@ export type PopupProps = {
 export class Popup extends Block {
   constructor(props: PopupProps) {
     super(props);
-    this.setProps({
-      onClick: function(event: Event): void {
-        if (event.target === this) {
-          EventBus.emit('popupHide');
-        }
-      },
-    });
+    this.props.onClick = function(event: Event): void {
+      if (event.target === this) {
+        EventBus.emit('popupHide');
+      }
+    };
     EventBus.on('popupShow', (id: string) => {
       const popup = document.getElementById(id);
       if (popup) {

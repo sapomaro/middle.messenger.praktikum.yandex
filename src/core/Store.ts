@@ -10,7 +10,7 @@ enum StoreEvents {
 class StoreService extends EventBus.Model {
   static __instance: StoreService;
   public EVENTS = StoreEvents;
-  public state: StateT = {
+  public state: Required<StateT> = {
     user: null,
     chats: [],
     activeChatId: 0,
@@ -47,15 +47,25 @@ class StoreService extends EventBus.Model {
 
 const Store = new StoreService();
 
-const StoreSynced = (CustomBlock: typeof Block) => {
+function StoreSynced(CustomBlock: typeof Block) {
   return class extends CustomBlock {
+    public ignoreSyncProps: Array<keyof StateT> = [];
     constructor(props?: StateT) {
       super({...props, ...Store.getState()});
       Store.on(Store.EVENTS.UPDATE, (newState: StateT) => {
-        this.setProps(newState);
+        const newStateCopy = {...newState};
+        if (this.ignoreSyncProps.length > 0) {
+          this.ignoreSyncProps.forEach((key) => {
+            delete newStateCopy[key];
+          });
+        }
+        this.setProps(newStateCopy);
       });
     }
+    ignoreSync(props: Array<keyof StateT>) {
+      this.ignoreSyncProps = props;
+    }
   };
-};
+}
 
 export {Store, StoreSynced};

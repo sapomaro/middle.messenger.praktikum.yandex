@@ -55,22 +55,14 @@ export const connectToChatService = async () => {
   const user: UserT | null | unknown = Store.getState().user;
   if (!user || !('id' in user) ||
       typeof (user as UserT).id !== 'number') {
-    try {
-      throw new Error('No user ID');
-    } catch (error) {
-      errorHandler(error);
-    }
+    errorHandler(new Error('No user ID'));
     return;
   }
   const userId = (user as UserT).id;
   const chatId = Store.getState().activeChatId as number;
   const token = await getChatTokenService(chatId) as string;
   if (!token) {
-    try {
-      throw new Error('Token error');
-    } catch (error) {
-      errorHandler(error);
-    }
+    errorHandler(new Error('Token error'));
   }
   chatSocket.init({userId, chatId, token});
 };
@@ -118,6 +110,15 @@ EventBus.on('webSocketOpen', () => {
   }, chatKeepAliveInterval);
 });
 
+function msgSort(a: MessageT, b: MessageT) {
+  if (a.time && b.time) {
+    const timeA = new Date(a.time).getTime();
+    const timeB = new Date(b.time).getTime();
+    return timeA - timeB;
+  }
+  return 0;
+}
+
 EventBus.on('webSocketMessage', (data: string) => {
   let messages = Store.getState().activeChatMessages as Array<MessageT>;
   if (typeof messages === 'object' && messages instanceof Array) {
@@ -125,14 +126,7 @@ EventBus.on('webSocketMessage', (data: string) => {
     const parsed = JSONWrapper.parse(data);
     if (parsed instanceof Array) {
       messages.push(...parsed as Array<MessageT>);
-      messages = messages.sort((a, b) => {
-        if (a.time && b.time) {
-          const timeA = new Date(a.time).getTime();
-          const timeB = new Date(b.time).getTime();
-          return timeA - timeB;
-        }
-        return 0;
-      });
+      messages = messages.sort(msgSort);
     } else {
       if (parsed.type && parsed.type !== 'pong') {
         messages.push(parsed as MessageT);

@@ -16,7 +16,7 @@ export class ChatBox extends Block {
   constructor(props?: ChatBoxType) {
     super(props);
     const msgArea = new (StoreSynced(Messages))();
-    this.setProps({
+    this.setPropsWithoutRerender({
       ChatBoxHeader,
       ChatBoxFooter,
       msgArea,
