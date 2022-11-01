@@ -240,10 +240,12 @@ export class Block extends EventBus.Model {
       } else {
         elem = this.buildNode(asset as RenderFn);
       }
-    } else if (typeof asset === 'object' && asset instanceof Block) {
-      elem = asset.build();
-    } else if (typeof asset === 'object' && asset instanceof HTMLElement) {
-      elem = asset;
+    } else if (typeof asset === 'object') {
+      if (asset instanceof Block) {
+        elem = asset.build();
+      } else if (asset instanceof HTMLElement) {
+        elem = asset;
+      }
     }
     // поиск шаблонов для замены на пропсы родителя
     this.traverseChildren(elem);

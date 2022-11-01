@@ -12,7 +12,8 @@ export class MessageTextarea extends Input {
           bubbles: true,
           cancelable: true,
         });
-        (event.currentTarget as HTMLTextAreaElement).form?.dispatchEvent?.(submitEvent);
+        (event.currentTarget as HTMLTextAreaElement)
+            .form?.dispatchEvent?.(submitEvent);
       }
     };
     this.on('submit', (): void => {

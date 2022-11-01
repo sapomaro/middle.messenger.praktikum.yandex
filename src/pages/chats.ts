@@ -17,13 +17,8 @@ import {StoreSynced} from '../core/Store';
 
 const view = new ChatsLayout({
   title: 'Чаты',
-  loadPopup: new LoadPopup(),
-  addUserPopup: new AddUserPopup(),
-  deleteUserPopup: new DeleteUserPopup(),
-  addChatPopup: new AddChatPopup(),
-  deleteChatPopup: new DeleteChatPopup(),
-  popup: `%{loadPopup}% %{addUserPopup}% %{deleteUserPopup}%
-    %{addChatPopup}% %{deleteChatPopup}%`,
+  popup: [LoadPopup, AddUserPopup, DeleteUserPopup,
+    AddChatPopup, DeleteChatPopup],
 });
 
 view.on(Block.EVENTS.BEFORERENDER, authControlService);

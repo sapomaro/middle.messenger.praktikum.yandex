@@ -53,13 +53,6 @@ export class Form extends Block {
       }
       return false;
     };
-    /*this.listDescendants((block: Block) => {
-      block.on('formElementSubmit', () => {
-        if (typeof this.props.onSubmit === 'function') {
-          this.props.onSubmit(document.createEvent('SubmitEvent'));
-        }
-      });
-    });*/
   }
   render(props: IncomingProps): string {
     return `
