@@ -28,17 +28,19 @@ view.on(Block.EVENTS.BEFORERENDER, chatsLoadService);
 view.on(Block.EVENTS.UNMOUNT, chatsUnloadService);
 
 const chatList = new (StoreSynced(ChatList))();
+
 chatList.ignoreSync(['isLoading']);
 
 const searchInput = new SearchInput({name: 'search'});
 
 searchInput.on('input', () => {
-  (chatList as ChatList).filterChats(searchInput.props.value as string ?? '');
+  (chatList as unknown as ChatList)
+      .filterChats(searchInput.props.value as string ?? '');
 });
-
 chatList.on(Block.EVENTS.UPDATE, () => {
   setTimeout(() => {
-    (chatList as ChatList).filterChats(searchInput.props.value as string ?? '');
+    (chatList as unknown as ChatList)
+        .filterChats(searchInput.props.value as string ?? '');
   }, 10);
 });
 

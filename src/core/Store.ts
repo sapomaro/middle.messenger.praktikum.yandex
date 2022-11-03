@@ -47,7 +47,7 @@ class StoreService extends EventBus.Model {
 
 const Store = new StoreService();
 
-function StoreSynced(CustomBlock: typeof Block): typeof CustomBlock {
+function StoreSynced(CustomBlock: typeof Block) {
   return class extends CustomBlock {
     public ignoreSyncProps: Array<keyof StateT> = [];
     constructor(props?: StateT) {

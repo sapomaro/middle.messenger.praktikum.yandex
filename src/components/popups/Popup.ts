@@ -9,9 +9,6 @@ export type PopupProps = {
   id: string;
 };
 
-// Ответ на комментарий в код-ревью:
-// Generic classes реализовать пока не удаётся из-за ошибок в типах
-// (в частности в HOC-функции StoreSynced - /src/core/Store.ts:50)
 export class Popup extends Block {
   constructor(props: PopupProps) {
     super(props);
