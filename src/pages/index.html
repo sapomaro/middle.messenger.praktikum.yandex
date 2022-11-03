@@ -13,6 +13,7 @@
   // import {view as TestPage} from './test';
 
   Router.registerRoutes({
+    '/5\\d\\d': ServerErrorPage,
     '/menu': IndexPage,
     '/': SignInPage,
     '/sing-up': SignUpPage,
@@ -20,7 +21,6 @@
     '/settings/edit': ProfileEditPage,
     '/settings/password': ProfilePassPage,
     '/messenger': ChatsPage,
-    '/500': ServerErrorPage,
   });
 
   Router.registerNotFound({'/404': NotFoundPage});

@@ -3,7 +3,8 @@ import type {Block} from '../core/Block';
 class RouterService {
   static __instance: RouterService;
   public routes: Record<string, Block> = {};
-  public currentRoute: string;
+  public currentRoute = '';
+  public currentPathname = '';
   public currentView: Block;
   private firstRender = true;
   private notFoundRoute = '';
@@ -17,8 +18,8 @@ class RouterService {
   }
   init() {
     window.addEventListener('popstate', (event: PopStateEvent) => {
-      if (event && event.state && event.state.route) {
-        this.navigate(event.state.route);
+      if (event && event.state && event.state.pathname) {
+        this.navigate(event.state.pathname);
       }
     });
   }
@@ -29,48 +30,62 @@ class RouterService {
     this.routes = {...this.routes, ...route};
     this.notFoundRoute = Object.keys(route).pop() as string;
   }
-  routeExists(pathname: string) {
-    return (pathname in this.routes);
+  getCurrentPathname(trimmed = true) {
+    let currentPathname = this.currentPathname;
+    if (trimmed && currentPathname[0] === '/') {
+      currentPathname = currentPathname.slice(1);
+    }
+    return currentPathname;
+  }
+  searchRealRoute(pathname: string) {
+    if (pathname in this.routes) return pathname;
+    for (const route of Object.keys(this.routes)) {
+      const rule = new RegExp('^' + route + '$');
+      if (rule.test(pathname)) return route;
+    }
+    return null;
   }
   getRealRoute(pathname: string) {
     if (pathname.length > 1 && pathname.slice(-1) === '/') {
       pathname = pathname.slice(0, -1);
     }
-    if (!this.routeExists(pathname)) {
-      if (this.routeExists(this.notFoundRoute)) {
+    const route = this.searchRealRoute(pathname);
+    if (route === null) {
+      if (this.notFoundRoute) {
         return this.notFoundRoute;
       }
       return null;
     }
-    return pathname;
+    return route;
   }
-  renderRoute(route: string) {
+  renderRoute(route: string, pathname: string) {
     if (this.currentView) {
       this.currentView.destroy();
     }
     this.currentView = this.routes[route];
     this.currentRoute = route;
+    this.currentPathname = pathname;
     this.currentView.renderToBody();
   }
   redirect(pathname: string) {
     const route = this.getRealRoute(pathname);
     if (route === null) return;
-    history.replaceState({route}, '', pathname);
-    this.renderRoute(route);
+    history.replaceState({route, pathname}, '', pathname);
+    this.renderRoute(route, pathname);
   }
   navigate(pathname: string) {
     const route = this.getRealRoute(pathname);
     if (route === null) return;
     if (this.firstRender) {
-      history.replaceState({route}, '', pathname);
+      history.replaceState({route, pathname}, '', pathname);
       this.firstRender = false;
     } else {
       if (!history.state || !history.state.route ||
           history.state.route !== route) {
-        history.pushState({route}, '', pathname);
+        history.pushState({route, pathname}, '', pathname);
       }
     }
-    this.renderRoute(route);
+    this.renderRoute(route, pathname);
   }
   back() {
     history.back();
