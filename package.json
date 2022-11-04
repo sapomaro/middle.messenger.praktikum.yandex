@@ -1,15 +1,16 @@
 {
   "name": "middle.messenger.praktikum.yandex",
-  "version": "1.0.0",
-  "description": "sprint_3",
+  "version": "1.4.0",
+  "description": "sprint_4",
   "scripts": {
-    "dev": "parcel ./src/pages/*.html --no-cache",
-    "build": "parcel build ./src/pages/*.html",
+    "dev": "npx webpack serve --history-api-fallback",
+    "build": "npx webpack --mode=production",
     "start": "npm run build && node ./server.js",
     "tscheck": "npx tsc --noEmit",
     "eslint": "npx eslint \"./src/**/*.ts\" --ext .ts",
     "csslint": "npx stylelint \"./src/**/*.scss\"",
-    "lint": "npm audit && npm run tscheck && npm run eslint && npm run csslint"
+    "lint": "npm audit && npm run tscheck && npm run eslint && npm run csslint",
+    "test": "jest ./src/"
   },
   "targets": {
     "default": {
@@ -23,7 +24,7 @@
   "author": "Optimizitor",
   "license": "ISC",
   "devDependencies": {
-    "@parcel/transformer-sass": "2.7.0",
+    "@types/jest": "29.2.1",
     "@typescript-eslint/eslint-plugin": "5.38.0",
     "@typescript-eslint/parser": "5.38.0",
     "chai": "4.3.6",
@@ -31,14 +32,17 @@
     "eslint": "8.23.1",
     "eslint-config-google": "0.14.0",
     "html-webpack-plugin": "5.5.0",
+    "identity-obj-proxy": "3.0.0",
+    "jest": "29.2.2",
+    "jest-environment-jsdom": "29.2.2",
     "mocha": "10.1.0",
-    "parcel": "2.7.0",
     "sass": "1.54.9",
     "sass-loader": "13.1.0",
     "style-loader": "3.3.1",
     "stylelint": "14.12.1",
     "stylelint-config-standard": "28.0.0",
     "stylelint-config-standard-scss": "5.0.0",
+    "ts-jest": "29.0.3",
     "ts-loader": "9.4.1",
     "typescript": "4.8.4",
     "webpack": "5.74.0",
@@ -47,5 +51,13 @@
   },
   "dependencies": {
     "express": "4.18.2"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "preset": "ts-jest",
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/constants/jestFileMock.js",
+      "\\.(css|scss)$": "identity-obj-proxy"
+    }
   }
 }
