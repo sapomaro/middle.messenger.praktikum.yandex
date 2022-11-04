@@ -49,7 +49,7 @@ export class Templator {
           .replace(/&quot;/ig, '"'); // чистит пакости Парсела
       const unwrapRule = matches[3];
       let jsonObj: JSONable = JSONWrapper.parse(jsonStr);
-      
+
       const block = context[blockName as keyof ContextT] as Fn;
       if (typeof block === 'function') {
         const blocksList: Array<unknown> = [];
@@ -58,7 +58,9 @@ export class Templator {
         }
         for (const subcontext of jsonObj) {
           if (block.hasOwnProperty('prototype')) {
-            const Block = block as unknown as { new (subcontext: unknown): typeof Block; };
+            const Block = block as unknown as {
+              new (subcontext: unknown): typeof Block;
+            };
             blocksList.push(new Block(subcontext));
           }
         }
