@@ -23,25 +23,23 @@ module.exports = {
             },
           },
         ],
-        exclude: /(node_modules)/,
+        exclude: /node_modules/,
       },
       {
         test: /\.s[ac]ss$/i,
         use: [
-          {
-            loader: 'style-loader',
-            options: { injectType: 'singletonStyleTag' },
-          },
+          'style-loader',
           'css-loader',
           'sass-loader',
         ],
+        exclude: /node_modules/,
       },
       {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
         type: 'asset/resource',
       },
       {
-        test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+        test: /\.(woff(2)?|eot|ttf|otf|svg)$/,
         type: 'asset/inline',
       },
     ],
@@ -53,10 +51,8 @@ module.exports = {
     }),
   ],
   devServer: {
-    /*static: {
-      directory: path.join(__dirname, 'dist'),
-    },*/
-    compress: true,
     port: 1234,
+    compress: true,
+    hot: true,
   },
 };
