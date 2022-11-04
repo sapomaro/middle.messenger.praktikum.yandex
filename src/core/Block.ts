@@ -1,6 +1,6 @@
 import {EventBus} from './EventBus';
 import {Templator} from './Templator';
-import {rand, objIntersect} from './Utils';
+import {rand, isEmptyObject, objIntersect} from './Utils';
 
 import type {Fn} from '../constants/types';
 
@@ -25,8 +25,6 @@ const clearUid = (uid: string) => {
 };
 
 const instancesOfBlock: Record<string, Block> = {};
-
-//type Fn = (...args: Array<unknown>) => void;
 
 type RenderFn = (props?: Record<string, unknown>) => string;
 
@@ -129,7 +127,7 @@ export class Block extends EventBus.Model {
   }
 
   setProps(newProps: Props, withRerender = true) {
-    if (!objIntersect(this.props, newProps)) {
+    if (!isEmptyObject(newProps) && !objIntersect(this.props, newProps)) {
       this.propsCurrentUpdate = newProps;
       Object.assign(this.props, newProps);
       if (withRerender) {
@@ -227,19 +225,6 @@ export class Block extends EventBus.Model {
     if (typeof asset === 'string') {
       elem = document.createTextNode(asset);
     } else if (typeof asset === 'function') {
-      /*if (asset.hasOwnProperty('prototype')) {
-        // const block = new asset();
-        const block = new (asset as new() => typeof asset)() as {
-          (): void;
-          build: () => BlockNodesT;
-        }; // Typescript...
-        if (typeof block.build === 'function') {
-          elem = block.build();
-        }
-      } else {
-        elem = this.buildNode(asset as RenderFn);
-      }*/
-
       if (asset.hasOwnProperty('prototype') &&
           asset.prototype instanceof Block) {
         const Asset = asset as unknown as typeof Block;

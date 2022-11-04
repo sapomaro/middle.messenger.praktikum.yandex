@@ -1,5 +1,5 @@
 import {EventBus} from './EventBus';
-import {objIntersect} from './Utils';
+import {isEmptyObject, objIntersect} from './Utils';
 import type {Block} from './Block';
 import type {StateT} from '../constants/types';
 
@@ -34,7 +34,7 @@ class StoreService extends EventBus.Model {
   }
 
   setState(newState: StateT) {
-    if (!objIntersect(this.state, newState)) {
+    if (!isEmptyObject(newState) && !objIntersect(this.state, newState)) {
       Object.assign(this.state, newState);
       this.emit(this.EVENTS.UPDATE, newState);
     }
