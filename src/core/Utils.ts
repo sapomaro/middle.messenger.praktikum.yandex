@@ -8,9 +8,11 @@ export function isPlainObject(value: unknown): value is PlainObject {
 
 export function isKeyOfObject(key: unknown,
     obj: unknown): key is keyof typeof obj {
-  if (!isPlainObject(obj)) return false;
+  if (typeof obj !== 'object' || obj === null) return false;
   if (typeof key !== 'string') return false;
-  if (key in obj && typeof obj[key] !== 'undefined') return true;
+  if (key in obj && typeof obj[key as keyof typeof obj] !== 'undefined') {
+    return true;
+  }
   return false;
 }
 

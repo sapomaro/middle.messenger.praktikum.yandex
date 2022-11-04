@@ -2,6 +2,10 @@ import {EventBus} from './EventBus';
 import {Templator} from './Templator';
 import {rand, objIntersect} from './Utils';
 
+import type {Fn} from '../constants/types';
+
+type BlockNodesT = DocumentFragment | HTMLElement | ChildNode;
+
 const uids: Record<string, boolean> = {};
 
 const generateUid = () => {
@@ -22,9 +26,7 @@ const clearUid = (uid: string) => {
 
 const instancesOfBlock: Record<string, Block> = {};
 
-type BlockNodes = DocumentFragment | HTMLElement | ChildNode;
-
-type Fn = (...args: Array<unknown>) => void;
+//type Fn = (...args: Array<unknown>) => void;
 
 type RenderFn = (props?: Record<string, unknown>) => string;
 
@@ -50,7 +52,7 @@ export class Block extends EventBus.Model {
   private blockuid: string;
   private templator: Templator;
   private nativeEventsList: Array<Record<string, unknown>>;
-  private element: BlockNodes;
+  private element: BlockNodesT;
   public props: Props;
   public propsCurrentUpdate: Props = {};
 
@@ -175,7 +177,7 @@ export class Block extends EventBus.Model {
     }
   }
 
-  build(): BlockNodes {
+  build(): BlockNodesT {
     this.emit(Block.EVENTS.BEFORERENDER);
     this.element = this.buildNode(this.render.bind(this), this.props,
         (node: HTMLElement) => {
@@ -201,7 +203,7 @@ export class Block extends EventBus.Model {
 
     const fragment: DocumentFragment = document.createDocumentFragment();
     while (elementHolder.childNodes.length !== 0) {
-      const node: BlockNodes = elementHolder.childNodes[0];
+      const node: BlockNodesT = elementHolder.childNodes[0];
       if (callback) {
         callback(node);
       }
@@ -220,20 +222,29 @@ export class Block extends EventBus.Model {
     }
   }
 
-  resolveNode(asset: unknown): BlockNodes {
-    let elem: BlockNodes = document.createTextNode('');
+  resolveNode(asset: unknown): BlockNodesT {
+    let elem: BlockNodesT = document.createTextNode('');
     if (typeof asset === 'string') {
       elem = document.createTextNode(asset);
     } else if (typeof asset === 'function') {
-      if (asset.hasOwnProperty('prototype')) {
+      /*if (asset.hasOwnProperty('prototype')) {
         // const block = new asset();
         const block = new (asset as new() => typeof asset)() as {
           (): void;
-          build: () => BlockNodes;
+          build: () => BlockNodesT;
         }; // Typescript...
         if (typeof block.build === 'function') {
           elem = block.build();
         }
+      } else {
+        elem = this.buildNode(asset as RenderFn);
+      }*/
+
+      if (asset.hasOwnProperty('prototype') &&
+          asset.prototype instanceof Block) {
+        const Asset = asset as unknown as typeof Block;
+        const block = new Asset();
+        elem = block.build();
       } else {
         elem = this.buildNode(asset as RenderFn);
       }
@@ -249,7 +260,7 @@ export class Block extends EventBus.Model {
     return elem;
   }
 
-  replaceNode(node: BlockNodes, assets: Array<unknown>) {
+  replaceNode(node: BlockNodesT, assets: Array<unknown>) {
     const fragment: DocumentFragment = document.createDocumentFragment();
     const blocksList: Array<Block> = [];
     for (const asset of assets) {
@@ -268,14 +279,14 @@ export class Block extends EventBus.Model {
     }
   }
 
-  traverseText(node: BlockNodes) {
+  traverseText(node: BlockNodesT) {
     const assets: Array<unknown> = this.templator.resolve(node.textContent);
     if (!(assets.length === 1 && assets[0] === node.textContent)) {
       this.replaceNode(node, assets);
     }
   }
 
-  traverseChildren(node: BlockNodes) {
+  traverseChildren(node: BlockNodesT) {
     if (!(node instanceof Node) || !node.childNodes) {
       return;
     }
