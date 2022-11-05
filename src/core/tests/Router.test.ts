@@ -6,7 +6,7 @@ describe('core/Router', () => {
   it('should register routes', () => {
     const mockPage = {} as unknown as Block;
     mockPage.renderToBody = jest.fn();
-    mockPage.destroy = jest.fn();
+    mockPage.unmount = jest.fn();
 
     Router.registerRoutes({'/test': mockPage});
     Router.registerRoutes({'/5\\d\\d': mockPage});
@@ -33,17 +33,17 @@ describe('core/Router', () => {
     expect(location.pathname).toBe('/523');
   });
 
-  it('should render & destroy views', () => {
+  it('should render & unmount views', () => {
     const mockPage = {} as unknown as Block;
     mockPage.renderToBody = jest.fn();
-    mockPage.destroy = jest.fn();
+    mockPage.unmount = jest.fn();
 
     Router.registerRoutes({'/test2': mockPage});
     Router.navigate('/test2');
     Router.navigate('/test');
 
     expect(mockPage.renderToBody).toBeCalledTimes(1);
-    expect(mockPage.destroy).toBeCalledTimes(1);
+    expect(mockPage.unmount).toBeCalledTimes(1);
   });
 
   it('should navigate to any route if 404 view was set', () => {

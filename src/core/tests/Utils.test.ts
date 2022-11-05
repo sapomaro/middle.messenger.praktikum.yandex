@@ -1,6 +1,8 @@
 import {isPlainObject, isKeyOfObject, isEmptyObject,
   isArray, isArrayOrObject, arraysAreEqual,
-  cloneDeep, objIntersect} from '../Utils';
+  cloneDeep, objIntersect, rand, JSONWrapper} from '../Utils';
+
+import type {JSONable} from '../../constants/types';
 
 describe('core/Utils (advanced)', () => {
   test('cloneDeep works properly', () => {
@@ -46,6 +48,33 @@ describe('core/Utils (advanced)', () => {
 });
 
 describe('core/Utils (basic)', () => {
+  test('JSONWrapper.parse works properly', () => {
+    expect(JSONWrapper.parse('{"key": 1}')).toEqual({key: 1});
+    expect(JSONWrapper.parse('[{"a": 1}, "2"]')).toEqual([{a: 1}, '2']);
+  });
+
+  test('JSONWrapper.parse should warn on bad JSON data', () => {
+    global.console.warn = jest.fn();
+
+    expect(JSONWrapper.parse('wrongentry')).toEqual({});
+    expect(global.console.warn).toBeCalled();
+  });
+
+  test('JSONWrapper.stringify works properly', () => {
+    expect(JSONWrapper.stringify({key: 1})).toBe('{"key":1}');
+    expect(JSONWrapper.stringify([{a: 1}, '2'])).toBe('[{"a":1},"2"]');
+    expect(JSONWrapper.stringify(/test/ as unknown as JSONable)).toEqual('{}');
+  });
+
+  test('rand works properly', () => {
+    expect(rand(1, 2)).toBeGreaterThan(0);
+    expect(rand(1, 2)).toBeLessThan(3);
+    expect(rand(4, 5)).toBeGreaterThan(3);
+    expect(rand(4, 5)).toBeLessThan(6);
+    expect(rand(8, 9)).toBeGreaterThan(7);
+    expect(rand(8, 9)).toBeLessThan(10);
+  });
+
   test('isPlainObject works properly', () => {
     expect(isPlainObject({})).toBe(true);
     expect(isPlainObject({test: 123})).toBe(true);

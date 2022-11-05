@@ -26,31 +26,31 @@ describe('core/Store', () => {
   });
 
   it('should emit event after store was updated', () => {
-    const mock = jest.fn();
+    const mockFn = jest.fn();
 
-    Store.on('updated', mock);
+    Store.on('updated', mockFn);
     Store.setState({test: 2});
 
-    expect(mock).toBeCalledTimes(1);
-    expect(mock).toHaveBeenCalledWith({test: 2});
+    expect(mockFn).toBeCalledTimes(1);
+    expect(mockFn).toHaveBeenCalledWith({test: 2});
   });
 
   it('should not emit event if store was not changed', () => {
-    const mock = jest.fn();
+    const mockFn = jest.fn();
 
     Store.setState({test: 3});
-    Store.on('updated', mock);
+    Store.on('updated', mockFn);
     Store.setState({});
     Store.setState({test: 3});
 
-    expect(mock).not.toHaveBeenCalled();
+    expect(mockFn).not.toHaveBeenCalled();
   });
 });
 
 describe('core/StoreSynced', () => {
   it('should update if store was updated', () => {
-    const mock = jest.fn() as unknown as typeof Block;
-    const mockSynced = new (StoreSynced(mock))();
+    const MockBlock = jest.fn() as unknown as typeof Block;
+    const mockSynced = new (StoreSynced(MockBlock))();
     mockSynced.setProps = jest.fn();
 
     Store.setState({test: 4});
@@ -60,8 +60,8 @@ describe('core/StoreSynced', () => {
   });
 
   it('should not update if property set to ignored', () => {
-    const mock = jest.fn() as unknown as typeof Block;
-    const mockSynced = new (StoreSynced(mock))();
+    const MockBlock = jest.fn() as unknown as typeof Block;
+    const mockSynced = new (StoreSynced(MockBlock))();
     mockSynced.setProps = jest.fn();
 
     mockSynced.ignoreSync(['test']);
