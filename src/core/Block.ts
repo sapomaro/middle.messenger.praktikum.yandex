@@ -20,11 +20,14 @@ const generateUid = () => {
   uids[uid] = true;
   return uid;
 };
-const clearUid = (uid: string) => {
-  delete uids[uid];
-};
 
 const instancesOfBlock: Record<string, Block> = {};
+
+const clearUid = (uid: string) => {
+  delete uids[uid];
+  delete instancesOfBlock[uid];
+};
+
 
 type RenderFn = (props?: Record<string, unknown>) => string;
 
@@ -50,7 +53,7 @@ export class Block extends EventBus.Model {
   private blockuid: string;
   private templator: Templator;
   private nativeEventsList: Array<Record<string, unknown>>;
-  private element: BlockNodesT;
+  private element: BlockNodesT | null = null;
   public props: Props;
   public propsCurrentUpdate: Props = {};
 
@@ -64,7 +67,7 @@ export class Block extends EventBus.Model {
     this.emit(Block.EVENTS.INIT);
   }
 
-  registerEvents() {
+  private registerEvents() {
     this.nativeEventsList = [];
     this.on(Block.EVENTS.UPDATE, () => {
       this.replaceMultipleNodes(`[data-blockuid=${this.blockuid}]`, [this]);
@@ -82,17 +85,76 @@ export class Block extends EventBus.Model {
       this.nativeEventsList = [];
       this.listDescendants((block: Block) => {
         block.emit(Block.EVENTS.UNMOUNT);
-        delete instancesOfBlock[block.blockuid];
         clearUid(block.blockuid);
       });
     });
   }
 
-  destroy() {
+  unmount() {
     this.emit(Block.EVENTS.UNMOUNT);
+    const nodeList = this.getContent();
+    if (nodeList) {
+      for (const node of nodeList) {
+        node.parentNode?.removeChild(node);
+      }
+    }
+    this.element = null;
   }
 
-  makePropsProxy(props: Props): Props {
+  refresh() {
+    this.emit(Block.EVENTS.UPDATE);
+  }
+
+  isInDOM(): boolean {
+    return document.querySelector(`[data-blockuid=${this.blockuid}]`) !== null;
+  }
+
+  getContent() {
+    return document.querySelectorAll(`[data-blockuid=${this.blockuid}]`) ||
+      this.element;
+  }
+
+  getElement() {
+    return this.getContent()?.[0];
+  }
+
+  setPropsWithoutRerender(newProps: Props) {
+    this.setProps(newProps, false);
+  }
+
+  setProps(newProps: Props, withRerender = true) {
+    if (!isEmptyObject(newProps) && !objIntersect(this.props, newProps)) {
+      this.propsCurrentUpdate = newProps;
+      Object.assign(this.props, newProps);
+      if (withRerender) {
+        this.emit(Block.EVENTS.UPDATE);
+      }
+    }
+  }
+
+  listDescendants(callback: Fn): void {
+    const elementNodes = this.getContent();
+    if (!elementNodes) {
+      return;
+    }
+    for (const node of elementNodes) {
+      if (!(node instanceof HTMLElement)) {
+        continue;
+      }
+      const nestedElementNodes = node.querySelectorAll('[data-blockuid]');
+      for (const nestedNode of nestedElementNodes) {
+        if (nestedNode instanceof HTMLElement &&
+            nestedNode.dataset && nestedNode.dataset.blockuid) {
+          const block: Block = instancesOfBlock[nestedNode.dataset.blockuid];
+          if (block) {
+            callback(block);
+          }
+        }
+      }
+    }
+  }
+
+  private makePropsProxy(props: Props): Props {
     // self = this;
     const forbiddenCheck = (prop: string) => {
       if (prop.indexOf('_') === 0) {
@@ -122,60 +184,7 @@ export class Block extends EventBus.Model {
     });
   }
 
-  setPropsWithoutRerender(newProps: Props) {
-    this.setProps(newProps, false);
-  }
-
-  setProps(newProps: Props, withRerender = true) {
-    if (!isEmptyObject(newProps) && !objIntersect(this.props, newProps)) {
-      this.propsCurrentUpdate = newProps;
-      Object.assign(this.props, newProps);
-      if (withRerender) {
-        this.emit(Block.EVENTS.UPDATE);
-      }
-    }
-  }
-
-  refresh() {
-    this.emit(Block.EVENTS.UPDATE);
-  }
-
-  isInDOM(): boolean {
-    return document.querySelector(`[data-blockuid=${this.blockuid}]`) !== null;
-  }
-
-  getContent(): NodeList {
-    return document.querySelectorAll(`[data-blockuid=${this.blockuid}]`) ||
-      this.element;
-  }
-
-  getElement() {
-    return this.getContent()?.[0];
-  }
-
-  listDescendants(callback: Fn): void {
-    const elementNodes = this.getContent();
-    if (!elementNodes) {
-      return;
-    }
-    for (const node of elementNodes) {
-      if (!(node instanceof HTMLElement)) {
-        continue;
-      }
-      const nestedElementNodes = node.querySelectorAll('[data-blockuid]');
-      for (const nestedNode of nestedElementNodes) {
-        if (nestedNode instanceof HTMLElement &&
-            nestedNode.dataset && nestedNode.dataset.blockuid) {
-          const block: Block = instancesOfBlock[nestedNode.dataset.blockuid];
-          if (block) {
-            callback(block);
-          }
-        }
-      }
-    }
-  }
-
-  build(): BlockNodesT {
+  private build(): BlockNodesT {
     this.emit(Block.EVENTS.BEFORERENDER);
     this.element = this.buildNode(this.render.bind(this), this.props,
         (node: HTMLElement) => {
@@ -193,7 +202,7 @@ export class Block extends EventBus.Model {
     return `${props?.value}`;
   }
 
-  buildNode(renderer: RenderFn,
+  private buildNode(renderer: RenderFn,
       props: Record<string, unknown> | undefined = {},
       callback: Fn | null = null) {
     const elementHolder: HTMLElement = document.createElement('DIV');
@@ -210,7 +219,7 @@ export class Block extends EventBus.Model {
     return fragment;
   }
 
-  replaceMultipleNodes(selector: string, assets: Array<Block>): void {
+  private replaceMultipleNodes(selector: string, assets: Array<Block>): void {
     const nodeList: NodeList = document.querySelectorAll(selector);
     if (nodeList && nodeList.length) {
       for (let i = nodeList.length - 1; i > 0; --i) {
@@ -220,7 +229,7 @@ export class Block extends EventBus.Model {
     }
   }
 
-  resolveNode(asset: unknown): BlockNodesT {
+  private resolveNode(asset: unknown): BlockNodesT {
     let elem: BlockNodesT = document.createTextNode('');
     if (typeof asset === 'string') {
       elem = document.createTextNode(asset);
@@ -245,7 +254,7 @@ export class Block extends EventBus.Model {
     return elem;
   }
 
-  replaceNode(node: BlockNodesT, assets: Array<unknown>) {
+  private replaceNode(node: BlockNodesT, assets: Array<unknown>) {
     const fragment: DocumentFragment = document.createDocumentFragment();
     const blocksList: Array<Block> = [];
     for (const asset of assets) {
@@ -264,7 +273,7 @@ export class Block extends EventBus.Model {
     }
   }
 
-  traverseText(node: BlockNodesT) {
+  private traverseText(node: BlockNodesT) {
     const assets: Array<unknown> = this.templator.resolve(node.textContent);
     if (!(assets.length === 1 && assets[0] === node.textContent)) {
       this.replaceNode(node, assets);
@@ -325,4 +334,3 @@ export class Block extends EventBus.Model {
     });
   }
 }
-

@@ -60,7 +60,7 @@ class RouterService {
   }
   renderRoute(route: string, pathname: string) {
     if (this.currentView) {
-      this.currentView.destroy();
+      this.currentView.unmount();
     }
     this.currentView = this.routes[route];
     this.currentRoute = route;
