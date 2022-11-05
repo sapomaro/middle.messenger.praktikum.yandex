@@ -10,7 +10,7 @@
     "eslint": "npx eslint \"./src/**/*.ts\" --ext .ts",
     "csslint": "npx stylelint \"./src/**/*.scss\"",
     "lint": "npm audit && npm run tscheck && npm run eslint && npm run csslint",
-    "test": "jest ./src/"
+    "test": "jest ./src/ --verbose"
   },
   "targets": {
     "default": {
