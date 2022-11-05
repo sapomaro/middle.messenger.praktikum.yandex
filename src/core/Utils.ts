@@ -4,6 +4,11 @@ export async function sleep(ms = 100) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export async function step(name: string, callback: () => string) {
+  await callback();
+  return name;
+}
+
 export function isPlainObject(value: unknown): value is PlainObject {
   return (typeof value === 'object' &&
     value !== null &&
