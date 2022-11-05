@@ -6,7 +6,7 @@ type ContextT = JSONable | Window;
 type AssetsT = Array<unknown>;
 
 export class Templator {
-  public context: ContextT;
+  private context: ContextT;
   private PP_PATTERN: RegExp;
   private PP_SUBPATTERN_JSONFUNC: RegExp;
 
@@ -18,7 +18,7 @@ export class Templator {
       /^([^( ]+)\(\s?([{[][^]*?[}\]])(\.\.\.)?\s?\)$/;
   }
 
-  resolveVariable(pattern: string): unknown {
+  private resolveVariable(pattern: string): unknown {
     let currentContext: unknown = this.context;
     const props = pattern.split('.');
     for (const key of props) {
@@ -37,7 +37,7 @@ export class Templator {
     return currentContext;
   }
 
-  resolveSubPattern(pattern: string): unknown | null {
+  private resolveSubPattern(pattern: string): unknown | null {
     const context: ContextT = this.context;
     let matches: Array<string> | null;
 
@@ -72,7 +72,7 @@ export class Templator {
     return null;
   }
 
-  resolveAssets(str: string): AssetsT {
+  private resolveAssets(str: string): AssetsT {
     this.PP_PATTERN.lastIndex = 0;
     if (!this.PP_PATTERN.test(str)) {
       return [];
@@ -110,7 +110,7 @@ export class Templator {
     return assets;
   }
 
-  resolveAssetsRecursive(str: string): AssetsT {
+  private resolveAssetsRecursive(str: string): AssetsT {
     const assets: AssetsT = this.resolveAssets(str);
     if (assets.length > 0 && !(assets.length === 1 && assets[0] === str)) {
       let asset: AssetsT;
