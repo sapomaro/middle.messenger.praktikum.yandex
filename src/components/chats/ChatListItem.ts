@@ -12,17 +12,14 @@ import type {ChatT} from '../../constants/types';
 export class ChatListItem extends Block {
   constructor(props: ChatT) {
     super(props);
-    const activeChatId = Store.getState().activeChatId;
-    this.setProps({
-      active: (props.id === activeChatId),
-      activate: () => {
-        setTimeout(() => {
-          this.toggleActive();
-          const chatId = this.props.id as number ?? 0;
-          EventBus.emit('chatSelected', chatId);
-          Store.setState({activeChatId: chatId});
-        }, 1);
-      },
+    this.setPropsWithoutRerender({
+      active: (props.id === Store.state.activeChatId),
+      activate: () => setTimeout(() => {
+        this.toggleActive();
+        const chatId = this.props.id as number ?? 0;
+        EventBus.emit('chatSelected', chatId);
+        Store.setState({activeChatId: chatId});
+      }, 1),
     });
   }
   toggleActive() {

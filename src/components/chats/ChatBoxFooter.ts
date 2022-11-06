@@ -13,7 +13,7 @@ export class ChatBoxFooter extends Block {
       name: 'msg',
       fieldset: ChatboxFooterChildren,
     });
-    this.setProps({
+    this.setPropsWithoutRerender({
       content: msgForm,
       messageTextarea: new MessageTextarea({
         name: 'message',

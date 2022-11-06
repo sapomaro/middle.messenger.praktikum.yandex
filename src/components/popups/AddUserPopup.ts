@@ -12,7 +12,7 @@ export class AddUserPopup extends Popup {
       submitLabel: 'Добавить',
       inputs: '%{ Input({"name": "login", "label": "Логин"}) }%',
     });
-    this.setProps({popupContent: addUserForm});
+    this.setPropsWithoutRerender({popupContent: addUserForm});
     addUserForm.on(Form.EVENTS.SUBMIT_SUCCESS, addUserToChatService);
   }
 }

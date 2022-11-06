@@ -15,7 +15,7 @@ type FormSetProps = {
 export class FormSet extends Form {
   constructor(props: FormSetProps) {
     super(props);
-    this.setProps({
+    this.setPropsWithoutRerender({
       Input,
       formSubmitButton: new (StoreSynced(Button))({
         name: 'submit',

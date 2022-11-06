@@ -16,9 +16,7 @@ import {profileEditService} from '../services/profile';
 
 const view = new WideLayoutWithSidebar({
   title: 'Изменить данные',
-  loadPopup: new LoadPopup(),
-  avatarPopup: new AvatarPopup(),
-  popup: `%{loadPopup}% %{avatarPopup}%`,
+  popup: [LoadPopup, AvatarPopup],
   aside: new RoundButton({url: '/settings', label: '⬅'}),
 });
 

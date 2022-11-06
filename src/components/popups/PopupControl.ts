@@ -4,7 +4,7 @@ import {Block} from '../../core/Block';
 export class PopupControl extends Block {
   constructor(props?: Record<string, unknown>) {
     super(props);
-    this.setProps({
+    this.setPropsWithoutRerender({
       showPopup: this.showPopup.bind(this),
     });
   }

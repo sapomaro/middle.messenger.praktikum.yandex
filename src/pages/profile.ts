@@ -16,9 +16,7 @@ import type {UserT} from '../constants/types';
 
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
-  loadPopup: new LoadPopup(),
-  avatarPopup: new AvatarPopup(),
-  popup: `%{loadPopup}% %{avatarPopup}%`,
+  popup: [LoadPopup, AvatarPopup],
   aside: new RoundButton({url: '/messenger', label: '⬅'}),
 });
 

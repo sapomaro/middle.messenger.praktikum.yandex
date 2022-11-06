@@ -4,6 +4,8 @@ export type PlainObject<T = unknown> = {
 
 export type JSONable = PlainObject | Array<unknown>;
 
+export type Fn = (...args: Array<unknown>) => unknown;
+
 export type StateT = {
   [key: string]: unknown;
   user?: null | UserT,

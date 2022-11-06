@@ -8,3 +8,7 @@
 /dist
 
 /.old
+
+/.husky
+
+/coverage

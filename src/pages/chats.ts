@@ -17,13 +17,8 @@ import {StoreSynced} from '../core/Store';
 
 const view = new ChatsLayout({
   title: 'Чаты',
-  loadPopup: new LoadPopup(),
-  addUserPopup: new AddUserPopup(),
-  deleteUserPopup: new DeleteUserPopup(),
-  addChatPopup: new AddChatPopup(),
-  deleteChatPopup: new DeleteChatPopup(),
-  popup: `%{loadPopup}% %{addUserPopup}% %{deleteUserPopup}%
-    %{addChatPopup}% %{deleteChatPopup}%`,
+  popup: [LoadPopup, AddUserPopup, DeleteUserPopup,
+    AddChatPopup, DeleteChatPopup],
 });
 
 view.on(Block.EVENTS.BEFORERENDER, authControlService);
@@ -34,15 +29,18 @@ view.on(Block.EVENTS.UNMOUNT, chatsUnloadService);
 
 const chatList = new (StoreSynced(ChatList))();
 
+chatList.ignoreSync(['isLoading']);
+
 const searchInput = new SearchInput({name: 'search'});
 
 searchInput.on('input', () => {
-  (chatList as ChatList).filterChats(searchInput.props.value as string ?? '');
+  (chatList as unknown as ChatList)
+      .filterChats(searchInput.props.value as string ?? '');
 });
-
 chatList.on(Block.EVENTS.UPDATE, () => {
   setTimeout(() => {
-    (chatList as ChatList).filterChats(searchInput.props.value as string ?? '');
+    (chatList as unknown as ChatList)
+        .filterChats(searchInput.props.value as string ?? '');
   }, 10);
 });
 

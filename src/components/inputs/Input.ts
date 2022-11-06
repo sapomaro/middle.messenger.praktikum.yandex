@@ -13,6 +13,7 @@ export type InputPropsType = {
   error?: string;
   accept?: string;
   readonly?: boolean;
+  focused?: boolean;
 }
 
 type EventState = Record<string, Record<string, string>>;
@@ -22,7 +23,7 @@ export class Input extends Block {
     super(props);
     const self = this; /* потому что в событийных коллбэках ниже
                           this = элементу, на который они вешаются */
-    this.setProps({
+    this.setPropsWithoutRerender({
       value: props.value || props.placeholder || '',
       onFocus: function(event: Event): void {
         if (!this.getAttribute('readonly')) {
@@ -30,6 +31,7 @@ export class Input extends Block {
           //  self.validate.call(self, event);
           // }
           self.togglePlaceholder.call(self, event);
+          self.props.focused = true;
           self.emit('focus', event);
         }
       },
@@ -37,6 +39,7 @@ export class Input extends Block {
         if (!this.getAttribute('readonly')) {
           self.validate.call(self, event);
           self.togglePlaceholder.call(self, event);
+          self.props.focused = false;
           self.emit('blur', event);
         }
       },

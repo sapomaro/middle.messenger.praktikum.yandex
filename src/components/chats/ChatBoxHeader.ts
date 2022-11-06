@@ -7,7 +7,7 @@ export class ChatBoxHeader extends Block {
   constructor() {
     super();
     const deleteChatControl = new PopupControl({forId: 'DeleteChatPopup'});
-    this.setProps({
+    this.setPropsWithoutRerender({
       addUser: new ChatBoxControl({
         label: 'Добавить пользователя',
         iconStyle: 'chatbox__icon-circle',

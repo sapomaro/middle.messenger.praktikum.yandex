@@ -10,11 +10,13 @@
 
 ## Проблемы, которые предстоит решить
 
-При обновлении аватара на профиле сервер кидает ошибку 500 (/src/api/profile.ts:15)
+- При обновлении аватара на профиле сервер кидает ошибку 500 (/src/api/GlobalAPI.ts:28)
+
+- В тестах у XHR не срабатывает таймаут (/src/core/tests/HTTPTransport.test.ts:31)
 
 ## Команды
 
-Запуск dev-сервера Parcel (http://localhost:1234/): 
+Запуск dev-сервера Webpack (http://localhost:1234/): 
 
     npm run dev
 
@@ -26,8 +28,16 @@
 
     npm run lint
 
+Запуск тестов Jest & msw (ими покрыты основные модули в /src/core/):
+
+    npm test
+
+Для вывода развёрнутого отчёта по тестированию (включая покрытие):
+
+    npm run testreport
+
 ## Прочее
 
 В проекте используется самописный шаблонизатор.
 
-Ссылка на макет в Figma: https://www.figma.com/file/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=0%3A1 (в интерфейсе ещё предполагается доработка некоторых мелких деталей по макету).
+Ссылка на макет в Figma: https://www.figma.com/file/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=0%3A1 

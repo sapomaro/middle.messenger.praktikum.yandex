@@ -14,7 +14,8 @@
     "strictNullChecks": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "esModuleInterop": true
   },
   "exclude": [
     "./node_modules",

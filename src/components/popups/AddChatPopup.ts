@@ -12,7 +12,7 @@ export class AddChatPopup extends Popup {
       submitLabel: 'Добавить',
       inputs: '%{ Input({"name": "title", "label": "Чат"}) }%',
     });
-    this.setProps({popupContent: addChatForm});
+    this.setPropsWithoutRerender({popupContent: addChatForm});
     addChatForm.on(Form.EVENTS.SUBMIT_SUCCESS, addChatService);
   }
 }
