@@ -10,7 +10,7 @@
     "eslint": "npx eslint \"./src/**/*.ts\" --ext .ts",
     "csslint": "npx stylelint \"./src/**/*.scss\"",
     "lint": "npm audit && npm run tscheck && npm run eslint && npm run csslint",
-    "test": "jest ./src/ --verbose"
+    "test": "jest ./src/ --verbose --coverage"
   },
   "targets": {
     "default": {
@@ -56,12 +56,12 @@
   "jest": {
     "testEnvironment": "jsdom",
     "preset": "ts-jest",
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/tests/jestSetup.ts"
+    ],
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/tests/jestFileMock.ts",
       "\\.(css|scss)$": "identity-obj-proxy"
-    },
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/tests/setup.ts"
-    ]
+    }
   }
 }

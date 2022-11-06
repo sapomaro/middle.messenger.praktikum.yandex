@@ -131,6 +131,7 @@ export class HTTPTransport {
     const headersString = xhr.getAllResponseHeaders();
     const headersList = headersString.trim().split('\r\n');
     for (const header of headersList) {
+      if (!header || header.indexOf(':') === -1) continue;
       const [key, value] = header.split(': ');
       headers[key.toLowerCase()] = value.toLowerCase();
     }
@@ -160,6 +161,6 @@ export class HTTPTransport {
     if (!isPlainObject(data)) {
       throw new Error('input must be an object');
     }
-    return this.getParams(data).map((arr) => arr.join('=')).join('&');
+    return '?' + this.getParams(data).map((arr) => arr.join('=')).join('&');
   }
 }

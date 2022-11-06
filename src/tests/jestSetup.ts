@@ -1,4 +1,4 @@
-import {server} from './mswApiMock'
+import {server} from './mswApiMock';
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
