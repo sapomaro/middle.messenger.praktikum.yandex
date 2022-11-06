@@ -12,9 +12,7 @@
     "lint": "npm run tscheck && npm run eslint && npm run csslint",
     "test": "jest ./src/",
     "testreport": "jest ./src/ --verbose --coverage",
-    "validate": "npm audit && npm-run-all --parallel test tscheck eslint csslint",
-    "precommit": "npm run validate",
-    "prepush": "npm run validate"
+    "validate": "npm audit && npm-run-all --parallel test tscheck eslint csslint"
   },
   "targets": {
     "default": {
