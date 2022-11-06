@@ -9,4 +9,6 @@
 
 /.old
 
+/.husky
+
 /coverage

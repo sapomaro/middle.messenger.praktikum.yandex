@@ -12,7 +12,9 @@
     "lint": "npm run tscheck && npm run eslint && npm run csslint",
     "test": "jest ./src/",
     "testreport": "jest ./src/ --verbose --coverage",
-    "validate": "npm audit && npm-run-all --parallel test tscheck eslint csslint"
+    "validate": "npm audit && npm-run-all --parallel test tscheck eslint csslint",
+    "huskysetup": "npx husky install && npx husky add .husky/pre-commit \"npm run validate\"",
+    "prepare": "npm run huskysetup"
   },
   "targets": {
     "default": {
