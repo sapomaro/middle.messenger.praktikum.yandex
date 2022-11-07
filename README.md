@@ -10,7 +10,7 @@
 
 - Netlify: https://cheery-pothos-620783.netlify.app/menu 
 
-Ссылка на пулл-реквест в главную ветку по итогам четвёртого спринта: 
+Ссылка на пулл-реквест в главную ветку по итогам четвёртого спринта: https://github.com/sapomaro/middle.messenger.praktikum.yandex/pull/22
 
 ## Проблемы, которые предстоит решить
 
@@ -20,7 +20,7 @@
 
 ## Команды
 
-Запуск dev-сервера Webpack (http://localhost:1234/): 
+Запуск dev-сервера Webpack (http://localhost:3000/): 
 
     npm run dev
 
