@@ -20,7 +20,7 @@
 
 ## Команды
 
-Запуск dev-сервера Webpack (http://localhost:1234/): 
+Запуск dev-сервера Webpack (http://localhost:3000/): 
 
     npm run dev
 
