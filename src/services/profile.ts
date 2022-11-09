@@ -32,8 +32,9 @@ export const profilePasswordService = async (
       .catch(errorHandler);
 };
 
-export const avatarChangeService = async (data: RequestT['ChangeAvatar']) => {
-  API.changeAvatar(data)
+export const avatarChangeService = async (_: RequestT['ChangeAvatar'],
+    formData: FormData) => {
+  API.changeAvatar(formData)
       .then(({responseJSON}) => {
         const user: UserT = responseJSON;
         Store.setState({
