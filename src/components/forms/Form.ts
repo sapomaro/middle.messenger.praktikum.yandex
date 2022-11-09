@@ -1,6 +1,7 @@
 import './Form.scss';
 
 import {Block} from '../../core/Block';
+import {Store} from '../../core/Store';
 
 type IncomingProps = {
   [key: string]: unknown;
@@ -19,41 +20,37 @@ export class Form extends Block {
   };
   constructor(props: IncomingProps) {
     super(props);
-    this.setProps({
-      onSubmit: (event: Event) => {
-        event.preventDefault();
-        const form = document.forms.namedItem(props.name);
-        if (typeof form !== 'object' || !(form instanceof HTMLFormElement)) {
-          return false;
-        }
-        const formData: FormData = new FormData(form);
-        const data: Record<string, unknown> = {};
-        for (const [key, value] of formData.entries()) {
-          data[key] = value;
-        }
-        const state: EventState = {errorMsgs: {}};
-        this.listDescendants((block: Block) => {
-          block.emit('submit', event, state); // для валидации инпутов формы
-        });
-
-        if (Object.keys(state.errorMsgs).length === 0) {
-          // console.log('Form successfully submitted: ');
-          // console.log(data);
-          this.emit(Form.EVENTS.SUBMIT_SUCCESS, data);
-          this.listDescendants((block: Block) => {
-            block.emit(Form.EVENTS.SUBMIT_SUCCESS, event, data);
-          });
-        } else {
-          // console.warn('Form validation failed: ');
-          // console.warn(state.errorMsgs);
-          this.emit(Form.EVENTS.SUBMIT_FAIL, state.errorMsgs);
-          this.listDescendants((block: Block) => {
-            block.emit(Form.EVENTS.SUBMIT_FAIL, event, state.errorMsgs);
-          });
-        }
+    this.props.onSubmit = (event: Event) => {
+      event.preventDefault();
+      if (Store.state.isLoading) {
         return false;
-      },
-    });
+      }
+      const form = document.forms.namedItem(props.name);
+      if (!(form instanceof HTMLFormElement)) {
+        return false;
+      }
+      const formData: FormData = new FormData(form);
+      const jsonData: Record<string, unknown> = {};
+      for (const [key, value] of formData.entries()) {
+        jsonData[key] = value;
+      }
+      const state: EventState = {errorMsgs: {}};
+      this.listDescendants((block: Block) => {
+        block.emit('submit', event, state); // для валидации инпутов формы
+      });
+      if (!Object.keys(state.errorMsgs).length) {
+        this.emit(Form.EVENTS.SUBMIT_SUCCESS, jsonData, formData);
+        this.listDescendants((block: Block) => {
+          block.emit(Form.EVENTS.SUBMIT_SUCCESS, event, jsonData, formData);
+        });
+      } else {
+        this.emit(Form.EVENTS.SUBMIT_FAIL, state.errorMsgs);
+        this.listDescendants((block: Block) => {
+          block.emit(Form.EVENTS.SUBMIT_FAIL, event, state.errorMsgs);
+        });
+      }
+      return false;
+    };
   }
   render(props: IncomingProps): string {
     return `

@@ -1,15 +1,16 @@
 import {JSONWrapper} from './Utils';
 
-type AnyObj = Array<unknown> | Record<string, unknown>;
-type AnyContext = Record<string, unknown> | Window;
-type Assets = Array<unknown>;
+import type {JSONable, Fn} from '../constants/types';
+
+type ContextT = JSONable | Window;
+type AssetsT = Array<unknown>;
 
 export class Templator {
-  public context: AnyContext;
+  private context: ContextT;
   private PP_PATTERN: RegExp;
   private PP_SUBPATTERN_JSONFUNC: RegExp;
 
-  constructor(context: AnyContext | undefined = window) {
+  constructor(context: ContextT | undefined = window) {
     this.context = context;
     this.PP_PATTERN =
       /%\{\s?([^]*?)\s?\}%/g;
@@ -17,7 +18,7 @@ export class Templator {
       /^([^( ]+)\(\s?([{[][^]*?[}\]])(\.\.\.)?\s?\)$/;
   }
 
-  resolveVariable(pattern: string): unknown {
+  private resolveVariable(pattern: string): unknown {
     let currentContext: unknown = this.context;
     const props = pattern.split('.');
     for (const key of props) {
@@ -36,8 +37,8 @@ export class Templator {
     return currentContext;
   }
 
-  resolveSubPattern(pattern: string): unknown | null {
-    const context: AnyContext = this.context;
+  private resolveSubPattern(pattern: string): unknown | null {
+    const context: ContextT = this.context;
     let matches: Array<string> | null;
 
     this.PP_SUBPATTERN_JSONFUNC.lastIndex = 0;
@@ -47,27 +48,20 @@ export class Templator {
           .replace(/([{,"])\s*(\\[\\tn]+)\s*([},"])/g, '$1 $3')
           .replace(/&quot;/ig, '"'); // чистит пакости Парсела
       const unwrapRule = matches[3];
-      let jsonObj: AnyObj = JSONWrapper.parse(jsonStr);
+      let jsonObj: JSONable = JSONWrapper.parse(jsonStr);
 
-      if (typeof context[blockName as keyof AnyContext] === 'function') {
-        const Block = context[blockName as keyof AnyContext];
+      const block = context[blockName as keyof ContextT] as Fn;
+      if (typeof block === 'function') {
         const blocksList: Array<unknown> = [];
         if (!(unwrapRule && jsonObj instanceof Array)) {
           jsonObj = [jsonObj];
         }
-        for (const item of jsonObj) {
-          let asset: AnyObj | string;
-          if (Block.hasOwnProperty('prototype')) { // обычная функция/класс
-            asset = new Block(item);
-          } else { // стрелочная функция
-            asset = context[blockName as keyof AnyContext](item);
-          }
-          if (typeof asset === 'object') {
-            blocksList.push(asset);
-          } else if (typeof asset === 'string') {
-            const elementHolder = document.createElement('DIV');
-            elementHolder.innerHTML = asset.trim();
-            blocksList.push(...elementHolder.childNodes);
+        for (const subcontext of jsonObj) {
+          if (block.hasOwnProperty('prototype')) {
+            const Block = block as unknown as {
+              new (subcontext: unknown): typeof Block;
+            };
+            blocksList.push(new Block(subcontext));
           }
         }
         return blocksList;
@@ -78,7 +72,7 @@ export class Templator {
     return null;
   }
 
-  resolveAssets(str: string): Assets {
+  private resolveAssets(str: string): AssetsT {
     this.PP_PATTERN.lastIndex = 0;
     if (!this.PP_PATTERN.test(str)) {
       return [];
@@ -116,10 +110,10 @@ export class Templator {
     return assets;
   }
 
-  resolveAssetsRecursive(str: string): Assets {
-    const assets: Assets = this.resolveAssets(str);
+  private resolveAssetsRecursive(str: string): AssetsT {
+    const assets: AssetsT = this.resolveAssets(str);
     if (assets.length > 0 && !(assets.length === 1 && assets[0] === str)) {
-      let asset: Assets;
+      let asset: AssetsT;
       for (let i = 0; i < assets.length; ++i) {
         if (typeof assets[i] === 'string') {
           asset = this.resolveAssetsRecursive(assets[i] as string);
@@ -134,7 +128,7 @@ export class Templator {
     return [str];
   }
 
-  resolve(str: string | null): Assets {
+  resolve(str: string | null): AssetsT {
     if (str !== null) {
       return this.resolveAssetsRecursive(str);
     } else {

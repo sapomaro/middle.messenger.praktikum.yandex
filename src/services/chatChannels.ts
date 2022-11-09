@@ -18,32 +18,33 @@ export const chatsUnloadService = () => {
   socketUnloadService();
 };
 
-export const chatsLoadService = async (callback?: () => void) => {
+function chatsSort(a: ChatT, b: ChatT) {
+  let timeA = 0;
+  let timeB = 0;
+  if (a.last_message === null || !a.last_message?.time) {
+    timeA = new Date().getTime();
+  } else {
+    timeA = new Date(a.last_message.time).getTime();
+  }
+  if (b.last_message === null || !b.last_message?.time) {
+    timeB = new Date().getTime();
+  } else {
+    timeB = new Date(b.last_message.time).getTime();
+  }
+  return timeB - timeA;
+}
+
+export const chatsLoadService = async () => {
   Store.setState({isLoading: true});
   API.getChats()
-      .then(({responseJSON}) => {
-        let chats: Array<ChatT> = responseJSON;
-        chats = chats.sort((a, b) => {
-          let timeA = 0;
-          let timeB = 0;
-          if (a.last_message === null || !a.last_message?.time) {
-            timeA = new Date().getTime();
-          } else {
-            timeA = new Date(a.last_message.time).getTime();
-          }
-          if (b.last_message === null || !b.last_message?.time) {
-            timeB = new Date().getTime();
-          } else {
-            timeB = new Date(b.last_message.time).getTime();
-          }
-          return timeB - timeA;
-        });
-        Store.setState({
-          chats,
-          currentError: null,
-        });
-        if (typeof callback === 'function') {
-          callback();
+      .then(({responseJSON, status}) => {
+        if (status !== 304 || Store.state.chats.length === 0) {
+          let chats: Array<ChatT> = responseJSON;
+          chats = chats.sort(chatsSort);
+          Store.setState({
+            chats,
+            currentError: null,
+          });
         }
         if (chatAutoloader) {
           clearTimeout(chatAutoloader);
@@ -65,16 +66,15 @@ export const chatsLoadService = async (callback?: () => void) => {
 export const addChatService = async (data: RequestT['AddChat']) => {
   Store.setState({isLoading: true});
   API.addChat(data)
-      .then(({responseJSON}) => {
+      .then(async ({responseJSON}) => {
         const chatId = responseJSON.id ?? 0;
         EventBus.emit('popupHide');
         Store.setState({currentError: null, activeChatId: chatId});
         addUserToChatService({login: data.title}, true);
-        chatsLoadService(() => {
-          Store.state.activeChatId = 0;
-          EventBus.emit('chatSelected', chatId);
-          Store.state.activeChatId = chatId;
-        });
+        await chatsLoadService();
+        Store.state.activeChatId = 0;
+        EventBus.emit('chatSelected', chatId);
+        Store.state.activeChatId = chatId;
       })
       .catch(errorHandler)
       .finally(() => {

@@ -13,7 +13,7 @@ export const errorHandler = (error: ResponseT) => {
     currentError = error.message;
   } else {
     if (typeof error.status === 'number' && error.status >= 500) {
-      Router.redirect('/500');
+      Router.redirect(`/${error.status}`);
     }
   }
   console.warn(currentError);

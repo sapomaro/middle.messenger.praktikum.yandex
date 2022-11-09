@@ -12,7 +12,7 @@ export class DeleteChatPopup extends Popup {
       submitLabel: 'Удалить',
       submitStyle: 'form__button_danger',
     });
-    this.setProps({popupContent: deleteChatForm});
+    this.setPropsWithoutRerender({popupContent: deleteChatForm});
     deleteChatForm.on(Form.EVENTS.SUBMIT_SUCCESS, deleteChatService);
   }
 }

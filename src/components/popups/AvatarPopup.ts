@@ -17,7 +17,7 @@ export class AvatarPopup extends Popup {
       }),
       inputs: '%{fileInput}%',
     });
-    this.setProps({
+    this.setPropsWithoutRerender({
       popupContent: avatarForm,
     });
     avatarForm.on(Form.EVENTS.SUBMIT_SUCCESS, avatarChangeService);

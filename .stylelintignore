@@ -3,3 +3,5 @@
 /.cache
 /.parcel-cache
 /.old
+/.husky
+/coverage

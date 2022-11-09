@@ -15,7 +15,7 @@ export type LinkProps = {
 export class Link extends Block {
   constructor(props: LinkProps) {
     super(props);
-    this.setProps({
+    this.setPropsWithoutRerender({
       onclickHandler: ((typeof props.onclick === 'function') ?
         props.onclick :
         () => {

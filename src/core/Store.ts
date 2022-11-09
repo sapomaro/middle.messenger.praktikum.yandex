@@ -1,5 +1,5 @@
 import {EventBus} from './EventBus';
-import {objIntersect} from './Utils';
+import {isEmptyObject, objIntersect} from './Utils';
 import type {Block} from './Block';
 import type {StateT} from '../constants/types';
 
@@ -10,7 +10,7 @@ enum StoreEvents {
 class StoreService extends EventBus.Model {
   static __instance: StoreService;
   public EVENTS = StoreEvents;
-  public state: StateT = {
+  public state: Required<StateT> = {
     user: null,
     chats: [],
     activeChatId: 0,
@@ -34,7 +34,7 @@ class StoreService extends EventBus.Model {
   }
 
   setState(newState: StateT) {
-    if (!objIntersect(this.state, newState)) {
+    if (!isEmptyObject(newState) && !objIntersect(this.state, newState)) {
       Object.assign(this.state, newState);
       this.emit(this.EVENTS.UPDATE, newState);
     }
@@ -47,15 +47,27 @@ class StoreService extends EventBus.Model {
 
 const Store = new StoreService();
 
-const StoreSynced = (CustomBlock: typeof Block) => {
+function StoreSynced(CustomBlock: typeof Block) {
   return class extends CustomBlock {
+    public ignoreSyncProps: Array<keyof StateT> = [];
     constructor(props?: StateT) {
       super({...props, ...Store.getState()});
       Store.on(Store.EVENTS.UPDATE, (newState: StateT) => {
-        this.setProps(newState);
+        if (this.ignoreSyncProps.length > 0) {
+          const newStateCopy = {...newState};
+          this.ignoreSyncProps.forEach((key) => {
+            delete newStateCopy[key];
+          });
+          this.setProps(newStateCopy);
+        } else {
+          this.setProps(newState);
+        }
       });
     }
+    ignoreSync(props: Array<keyof StateT>) {
+      this.ignoreSyncProps = props;
+    }
   };
-};
+}
 
 export {Store, StoreSynced};

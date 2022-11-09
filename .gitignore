@@ -1,10 +1,7 @@
 /.cache
-/.parcel-cache
-
-# dependencies
 /node_modules
-
-# production
 /dist
-
 /.old
+/.husky
+/.docker
+/coverage

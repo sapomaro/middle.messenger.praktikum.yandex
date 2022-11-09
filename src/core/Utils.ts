@@ -1,9 +1,32 @@
 import type {PlainObject, JSONable} from '../constants/types';
 
+export async function sleep(ms = 100) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export async function step(name: string, callback: () => string) {
+  await callback();
+  return name;
+}
+
 export function isPlainObject(value: unknown): value is PlainObject {
   return (typeof value === 'object' &&
     value !== null &&
     value.constructor === Object);
+}
+
+export function isEmptyObject(obj: JSONable): boolean {
+  return (Object.keys(obj).length === 0);
+}
+
+export function isKeyOfObject(key: unknown,
+    obj: unknown): key is keyof typeof obj {
+  if (typeof obj !== 'object' || obj === null) return false;
+  if (typeof key !== 'string' && typeof key !== 'number') return false;
+  if (key in obj && typeof obj[key as keyof typeof obj] !== 'undefined') {
+    return true;
+  }
+  return false;
 }
 
 export function isArray(value: unknown): value is [] {
@@ -47,25 +70,26 @@ export function cloneDeep<T>(entity: T,
   })(entity);
 }
 
-export function objIntersect<T extends object>(base: T, chunk: T): boolean {
-  return (function compareDeepRecursive(base: T, chunk: T): boolean {
-    if (base === chunk) {
+export function objIntersect<T1, T2>(
+    base: T1, chunk: T2,
+): boolean {
+  return (function compareDeepRecursive(base: T1, chunk: T2): boolean {
+    if (base === chunk as unknown as T1) {
       return true;
     }
     if (base instanceof Array) {
       if (!(chunk instanceof Array)) return false;
-      if (base.length !== chunk.length) return false;
-      for (let i = base.length; i >= 0; --i) {
+      if (chunk.length === 0) return false;
+      for (let i = chunk.length - 1; i >= 0; --i) {
         if (!compareDeepRecursive(base[i], chunk[i])) return false;
       }
       return true;
     }
     if (base instanceof Object) {
       if (!(chunk instanceof Object)) return false;
+      if (isEmptyObject(chunk as PlainObject)) return false;
       for (const [key, value] of Object.entries(chunk)) {
-        if (!(key in base)) return false;
-        // @ts-ignore: TS не воспринимает какую-либо типизацию base[key],
-        // выдавая ошибку TS2345 или TS7053 (as keyof typeof base не помогает)
+        if (!isKeyOfObject(key, base)) return false;
         if (!compareDeepRecursive(base[key], value)) {
           return false;
         }
