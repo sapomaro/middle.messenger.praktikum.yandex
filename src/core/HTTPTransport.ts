@@ -11,11 +11,11 @@ enum METHOD {
 
 export type OptionsT = {
   url: string;
-  method?: METHOD;
-  tries?: number;
-  timeout?: number;
-  headers?: Record<string, string>;
-  data?: unknown;
+  method: METHOD;
+  tries: number;
+  timeout: number;
+  headers: Record<string, string>;
+  data: unknown;
 };
 
 export class HTTPTransport {
@@ -32,7 +32,7 @@ export class HTTPTransport {
   delete(url: string, data?: unknown) {
     return this.request({url, method: METHOD.DELETE, data});
   }
-  request(options: OptionsT) {
+  request(options: Partial<OptionsT>) {
     let {
       url,
       method = METHOD.GET,
@@ -46,7 +46,7 @@ export class HTTPTransport {
       (isArrayOrObject(data)) ? 'json' : 'unknown';
     const urlParams = (method === METHOD.GET && dataType === 'json') ?
       this.getUrlParams(data as Record<string, unknown>) : '';
-    this.setRequestHeaders(headers, dataType);
+    headers = this.getRequestHeaders(headers, dataType);
 
     return new Promise((resolve, reject) =>
       (function request() {
@@ -109,21 +109,16 @@ export class HTTPTransport {
     );
   }
 
-  setRequestHeaders(headers: PlainObject, dataType: string) {
-    if (!headers['accept']) {
-      if (dataType === 'json') {
+  getRequestHeaders(headers: OptionsT['headers'], dataType: string) {
+    if (dataType === 'json') {
+      if (!headers['accept']) {
         headers['accept'] = 'application/json';
-      } else if (dataType === 'formdata') {
-        headers['accept'] = '*/*';
       }
-    }
-    if (!headers['Content-Type']) {
-      if (dataType === 'json') {
+      if (!headers['Content-Type']) {
         headers['Content-Type'] = 'application/json; charset = UTF-8';
-      } else if (dataType === 'formdata') {
-        headers['Content-Type'] = 'multipart/form-data';
       }
     }
+    return headers;
   }
 
   getResponseHeaders(xhr: XMLHttpRequest) {

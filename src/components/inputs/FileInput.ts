@@ -5,7 +5,12 @@ import {Input, InputPropsType} from './Input';
 export class FileInput extends Input {
   constructor(props: InputPropsType) {
     super(props);
-    this.on('change', () => {
+    this.on('change', (event: Event) => {
+      const fileInput = event.target as HTMLInputElement;
+      const fileList = fileInput?.files;
+      if (fileList && fileList.length > 0) {
+        this.props.file = fileList[0];
+      }
       this.emit('updated');
     });
   }

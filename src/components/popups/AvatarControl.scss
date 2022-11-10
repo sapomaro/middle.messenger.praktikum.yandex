@@ -27,6 +27,7 @@
   cursor: pointer;
 }
 
-.form__avatar:hover .form__avatar-control {
+.form__avatar:hover .form__avatar-control,
+.form__avatar-control_visible {
   visibility: visible;
 }

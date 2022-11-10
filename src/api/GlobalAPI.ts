@@ -22,12 +22,10 @@ export const API = {
     http.put('/user/profile', data),
   changePassword: (data: RequestT['ChangePassword']) =>
     http.put('/user/password', data),
-  changeAvatar: (data: FormData) => { // RequestT['ChangeAvatar']
-    // const formData = new FormData();
-    // formData.append('avatar', data.avatar);
-    return http.put('/user/profile/avatar', data);
-    // ОСТОРОЖНО, ЗДЕСЬ БАГ!
-    // При смене аватара сервер почему-то выдаёт ошибку 500...
+  changeAvatar: (data: RequestT['ChangeAvatar']) => {
+    const formData = new FormData();
+    formData.append('avatar', data.avatar);
+    return http.put('/user/profile/avatar', formData);
   },
   getChats: () =>
     http.get('/chats'),

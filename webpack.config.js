@@ -6,6 +6,7 @@ module.exports = {
   entry: './src/pages/index.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
     filename: 'messenger.bundle.js',
   },
   resolve: {

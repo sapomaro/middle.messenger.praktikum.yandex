@@ -14,6 +14,7 @@ export type InputPropsType = {
   accept?: string;
   readonly?: boolean;
   focused?: boolean;
+  file?: Blob;
 }
 
 type EventState = Record<string, Record<string, string>>;

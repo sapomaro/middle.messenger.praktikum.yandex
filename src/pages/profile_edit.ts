@@ -25,7 +25,10 @@ view.on(Block.EVENTS.BEFORERENDER, authControlService);
 const profileForm = new (StoreSynced(Form))({
   name: 'profile',
   Input,
-  avatarControl: new (StoreSynced(AvatarControl))({forId: 'AvatarPopup'}),
+  avatarControl: new (StoreSynced(AvatarControl))({
+    changeable: true,
+    forId: 'AvatarPopup',
+  }),
   formSubmitButton: new (StoreSynced(Button))({
     name: 'submit',
     type: 'submit',
