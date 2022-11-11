@@ -7,10 +7,11 @@ import type {JSONable} from '../../constants/types';
 describe('core/Utils (advanced)', () => {
   test('cloneDeep works properly', () => {
     const mock = {keyA: 1, nested: {keyB: 2}};
+    const clone = cloneDeep(mock);
     expect(cloneDeep(true)).toBe(true);
     expect(cloneDeep(mock)).not.toBe(mock);
-    expect(cloneDeep(mock.nested)).not.toBe(mock.nested);
-    expect(cloneDeep(mock)).toEqual({keyA: 1, nested: {keyB: 2}});
+    expect(cloneDeep(mock.nested)).not.toBe(clone.nested);
+    expect(cloneDeep(mock)).toEqual(clone);
     expect(cloneDeep([1, 2, 3])).toEqual([1, 2, 3]);
   });
 

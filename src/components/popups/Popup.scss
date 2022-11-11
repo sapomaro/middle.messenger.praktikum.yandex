@@ -1,3 +1,5 @@
+@import "../../constants/animations.scss";
+
 .popup {
   position: fixed;
   z-index: 100;
@@ -10,4 +12,9 @@
   background: rgba(0 0 0 / 50%);
   justify-content: center;
   flex-direction: row;
+}
+
+.popup_visible {
+  display: flex;
+  animation: fade-in 0.1s;
 }

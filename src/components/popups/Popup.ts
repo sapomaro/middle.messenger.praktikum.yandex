@@ -20,7 +20,7 @@ export class Popup extends Block {
     EventBus.on('popupShow', (id: string) => {
       const popup = document.getElementById(id);
       if (popup) {
-        popup.style.display = 'flex';
+        popup.classList?.add('popup_visible');
       }
     });
     EventBus.on('popupHide', () => {
@@ -28,7 +28,7 @@ export class Popup extends Block {
       const popups = document.querySelectorAll('.popup');
       if (popups) {
         for (const popup of popups) {
-          (popup as HTMLElement).style.display = 'none';
+          popup.classList?.remove('popup_visible');
         }
       }
     });

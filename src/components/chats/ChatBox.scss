@@ -1,4 +1,5 @@
 @import "../../constants/colors.scss";
+@import "../../constants/animations.scss";
 
 .chatbox__header {
   position: sticky;
@@ -178,6 +179,7 @@
 
 .chatbox__dropdown-toggle:checked + .chatbox__dropdown-control + .chatbox__dropdown {
   display: block;
+  animation: fade-in 0.1s;
 }
 
 .chatbox__dropdown-menu {

@@ -12,7 +12,9 @@ export class Layout extends Block {
   }
   updateTitle(newTitle = '') {
     const title = document.querySelector<HTMLElement>('title');
-    if (!title) return;
+    if (!title) {
+      return;
+    }
     if (newTitle) {
       this.props.title = newTitle;
     }

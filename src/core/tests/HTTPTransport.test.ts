@@ -1,5 +1,4 @@
 import {HTTPTransport} from '../HTTPTransport';
-// import {sleep} from '../Utils';
 
 const http = new HTTPTransport();
 http.baseUrl = 'http://mockhost';

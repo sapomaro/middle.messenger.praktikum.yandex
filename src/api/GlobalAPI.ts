@@ -26,8 +26,6 @@ export const API = {
     const formData = new FormData();
     formData.append('avatar', data.avatar);
     return http.put('/user/profile/avatar', formData);
-    // ОСТОРОЖНО, ЗДЕСЬ БАГ!
-    // При смене аватара сервер почему-то выдаёт ошибку 500...
   },
   getChats: () =>
     http.get('/chats'),
