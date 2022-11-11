@@ -32,3 +32,26 @@
   flex: 1 1 25%;
   min-width: 11rem;
 }
+
+@media (max-width: 400px) {
+  .chat {
+    flex-flow: column;
+  }
+
+  .scrollable {
+    height: auto;
+    overflow-y: hidden;
+  }
+
+  .container_chatbox {
+    flex: 1 1 75%;
+    height: 75vh;
+  }
+
+  .sidebar_chatlist {
+    flex: 0 1 25%;
+    height: 25vh;
+    border-right: none;
+    border-bottom: 2px solid $border-color;
+  }
+}
