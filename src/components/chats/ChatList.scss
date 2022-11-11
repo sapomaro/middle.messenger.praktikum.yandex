@@ -17,6 +17,7 @@
 .chatlist__item:hover,
 .chatlist__item_active {
   background: $secondary-color;
+  transition: all 0.1s ease-in;
 }
 
 .chatlist__item-wrapper {

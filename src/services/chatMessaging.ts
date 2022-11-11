@@ -9,7 +9,7 @@ import {errorHandler} from './errorHandler';
 import type {UserT, RequestT, MessageT} from '../constants/types';
 
 const chatKeepAliveInterval = 30000;
-const chatSelectInterval = 1000;
+const chatSelectInterval = 100;
 let chatReconnectInterval = 1000;
 
 const getNewReconnectInterval = () => {
@@ -24,6 +24,11 @@ let connectTimer: ReturnType<typeof setTimeout> | null = null;
 let chatKeepAlive: ReturnType<typeof setInterval> | null = null;
 
 export const socketUnloadService = () => {
+  chatSocket.close();
+  socketClearTimers();
+};
+
+export const socketClearTimers = () => {
   if (connectTimer) {
     clearTimeout(connectTimer);
   }
@@ -38,7 +43,7 @@ EventBus.on('chatSelected', (chatId: number) => {
     return;
   }
   Store.setState({activeChatMessages: [], isLoading: true});
-  socketUnloadService();
+  socketClearTimers();
   connectTimer = setTimeout(() => {
     connectToChatService();
   }, chatSelectInterval);
@@ -57,6 +62,7 @@ export const connectToChatService = async () => {
   const user: UserT | null | unknown = Store.getState().user;
   if (!user || !('id' in user) ||
       typeof (user as UserT).id !== 'number') {
+    Store.setState({isLoading: false});
     errorHandler(new Error('No user ID'));
     return;
   }
@@ -64,6 +70,7 @@ export const connectToChatService = async () => {
   const chatId = Store.getState().activeChatId as number;
   const token = await getChatTokenService(chatId) as string;
   if (!token) {
+    Store.setState({isLoading: false});
     errorHandler(new Error('Token error'));
     return;
   }
@@ -84,7 +91,7 @@ EventBus.on('webSocketInit', () => {
 
 EventBus.on('webSocketClose, webSocketError', () => {
   Store.setState({isLoading: true});
-  socketUnloadService();
+  socketClearTimers();
   connectTimer = setTimeout(() => {
     connectToChatService();
   }, getNewReconnectInterval());
@@ -105,7 +112,7 @@ EventBus.on('webSocketOpen', () => {
   Store.setState({isLoading: false});
   getOldMessagesService();
   chatsLoadService();
-  socketUnloadService();
+  socketClearTimers();
   chatKeepAlive = setInterval(() => {
     chatSocket.send({type: 'ping'});
   }, chatKeepAliveInterval);
