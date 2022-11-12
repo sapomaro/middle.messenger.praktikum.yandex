@@ -7,9 +7,13 @@
 
 .form__input_field_right {
   text-align: right;
-  color: $note-color;
+  color: $text-color;
   font-size: 1.2rem;
   border: none;
+}
+
+.form__input_field_right[readonly] {
+  color: $note-color;
 }
 
 .form__text_right {

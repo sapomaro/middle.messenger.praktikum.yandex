@@ -8,6 +8,7 @@ const API_CHATS_WEBSOCKET_URL = 'wss://ya-praktikum.tech/ws/chats';
 export class ChatSocket {
   private static __instance: ChatSocket;
   private activeSocket: WebSocket | null = null;
+  private preventCloseEvent = false;
   constructor() {
     if (ChatSocket.__instance) {
       return ChatSocket.__instance;
@@ -15,13 +16,14 @@ export class ChatSocket {
     ChatSocket.__instance = this;
   }
   init({userId, chatId, token}: RequestT['SocketInit']) {
-    this.close();
+    this.shut();
     this.activeSocket =
       new WebSocket(`${API_CHATS_WEBSOCKET_URL}/${userId}/${chatId}/${token}`);
     this.registerEvents();
   }
-  close() {
+  shut() {
     if (this.activeSocket) {
+      this.preventCloseEvent = true;
       this.activeSocket.close();
       this.activeSocket = null;
     }
@@ -35,7 +37,10 @@ export class ChatSocket {
       EventBus.emit('webSocketOpen');
     });
     this.activeSocket.addEventListener('close', (event: CloseEvent) => {
-      EventBus.emit('webSocketClose', event);
+      if (!this.preventCloseEvent) {
+        EventBus.emit('webSocketClose', event);
+      }
+      this.preventCloseEvent = false;
     });
     this.activeSocket.addEventListener('message', (event: MessageEvent) => {
       EventBus.emit('webSocketMessage', event.data);

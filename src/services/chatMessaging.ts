@@ -24,7 +24,7 @@ let connectTimer: ReturnType<typeof setTimeout> | null = null;
 let chatKeepAlive: ReturnType<typeof setInterval> | null = null;
 
 export const socketUnloadService = () => {
-  chatSocket.close();
+  chatSocket.shut();
   socketClearTimers();
 };
 

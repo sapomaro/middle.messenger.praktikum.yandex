@@ -2,6 +2,7 @@ import {HTTPTransport} from '../core/HTTPTransport';
 import type {UserT, RequestT} from '../constants/types';
 
 const API_BASEURL = 'https://ya-praktikum.tech/api/v2';
+// Swagger: https://ya-praktikum.tech/api/v2/swagger/
 
 const http = new HTTPTransport();
 

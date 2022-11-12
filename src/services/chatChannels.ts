@@ -40,6 +40,9 @@ export const chatsLoadService = async () => {
       .then(({responseJSON, status}) => {
         if (status !== 304 || Store.state.chats.length === 0) {
           let chats: Array<ChatT> = responseJSON;
+          if (!(chats instanceof Array)) {
+            chats = [];
+          }
           chats = chats.sort(chatsSort);
           Store.setState({
             chats,
