@@ -1,12 +1,12 @@
 import './SearchInput.scss';
 
-import {Input, InputPropsType} from './Input';
+import {Input, InputPropsT} from './Input';
 
 export class SearchInput extends Input {
-  constructor(props: InputPropsType) {
+  constructor(props: InputPropsT) {
     super(props);
   }
-  render(props: InputPropsType) {
+  render(props: InputPropsT) {
     return `
       <div class="chatlist__search-field-wrapper">
         <input name="${props.name}" type="text"

@@ -22,8 +22,8 @@ view.on(Block.EVENTS.BEFORERENDER, authControlService);
 const inputs = JSONWrapper.stringify([
   {name: 'email', type: 'email', label: 'Почта'},
   {name: 'login', type: 'text', label: 'Логин'},
-  {name: 'first_name', type: 'text', label: 'Имя'},
-  {name: 'second_name', type: 'text', label: 'Фамилия'},
+  {name: 'first_name', type: 'text', label: 'Имя', autocapitalize: true},
+  {name: 'second_name', type: 'text', label: 'Фамилия', autocapitalize: true},
   {name: 'phone', type: 'tel', label: 'Телефон'},
   {name: 'password', type: 'password', label: 'Пароль'},
   {name: 'password2', type: 'password', label: 'Пароль (ещё раз)'},

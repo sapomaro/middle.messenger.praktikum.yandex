@@ -13,6 +13,7 @@ import {logoutService} from '../services/login';
 import {sanitizeAll} from '../services/sanitizer';
 import {JSONWrapper} from '../core/Utils';
 import type {UserT} from '../constants/types';
+import type {InputPropsT} from '../components/inputs/Input';
 
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
@@ -22,18 +23,15 @@ const view = new WideLayoutWithSidebar({
 
 view.on(Block.EVENTS.BEFORERENDER, authControlService);
 
-export const profileInputs: Array<{
-  name: string;
-  type?: string;
-  label: string;
-  value?: string;
-  readonly?: boolean;
-}> = [
+export const profileInputs: Array<InputPropsT> = [
   {name: 'email', type: 'email', label: 'Почта'},
   {name: 'login', type: 'text', label: 'Логин'},
-  {name: 'first_name', type: 'text', label: 'Имя'},
-  {name: 'second_name', type: 'text', label: 'Фамилия'},
-  {name: 'display_name', type: 'text', label: 'Имя в чате'},
+  {name: 'first_name', type: 'text', label: 'Имя',
+    autocapitalize: true},
+  {name: 'second_name', type: 'text', label: 'Фамилия',
+    autocapitalize: true},
+  {name: 'display_name', type: 'text', label: 'Имя в чате',
+    autocapitalize: true},
   {name: 'phone', type: 'tel', label: 'Телефон'},
 ];
 

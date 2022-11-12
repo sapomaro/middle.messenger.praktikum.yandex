@@ -4,7 +4,7 @@ import {EventBus} from '../../core/EventBus';
 import {Block} from '../../core/Block';
 import {getValidationMessage} from '../../services/inputValidation';
 
-export type InputPropsType = {
+export type InputPropsT = {
   name: string;
   label?: string;
   value?: string;
@@ -13,6 +13,7 @@ export type InputPropsType = {
   error?: string;
   accept?: string;
   readonly?: boolean;
+  autocapitalize?: boolean;
   focused?: boolean;
   file?: Blob;
 }
@@ -20,7 +21,7 @@ export type InputPropsType = {
 type EventState = Record<string, Record<string, string>>;
 
 export class Input extends Block {
-  constructor(props: InputPropsType) {
+  constructor(props: InputPropsT) {
     super(props);
     const self = this; /* потому что в событийных коллбэках ниже
                           this = элементу, на который они вешаются */

@@ -1,9 +1,9 @@
 import './FileInput.scss';
 
-import {Input, InputPropsType} from './Input';
+import {Input, InputPropsT} from './Input';
 
 export class FileInput extends Input {
-  constructor(props: InputPropsType) {
+  constructor(props: InputPropsT) {
     super(props);
     this.on('change', (event: Event) => {
       const fileInput = event.target as HTMLInputElement;
@@ -14,7 +14,7 @@ export class FileInput extends Input {
       this.emit('updated');
     });
   }
-  render(props: InputPropsType): string {
+  render(props: InputPropsT): string {
     let fileName = '';
     if (props && props.value) {
       fileName = props.value.split(/[\\/]+/).pop() as string;

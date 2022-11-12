@@ -1,9 +1,9 @@
 import './MessageTextarea.scss';
 
-import {Input, InputPropsType} from './Input';
+import {Input, InputPropsT} from './Input';
 
 export class MessageTextarea extends Input {
-  constructor(props: InputPropsType) {
+  constructor(props: InputPropsT) {
     super(props);
     this.props.onKeydown = (event: KeyboardEvent) => {
       if (event.keyCode && event.keyCode === 13 && !event.shiftKey) {
@@ -21,7 +21,7 @@ export class MessageTextarea extends Input {
       (this.getElement() as HTMLTextAreaElement)?.focus();
     });
   }
-  render(props: InputPropsType): string {
+  render(props: InputPropsT): string {
     return `
       <textarea name="${props.name}" class="chatbox__send-textarea" rows="1"
         onblur="%{onBlur}%"

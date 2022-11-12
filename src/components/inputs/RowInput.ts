@@ -1,11 +1,11 @@
 import './RowInput.scss';
-import {Input, InputPropsType} from './Input';
+import {Input, InputPropsT} from './Input';
 
 export class RowInput extends Input {
-  constructor(props: InputPropsType) {
+  constructor(props: InputPropsT) {
     super(props);
   }
-  render(props: InputPropsType): string {
+  render(props: InputPropsT): string {
     return `
       <label class="container__row">
         <span class="form__row-label">${props.label}</span>
@@ -15,6 +15,7 @@ export class RowInput extends Input {
             type="${props.type}"
             class="form__input_field form__input_field_right"
             value="${props.value || ''}"
+            ${!props.autocapitalize ? 'autocapitalize="off"' : ''}
             onblur="%{onBlur}%"
             onfocus="%{onFocus}%"
             oninput="%{onInput}%"

@@ -9,7 +9,7 @@ export class NarrowLayout extends Layout {
   render(): string {
     return `
       %{popup}%
-      <div class="root">
+      <div class="root root_narrow">
         <main class="container container_narrow">
           %{contents}%
         </main>
