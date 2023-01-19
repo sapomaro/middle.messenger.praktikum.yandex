@@ -75,9 +75,12 @@ class RouterService {
     this.renderRoute(route, pathname);
   }
   navigate(pathname: string) {
-    const route = this.getRealRoute(pathname);
+    let route = this.getRealRoute(pathname);
     if (route === null) return;
     if (this.firstRender) {
+      if (route === this.notFoundRoute) {
+        route = '/';
+      }
       history.replaceState({route, pathname}, '', this.basePath + pathname);
       this.firstRender = false;
     } else {
