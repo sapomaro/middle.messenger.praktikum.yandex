@@ -17,7 +17,7 @@ import type {UserT} from '../constants/types';
 const view = new WideLayoutWithSidebar({
   title: 'Профиль',
   popup: [LoadPopup, AvatarPopup],
-  aside: new RoundButton({url: '/messenger', label: '⬅'}),
+  aside: new RoundButton({url: '/chats', label: '⬅'}),
 });
 
 view.on(Block.EVENTS.BEFORERENDER, authControlService);

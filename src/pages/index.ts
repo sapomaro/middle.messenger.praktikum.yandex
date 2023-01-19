@@ -9,6 +9,8 @@ import {view as ChatsPage} from './chats';
 import {view as NotFoundPage} from './404';
 import {view as ServerErrorPage} from './500';
 
+Router.basePath = '/messenger';
+
 Router.registerRoutes({
   '/5\\d\\d': ServerErrorPage,
   '/menu': IndexPage,
@@ -17,7 +19,7 @@ Router.registerRoutes({
   '/settings': ProfilePage,
   '/settings/edit': ProfileEditPage,
   '/settings/password': ProfilePassPage,
-  '/messenger': ChatsPage,
+  '/chats': ChatsPage,
 });
 
 Router.registerNotFound({'/404': NotFoundPage});

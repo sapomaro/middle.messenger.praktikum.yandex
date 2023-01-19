@@ -3,6 +3,7 @@ import type {Block} from '../core/Block';
 class RouterService {
   static __instance: RouterService;
   public routes: Record<string, Block> = {};
+  public basePath = '';
   public currentRoute = '';
   public currentPathname = '';
   public currentView: Block;
@@ -70,19 +71,19 @@ class RouterService {
   redirect(pathname: string) {
     const route = this.getRealRoute(pathname);
     if (route === null) return;
-    history.replaceState({route, pathname}, '', pathname);
+    history.replaceState({route, pathname}, '', this.basePath + pathname);
     this.renderRoute(route, pathname);
   }
   navigate(pathname: string) {
     const route = this.getRealRoute(pathname);
     if (route === null) return;
     if (this.firstRender) {
-      history.replaceState({route, pathname}, '', pathname);
+      history.replaceState({route, pathname}, '', this.basePath + pathname);
       this.firstRender = false;
     } else {
       if (!history.state || !history.state.route ||
           history.state.route !== route) {
-        history.pushState({route, pathname}, '', pathname);
+        history.pushState({route, pathname}, '', this.basePath + pathname);
       }
     }
     this.renderRoute(route, pathname);

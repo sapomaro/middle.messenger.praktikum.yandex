@@ -22,13 +22,13 @@ export const authControlService = async () => {
   if (authed) {
     if (Router.currentRoute === '/' ||
         Router.currentRoute === '/sing-up') {
-      redirectRoute = '/messenger';
+      redirectRoute = '/chats';
     }
   } else {
     if (Router.currentRoute === '/settings' ||
         Router.currentRoute === '/settings/edit' ||
         Router.currentRoute === '/settings/password' ||
-        Router.currentRoute === '/messenger') {
+        Router.currentRoute === '/chats') {
       redirectRoute = '/';
     }
   }
@@ -60,7 +60,7 @@ export const loginService = async (data: RequestT['Login']) => {
   API.login(data)
       .then(async () => {
         await getUserDataService();
-        Router.navigate('/messenger');
+        Router.navigate('/chats');
       })
       .catch(errorHandler)
       .finally(() => {

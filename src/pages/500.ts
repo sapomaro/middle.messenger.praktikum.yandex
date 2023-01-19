@@ -8,7 +8,7 @@ const view = new WideLayout({
   title: '500',
   comment: 'Уже фиксим',
   contents: ErrorStatusMsg,
-  navLink: new Link({url: '/messenger', label: 'Назад к чатам'}),
+  navLink: new Link({url: '/chats', label: 'Назад к чатам'}),
 });
 
 view.on(Block.EVENTS.BEFORERENDER, () => {

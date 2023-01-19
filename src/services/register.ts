@@ -11,7 +11,7 @@ export const registerService = async (data: RequestT['Register']) => {
   API.signup(data)
       .then(async () => {
         await getUserDataService();
-        Router.navigate('/messenger');
+        Router.navigate('/chats');
       })
       .catch(errorHandler)
       .finally(() => {
